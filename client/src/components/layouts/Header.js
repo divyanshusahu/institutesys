@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link as RLink } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
@@ -12,6 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Slide from "@material-ui/core/Slide";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
+import Link from "@material-ui/core/Link";
 
 import logo from "../../assets/images/logo.png";
 
@@ -59,9 +60,9 @@ function Header(props) {
         <AppBar className={classes.navbar} elevation={1}>
           <Toolbar>
             <div className={classes.navbarLogo}>
-              <Link to="/">
+              <RLink to="/">
                 <img src={logo} alt="logo" title="Institute System" />
-              </Link>
+              </RLink>
             </div>
             <div>
               <Hidden smUp>
@@ -87,17 +88,25 @@ function Header(props) {
                 </Menu>
               </Hidden>
               <Hidden xsDown>
-                <Button className={classes.navbarButtons}>Features</Button>
-                <Button className={classes.navbarButtons}>Pricing</Button>
-                <Button className={classes.navbarButtons}>About Us</Button>
-                <Button className={classes.navbarButtons}>Contact</Button>
-                <Button
+                <Link href="#features" color="inherit">
+                  <Button className={classes.navbarButtons}>Features</Button>
+                </Link>
+                <Link href="#pricing" color="inherit">
+                  <Button className={classes.navbarButtons}>Pricing</Button>
+                </Link>
+                <Link href="#aboutus" color="inherit">
+                  <Button className={classes.navbarButtons}>About Us</Button>
+                </Link>
+                <Link href="#aboutus" color="inherit">
+                  <Button className={classes.navbarButtons}>Contact</Button>
+                </Link>
+                <Link href="/login" color="inherit"><Button
                   className={classes.navbarButtons}
                   variant="outlined"
                   color="primary"
                 >
                   Login
-                </Button>
+                </Button></Link>
               </Hidden>
             </div>
           </Toolbar>

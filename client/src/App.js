@@ -5,10 +5,16 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 
 import Header from "./components/layouts/Header";
 import Landing from "./components/Landing";
+import Footer from "./components/layouts/Footer";
+import SignIn from "./components/auth/SignIn";
+import SignUp from "./components/auth/SignUp";
 
 const useStyles = makeStyles({
   wrapper: {
-    backgroundColor: "white"
+    backgroundColor: "white",
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh"
   }
 });
 
@@ -23,6 +29,9 @@ function App() {
         <div className={classes.wrapper}>
           <Header />
           <Route exact path="/" component={Landing} />
+          <Route exact path="/login" component={SignIn} />
+          <Route exact path="/signup" component={SignUp} />
+          <Footer />
         </div>
       </React.Fragment>
     </Router>

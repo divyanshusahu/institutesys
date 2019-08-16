@@ -9,6 +9,7 @@ import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import CardMedia from "@material-ui/core/CardMedia";
+import Icon from "@material-ui/core/Icon";
 import WOW from "wowjs";
 
 import background from "../assets/images/background.jpeg";
@@ -138,10 +139,16 @@ function Landing() {
               maxWidth={window.innerWidth >= 1367 ? "md" : "sm"}
               className={classes.landingContent}
             >
-              <Typography variant="h3" className={classes.landingContentChild}>
+              <Typography
+                variant="h3"
+                className={classes.landingContentChild}
+              >
                 Securely connect, sync, and collaborate
               </Typography>
-              <Typography variant="h6" className={classes.landingContentChild}>
+              <Typography
+                variant="h6"
+                className={classes.landingContentChild}
+              >
                 Institute System is the secure institite system that teachers
                 and students love and trust
               </Typography>
@@ -172,7 +179,6 @@ function Landing() {
                 className={classes.featureCard + " wow zoomIn"}
                 data-wow-duration="1s"
                 data-wow-offset="100"
-                data-wow-delay="0.5s"
               >
                 <CardContent>
                   <Typography variant="h5" align="center" gutterBottom>
@@ -195,7 +201,6 @@ function Landing() {
                 className={classes.featureCard + " wow zoomIn"}
                 data-wow-duration="1s"
                 data-wow-offset="100"
-                data-wow-delay="0.5s"
               >
                 <CardContent>
                   <Typography variant="h5" align="center" gutterBottom>
@@ -218,7 +223,6 @@ function Landing() {
                 className={classes.featureCard + " wow zoomIn"}
                 data-wow-duration="1s"
                 data-wow-offset="100"
-                data-wow-delay="0.5s"
               >
                 <CardContent>
                   <Typography variant="h5" align="center" gutterBottom>
@@ -230,8 +234,8 @@ function Landing() {
                     align="center"
                     gutterBottom
                   >
-                    Get visibility and control over team folders, including sync
-                    management.
+                    Get visibility and control over team folders, including
+                    sync management.
                   </Typography>
                 </CardContent>
               </Card>
@@ -241,7 +245,6 @@ function Landing() {
                 className={classes.featureCard + " wow zoomIn"}
                 data-wow-duration="1s"
                 data-wow-offset="100"
-                data-wow-delay="0.5s"
               >
                 <CardContent>
                   <Typography variant="h5" align="center" gutterBottom>
@@ -264,7 +267,6 @@ function Landing() {
                 className={classes.featureCard + " wow zoomIn"}
                 data-wow-duration="1s"
                 data-wow-offset="100"
-                data-wow-delay="0.5s"
               >
                 <CardContent>
                   <Typography variant="h5" align="center" gutterBottom>
@@ -276,8 +278,8 @@ function Landing() {
                     align="center"
                     gutterBottom
                   >
-                    A simple, powerful way to create, share, and keep your team
-                    in sync — with the added benefit of admin controls.
+                    A simple, powerful way to create, share, and keep your
+                    team in sync — with the added benefit of admin controls.
                   </Typography>
                 </CardContent>
               </Card>
@@ -287,7 +289,6 @@ function Landing() {
                 className={classes.featureCard + " wow zoomIn"}
                 data-wow-duration="1s"
                 data-wow-offset="100"
-                data-wow-delay="0.5s"
               >
                 <CardContent>
                   <Typography variant="h5" align="center" gutterBottom>
@@ -332,15 +333,18 @@ function Landing() {
             user activity.
           </Typography>
         </Container>
-        <Container maxWidth="lg" component="main" style={{ marginTop: "5rem" }}>
+        <Container
+          maxWidth="lg"
+          component="main"
+          style={{ marginTop: "5rem" }}
+        >
           <Grid container spacing={5} alignItems="flex-end">
             {tiers.map(tier => (
               <Grid item key={tier.title} xs={12} sm={4}>
                 <Card
                   className="wow zoomIn"
                   data-wow-duration="1s"
-                  data-wow-offset="100"
-                  data-wow-delay="0.5s"
+                  data-wow-offset="50"
                 >
                   <CardHeader
                     title={tier.title}
@@ -418,7 +422,6 @@ function Landing() {
                 className="wow zoomIn"
                 data-wow-duration="1s"
                 data-wow-offset="100"
-                data-wow-delay="0.5s"
               >
                 <CardMedia
                   image={storage}
@@ -445,7 +448,6 @@ function Landing() {
                 className="wow zoomIn"
                 data-wow-duration="1s"
                 data-wow-offset="100"
-                data-wow-delay="0.5s"
               >
                 <CardMedia
                   style={{ width: "40%", margin: "auto" }}
@@ -472,7 +474,6 @@ function Landing() {
                 className="wow zoomIn"
                 data-wow-duration="1s"
                 data-wow-offset="100"
-                data-wow-delay="0.5s"
               >
                 <CardMedia
                   image={support}
@@ -489,6 +490,64 @@ function Landing() {
                     gutterBottom
                   >
                     Dedicated Live Support
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Container>
+      </div>
+
+      <div id="contactus" style={{ marginTop: "5rem" }}>
+        <Typography
+          variant="h3"
+          component="p"
+          color="primary"
+          align="center"
+          gutterBottom
+        >
+          CONTACT SALES
+        </Typography>
+        <Container maxWidth="lg" style={{marginTop: "5rem"}}>
+          <Grid container spacing={5}>
+            <Grid item xs={12} sm={4}>
+              <Card elevation={0}>
+                <CardContent align="center">
+                  <Icon fontSize="large">chat_bubble_outline</Icon>
+                  <Typography
+                    variant="h6"
+                    component="p"
+                    color="textSecondary"
+                  >
+                    Chat
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Card elevation={0}>
+                <CardContent align="center">
+                  <Icon fontSize="large">email</Icon>
+                  <Typography
+                    variant="h6"
+                    component="p"
+                    color="textSecondary"
+                  >
+                    Email
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Card elevation={0}>
+                <CardContent align="center">
+                  <Icon fontSize="large">phone</Icon>
+                  <Typography
+                    variant="h6"
+                    component="p"
+                    color="textSecondary"
+                  >
+                    +44 8552376726
                   </Typography>
                 </CardContent>
               </Card>
