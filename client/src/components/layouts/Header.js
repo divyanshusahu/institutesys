@@ -60,9 +60,9 @@ function Header(props) {
         <AppBar className={classes.navbar} elevation={1}>
           <Toolbar>
             <div className={classes.navbarLogo}>
-              <RLink to="/">
+              <Link to="/" component={RLink}>
                 <img src={logo} alt="logo" title="Institute System" />
-              </RLink>
+              </Link>
             </div>
             <div>
               <Hidden smUp>
@@ -100,13 +100,15 @@ function Header(props) {
                 <Link href="#aboutus" color="inherit">
                   <Button className={classes.navbarButtons}>Contact</Button>
                 </Link>
-                <Link href="/login" color="inherit"><Button
-                  className={classes.navbarButtons}
-                  variant="outlined"
-                  color="primary"
-                >
-                  Login
-                </Button></Link>
+                <Link to="/login" component={RLink} color="inherit">
+                  <Button
+                    className={classes.navbarButtons}
+                    variant="outlined"
+                    color="primary"
+                  >
+                    Login
+                  </Button>
+                </Link>
               </Hidden>
             </div>
           </Toolbar>

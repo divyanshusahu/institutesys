@@ -10,6 +10,11 @@ import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
 
 const useStyles = makeStyles({
+  "@global": {
+    a: {
+      textDecoration: "none"
+    }
+  },
   wrapper: {
     backgroundColor: "white",
     display: "flex",

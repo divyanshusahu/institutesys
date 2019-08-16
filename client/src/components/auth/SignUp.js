@@ -1,4 +1,5 @@
 import React from "react";
+import { Link as RLink } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -103,7 +104,7 @@ export default function SignUp() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="/login" variant="body2">
+              <Link to="/login" variant="body2" component={RLink}>
                 Already have an account? Sign in
               </Link>
             </Grid>

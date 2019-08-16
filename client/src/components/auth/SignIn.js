@@ -1,4 +1,5 @@
 import React from "react";
+import { Link as RLink } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -86,7 +87,7 @@ function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/signup" variant="body2">
+              <Link to="/signup" variant="body2" component={RLink}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
