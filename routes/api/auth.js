@@ -76,10 +76,10 @@ router.post("/register", (req, res) => {
           ". Thanks for joining Institute System.<br /><br />" +
           "Please verify your account by clicking the link:<br />" +
           "http://" +
-          req.header.host +
-          "/confirmation/" +
-          token +
-          ".<br />"
+          req.headers.host +
+          "/api/auth/confirmation?token=" +
+          newToken.token +
+          "<br />"
       };
 
       transporter.sendMail(mailinfo, err => {
@@ -87,7 +87,8 @@ router.post("/register", (req, res) => {
           return res.status(500).json({ error: err.message });
         }
         res.status(200).json({
-          message: "A verification email has been sent to " + newUser.email
+          message: "A verification email has been sent to " + newUser.email,
+          success: true
         });
       });
     });
@@ -108,6 +109,11 @@ router.post("/login", (req, res) => {
     if (!user) {
       return res.status(400).json({ username: "No user found" });
     }
+
+    if (!user.isVerified) {
+      return res.status(400).json({ username: "Email not verified" });
+    }
+
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         var payload = {
@@ -128,6 +134,24 @@ router.post("/login", (req, res) => {
       } else {
         return res.status(400).json({ password: "Password is incorrect" });
       }
+    });
+  });
+});
+
+router.get("/confirmation", (req, res) => {
+  const token = req.query.token;
+  Token.findOne({ token }).then(t => {
+    var _id = t._userid;
+    User.findOne({ _id }).then(user => {
+      if (user.isVerified) {
+        return res.status(400).json({ info: "Email already verified" });
+      }
+
+      user.isVerified = true;
+      user.save().catch(err => res.json({ error: err.message }));
+      return res
+        .status(200)
+        .json({ success: true, message: "Email successfully verified" });
     });
   });
 });
