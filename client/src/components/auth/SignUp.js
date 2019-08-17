@@ -10,6 +10,11 @@ import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import FormControl from "@material-ui/core/FormControl";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -33,6 +38,22 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  const [values, setValues] = React.useState({
+    role: "",
+  });
+
+  const inputLabel = React.useRef(null);
+  const [labelWidth, setLabelWidth] = React.useState(0);
+  React.useEffect(() => {
+    setLabelWidth(inputLabel.current.offsetWidth);
+  }, []);
+
+  function handleChange(event) {
+    setValues(oldValues => ({
+      ...oldValues,
+      [event.target.name]: event.target.value
+    }));
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -46,27 +67,27 @@ export default function SignUp() {
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
-                autoComplete="fname"
-                name="firstName"
+                autoComplete="name"
+                name="name"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="name"
+                label="Name"
                 autoFocus
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
               />
             </Grid>
             <Grid item xs={12}>
@@ -91,6 +112,30 @@ export default function SignUp() {
                 id="password"
                 autoComplete="current-password"
               />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl required variant="outlined" fullWidth>
+                <InputLabel ref={inputLabel} htmlFor="role">
+                  Role
+                </InputLabel>
+                <Select
+                  value={values.role}
+                  onChange={handleChange}
+                  input={
+                    <OutlinedInput
+                      labelWidth={labelWidth}
+                      name="role"
+                      id="role"
+                    />
+                  }
+                >
+                  <MenuItem value="Institute">Institute</MenuItem>
+                  <MenuItem value="School">School</MenuItem>
+                  <MenuItem value="Teacher">Teacher</MenuItem>
+                  <MenuItem value="Student">Student</MenuItem>
+                  <MenuItem value="Parent">Parent</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
           <Button

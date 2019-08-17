@@ -8,6 +8,7 @@ import Landing from "./components/Landing";
 import Footer from "./components/layouts/Footer";
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
+import AdminLogin from "./components/auth/AdminLogin";
 
 const useStyles = makeStyles({
   "@global": {
@@ -36,6 +37,7 @@ function App() {
           <Route exact path="/" component={Landing} />
           <Route exact path="/login" component={SignIn} />
           <Route exact path="/signup" component={SignUp} />
+          <Route exact path="/rootadmin" component={AdminLogin} />
           <Footer />
         </div>
       </React.Fragment>
