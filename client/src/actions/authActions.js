@@ -1,13 +1,16 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
-import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING, REGISTER_STATUS } from "./types";
 
 // Register
-export const registerUser = (userData, history) => dispatch => {
+export const registerUser = (userData) => dispatch => {
   axios
     .post("/api/auth/register", userData)
-    .then(res => console.log(res))
+    .then(res => dispatch({
+      type: REGISTER_STATUS,
+      payload: res.data
+    }))
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

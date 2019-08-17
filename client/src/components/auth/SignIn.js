@@ -49,8 +49,6 @@ function SignIn(props) {
     props.loginUser(userData);
   }
 
-  console.log(props);
-
   useEffect(() => {
     if (props.auth.isAuthenticated) {
       let dashboard = props.auth.user["role"] + "dashboard";

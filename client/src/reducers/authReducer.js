@@ -1,11 +1,12 @@
-import { SET_CURRENT_USER, USER_LOADING } from "../actions/types";
+import { SET_CURRENT_USER, USER_LOADING, REGISTER_STATUS } from "../actions/types";
 
 const isEmpty = require("is-empty");
 
 const initialState = {
   isAuthenticated: false,
   user: {},
-  loading: false
+  loading: false,
+  registerMessage: {}
 };
 
 export default function(state = initialState, action) {
@@ -21,6 +22,11 @@ export default function(state = initialState, action) {
         ...state,
         loading: true
       };
+    case REGISTER_STATUS: 
+      return {
+        ...state,
+        registerMessage: action.payload
+      }
     default:
       return state;
   }

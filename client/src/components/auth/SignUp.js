@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link as RLink } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
+
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -15,6 +19,10 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+
+import Swal from "sweetalert2";
+import isEmpty from "is-empty";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -36,17 +44,30 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SignUp() {
+function SignUp(props) {
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    role: "",
+    role: ""
   });
 
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
+  
+  useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
-  }, []);
+
+    /*if (props.auth.isAuthenticated) {
+      let dashboard = props.auth.user["role"] + "dashboard";
+      props.history.push(dashboard.toLowerCase());
+    }*/
+    if (!isEmpty(props.auth.registerMessage)) {
+      Swal.fire({
+        type: props.auth.registerMessage.success ? "success" : "error",
+        text: props.auth.registerMessage.message
+      });
+    }
+    //console.log(props);
+  }, [props.auth.registerMessage]);
 
   function handleChange(event) {
     setValues(oldValues => ({
@@ -55,6 +76,19 @@ export default function SignUp() {
     }));
   }
 
+  function registerSubmit(event) {
+    event.preventDefault();
+
+    let newUser = {
+      name: document.getElementById("name").value,
+      username: document.getElementById("username").value,
+      email: document.getElementById("email").value,
+      password: document.getElementById("password").value,
+      role: document.getElementById("role").value
+    };
+    props.registerUser(newUser);
+  }
+  console.log(props);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -65,7 +99,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={registerSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -78,6 +112,7 @@ export default function SignUp() {
                 label="Name"
                 autoFocus
               />
+              <FormHelperText error>{props.errors["name"]}</FormHelperText>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -89,6 +124,7 @@ export default function SignUp() {
                 name="username"
                 autoComplete="username"
               />
+              <FormHelperText error>{props.errors["username"]}</FormHelperText>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -100,6 +136,7 @@ export default function SignUp() {
                 name="email"
                 autoComplete="email"
               />
+              <FormHelperText error>{props.errors["email"]}</FormHelperText>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -110,8 +147,9 @@ export default function SignUp() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                autoComplete="password"
               />
+              <FormHelperText error>{props.errors["password"]}</FormHelperText>
             </Grid>
             <Grid item xs={12}>
               <FormControl required variant="outlined" fullWidth>
@@ -136,6 +174,7 @@ export default function SignUp() {
                   <MenuItem value="Parent">Parent</MenuItem>
                 </Select>
               </FormControl>
+              <FormHelperText error>{props.errors["role"]}</FormHelperText>
             </Grid>
           </Grid>
           <Button
@@ -159,3 +198,19 @@ export default function SignUp() {
     </Container>
   );
 }
+
+SignUp.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors,
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(SignUp);
