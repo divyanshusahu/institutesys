@@ -1,5 +1,9 @@
 import React from "react";
 import { Link as RLink } from "react-router-dom";
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
+import { logoutUser } from "../../actions/authActions";
+
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
@@ -9,7 +13,6 @@ import Hidden from "@material-ui/core/Hidden";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
 import Slide from "@material-ui/core/Slide";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Link from "@material-ui/core/Link";
@@ -85,30 +88,48 @@ function Header(props) {
                   <MenuItem>About Us</MenuItem>
                   <MenuItem>Contact</MenuItem>
                   <MenuItem>Login</MenuItem>
+                  {props.auth.isAuthenticated ? (
+                    <MenuItem onClick={props.logoutUser}>Logout</MenuItem>
+                  ) : (
+                    <Link color="inherit" to="/login" component={RLink}>
+                      <MenuItem>Login</MenuItem>
+                    </Link>
+                  )}
                 </Menu>
               </Hidden>
               <Hidden xsDown>
-                <Link href="#features" color="inherit">
+                <Link href="/#features" color="inherit">
                   <Button className={classes.navbarButtons}>Features</Button>
                 </Link>
-                <Link href="#pricing" color="inherit">
+                <Link href="/#pricing" color="inherit">
                   <Button className={classes.navbarButtons}>Pricing</Button>
                 </Link>
-                <Link href="#aboutus" color="inherit">
+                <Link href="/#aboutus" color="inherit">
                   <Button className={classes.navbarButtons}>About Us</Button>
                 </Link>
-                <Link href="#aboutus" color="inherit">
+                <Link href="/#contactus" color="inherit">
                   <Button className={classes.navbarButtons}>Contact</Button>
                 </Link>
-                <Link to="/login" component={RLink} color="inherit">
+                {!props.auth.isAuthenticated ? (
+                  <Link to="/login" component={RLink} color="inherit">
+                    <Button
+                      className={classes.navbarButtons}
+                      variant="outlined"
+                      color="primary"
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                ) : (
                   <Button
                     className={classes.navbarButtons}
                     variant="outlined"
                     color="primary"
+                    onClick={props.logoutUser}
                   >
-                    Login
+                    Logout
                   </Button>
-                </Link>
+                )}
               </Hidden>
             </div>
           </Toolbar>
@@ -118,4 +139,16 @@ function Header(props) {
   );
 }
 
-export default Header;
+Header.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapToStateProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapToStateProps,
+  { logoutUser }
+)(Header);

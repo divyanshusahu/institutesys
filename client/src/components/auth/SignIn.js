@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link as RLink } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { loginUser } from "../../actions/authActions";
+
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -11,6 +15,7 @@ import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -32,8 +37,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function SignIn() {
+function SignIn(props) {
   const classes = useStyles();
+
+  function loginSubmit(event) {
+    event.preventDefault();
+    let userData = {
+      username: document.getElementById("username").value,
+      password: document.getElementById("password").value
+    };
+    props.loginUser(userData);
+  }
+
+  console.log(props);
+
+  useEffect(() => {
+    if (props.auth.isAuthenticated) {
+      let dashboard = props.auth.user["role"] + "dashboard";
+      props.history.push(dashboard.toLowerCase());
+    }
+  });
 
   return (
     <Container component="main" maxWidth="xs">
@@ -44,7 +67,7 @@ function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={loginSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -56,6 +79,7 @@ function SignIn() {
             autoComplete="username"
             autoFocus
           />
+          <FormHelperText error>{props.errors["username"]}</FormHelperText>
           <TextField
             variant="outlined"
             margin="normal"
@@ -67,6 +91,7 @@ function SignIn() {
             id="password"
             autoComplete="current-password"
           />
+          <FormHelperText error>{props.errors["password"]}</FormHelperText>
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
@@ -98,4 +123,19 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+SignIn.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors,
+  classes: state.classes
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(SignIn);
