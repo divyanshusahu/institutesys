@@ -7,6 +7,7 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
 const validateRegisterInputs = require("../../validation/register");
+const validateLoginInputs = require("../../validation/login");
 
 const User = require("../../models/User");
 const Token = require("../../models/Token");
@@ -89,6 +90,44 @@ router.post("/register", (req, res) => {
           message: "A verification email has been sent to " + newUser.email
         });
       });
+    });
+  });
+});
+
+router.post("/login", (req, res) => {
+  const { errors, isValid } = validateLoginInputs(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  var username = req.body.username;
+  var password = req.body.password;
+
+  User.findOne({ username }).then(user => {
+    if (!user) {
+      return res.status(400).json({ username: "No user found" });
+    }
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (isMatch) {
+        var payload = {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          username: user.username,
+          role: user.role
+        };
+        jwt.sign(
+          payload,
+          keys.secretOrKey,
+          { expiresIn: 86400 },
+          (err, token) => {
+            res.json({ success: true, token: "Bearer " + token });
+          }
+        );
+      } else {
+        return res.status(400).json({ password: "Password is incorrect" });
+      }
     });
   });
 });
