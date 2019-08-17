@@ -56,13 +56,21 @@ router.post("/register", (req, res) => {
 
       newToken.save().catch(err => res.status(500).json({ error: err }));
 
-      let transporter = nodemailer.createTransport({
+      /*let transporter = nodemailer.createTransport({
         host: "smtp.pepipost.com",
         post: 587,
         secure: false,
         auth: {
           user: process.env.PEPIPOST_USER,
           pass: process.env.PEPIPOST_PASSWORD
+        }
+      });*/
+
+      let transporter = nodemailer.createTransport({
+        service: "SendGrid",
+        auth: {
+          user: process.env.SENDGRID_USER,
+          pass: process.env.SENDGRID_PASSWORD
         }
       });
 
