@@ -6,12 +6,13 @@ const path = require("path");
 
 //const users = require("./routes/api/users");
 //const tests = require("./routes/api/tests");
+const auth = require("./routes/api/auth");
 
 const app = express();
 
 app.use(
   bodyParser.urlencoded({
-    extended: false
+    extended: true
   })
 );
 app.use(bodyParser.json());
@@ -28,6 +29,7 @@ mongoose
 
 //app.use("/api/users", users);
 //app.use("/api/tests", tests);
+app.use("/api/auth", auth);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
