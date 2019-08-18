@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
+
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -13,12 +13,11 @@ import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+import Icon from "@material-ui/core/Icon";
 
-const drawerWidth = 240;
+import SidebarItems from "./SidebarItems";
+
+const drawerWidth = 300;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -81,8 +80,7 @@ const useStyles = makeStyles(theme => ({
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    height: "100vh",
-    overflow: "auto"
+    minHeight: "calc(100vh - 52px)"
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -112,7 +110,6 @@ function AdminDashboard() {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <AppBar
         position="absolute"
         className={clsx(classes.appBar, open && classes.appBarShift)}
@@ -128,7 +125,7 @@ function AdminDashboard() {
               open && classes.menuButtonHidden
             )}
           >
-            <MenuIcon />
+            <Icon>menu</Icon>
           </IconButton>
           <Typography
             component="h1"
@@ -137,17 +134,18 @@ function AdminDashboard() {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            Institute System
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
+            <Badge badgeContent={0} color="secondary">
+              <Icon>notifications</Icon>
             </Badge>
           </IconButton>
         </Toolbar>
       </AppBar>
+
       <Drawer
-        variant="permanent"
+        variant={window.innerWidth>576 ? "permanent" : "temporary"}
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
         }}
@@ -155,35 +153,28 @@ function AdminDashboard() {
       >
         <div className={classes.toolbarIcon}>
           <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
+            <Icon>chevron_left</Icon>
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
+        <List><SidebarItems /></List>
       </Drawer>
+
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
+              <Paper className={fixedHeightPaper} />
             </Grid>
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
+              <Paper className={fixedHeightPaper} />
             </Grid>
             {/* Recent Orders */}
             <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
+              <Paper className={classes.paper} />
             </Grid>
           </Grid>
         </Container>

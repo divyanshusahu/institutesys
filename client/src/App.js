@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import jwt_decode from "jwt-decode";
@@ -11,7 +11,9 @@ import Landing from "./components/Landing";
 import Footer from "./components/layouts/Footer";
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
+import AdminDashboard from "./components/dashboard/admin/AdminDashboard";
 
+import PrivateRoute from "./components/PrivateRoute";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 
@@ -48,6 +50,9 @@ function App() {
             <Route exact path="/" component={Landing} />
             <Route exact path="/login" component={SignIn} />
             <Route exact path="/signup" component={SignUp} />
+            <Switch>
+              <PrivateRoute  exact path="/admindashboard" component={AdminDashboard} />
+            </Switch>
             <Footer />
           </div>
         </React.Fragment>

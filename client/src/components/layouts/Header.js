@@ -57,6 +57,11 @@ function Header(props) {
     setAnchorEl(null);
   }
 
+  const pathname = window.location.pathname;
+  if (pathname.indexOf("dashboard") >= 0) {
+    return null;
+  }
+
   return (
     <HideOnScroll {...props}>
       <div>
