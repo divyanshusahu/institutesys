@@ -8,6 +8,7 @@ const path = require("path");
 //const tests = require("./routes/api/tests");
 const auth = require("./routes/api/auth");
 const institutes = require("./routes/api/institutes");
+const features = require("./routes/api/features");
 
 const app = express();
 
@@ -32,6 +33,7 @@ mongoose
 //app.use("/api/tests", tests);
 app.use("/api/auth", auth);
 app.use("/api/institutes", institutes);
+app.use("/api/features", features);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
