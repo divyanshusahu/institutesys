@@ -7,6 +7,7 @@ const path = require("path");
 //const users = require("./routes/api/users");
 //const tests = require("./routes/api/tests");
 const auth = require("./routes/api/auth");
+const institutes = require("./routes/api/institutes");
 
 const app = express();
 
@@ -30,6 +31,7 @@ mongoose
 //app.use("/api/users", users);
 //app.use("/api/tests", tests);
 app.use("/api/auth", auth);
+app.use("/api/institutes", institutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
