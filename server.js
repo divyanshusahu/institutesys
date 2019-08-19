@@ -9,6 +9,9 @@ const path = require("path");
 const auth = require("./routes/api/auth");
 const institutes = require("./routes/api/institutes");
 const features = require("./routes/api/features");
+const standards = require("./routes/api/standards");
+const categories = require("./routes/api/categories");
+const grievance_categories = require("./routes/api/grievance_categories");
 
 const app = express();
 
@@ -26,14 +29,17 @@ mongoose
   .then(() => console.log("Connected to Mongo Database"))
   .catch(err => console.log(err));
 
-//app.use(passport.initialize());
-//require("./config/passport")(passport);
+app.use(passport.initialize());
+require("./config/passport")(passport);
 
 //app.use("/api/users", users);
 //app.use("/api/tests", tests);
 app.use("/api/auth", auth);
 app.use("/api/institutes", institutes);
 app.use("/api/features", features);
+app.use("/api/standards", standards);
+app.use("/api/categories", categories);
+app.use("/api/grievance_categories", grievance_categories);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
