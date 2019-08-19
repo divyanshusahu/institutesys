@@ -41,8 +41,21 @@ router.post("/create", (req, res) => {
 router.get("/list", (req, res) => {
   Institute.find({}).then(user => {
     if (user) {
-      return res.status(200).json({ success: true, item: user, name: "Institute List" });
+      var send_data = user.map((user) => {
+        return {
+          status: user.status,
+          name: user.name,
+          "phone number": user.phone_number,
+          "registration number": user.registration_number,
+          "owner email": user.owner_email,
+          "funding body": user.funding_body
+        }
+      })
+      return res
+        .status(200)
+        .json({ success: true, item: send_data, name: "Institute List" });
     }
+    return res.status(400).json({ success: false });
   });
 });
 

@@ -113,11 +113,13 @@ function AdminDashboard(props) {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const [table, setTable] = React.useState({
-    title: "Title"
+    title: "Title",
+    columns: [],
+    data: []
   });
   React.useEffect(() => {
     // show data
-    if (!isEmpty(props.datalist)) {
+    if (!isEmpty(props.datalist) && props.datalist.data.item.length) {
       var fields = Object.keys(props.datalist.data.item[0]);
       var columns = fields.map((c) => {
         return {
@@ -198,6 +200,13 @@ function AdminDashboard(props) {
                 title={table.title}
                 columns={table.columns}
                 data={table.data}
+                actions={[
+                  {icon: 'edit', tooltip: "Edit"},
+                  {icon: 'delete', tooltip: "Delete"}
+                ]}
+                options={{
+                  actionsColumnIndex: -1
+                }}
               />
             </Grid>
           </Grid>
