@@ -59,4 +59,13 @@ router.get("/list", (req, res) => {
   });
 });
 
+router.post("/delete", (req, res) => {
+  Institute.deleteOne({ name: req.body.name }, function(err) {
+    if (err) {
+      return res.status(400).json({ success: false });
+    }
+    return res.status(200).json({ success: true });
+  });
+});
+
 module.exports = router;

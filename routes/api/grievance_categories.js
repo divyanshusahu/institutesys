@@ -29,7 +29,10 @@ router.post("/create", (req, res) => {
       .then(() =>
         res
           .status(200)
-          .json({ success: true, message: "Grievance Category created successfully" })
+          .json({
+            success: true,
+            message: "Grievance Category created successfully"
+          })
       )
       .catch(err => res.status(500).json({ status: false, error: err }));
   });
@@ -40,15 +43,28 @@ router.get("/list", (req, res) => {
     if (user) {
       var send_data = user.map(user => {
         return {
-          description: user.description,
-          name: user.name
+          name: user.name,
+          description: user.description
         };
       });
       return res
         .status(200)
-        .json({ success: true, item: send_data, name: "Grievance Category List" });
+        .json({
+          success: true,
+          item: send_data,
+          name: "Grievance Category List"
+        });
     }
     return res.status(400).json({ success: false });
+  });
+});
+
+router.post("/delete", (req, res) => {
+  GrievanceCategory.deleteOne({ name: req.body.name }, function(err) {
+    if (err) {
+      return res.status(400).json({ success: false });
+    }
+    return res.status(200).json({ success: true });
   });
 });
 

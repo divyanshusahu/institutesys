@@ -3,7 +3,10 @@ import clsx from "clsx";
 import MaterialTable from "material-table";
 import isEmpty from "is-empty";
 import { connect } from "react-redux";
+import { listData } from "../../../actions/listActions";
 import PropTypes from "prop-types";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -121,14 +124,14 @@ function AdminDashboard(props) {
     // show data
     if (!isEmpty(props.datalist) && props.datalist.data.item.length) {
       var fields = Object.keys(props.datalist.data.item[0]);
-      var columns = fields.map((c) => {
+      var columns = fields.map(c => {
         return {
           title: c.toUpperCase(),
           field: c
-        }
+        };
       });
       let data = props.datalist.data.item;
-      
+
       setTable({
         title: props.datalist.data.name,
         columns: columns,
@@ -136,6 +139,48 @@ function AdminDashboard(props) {
       });
     }
   }, [props.datalist]);
+
+  function handleDeleteData(type, item) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then(result => {
+      if (result.value) {
+        if (type === "Grievance Category List") {
+          axios.post("/api/grievance_categories/delete", {
+            name: item
+          });
+          props.listData("grievance_category");
+        } else if (type === "Category List") {
+          axios.post("/api/categories/delete", {
+            name: item
+          });
+          props.listData("category");
+        } else if (type === "Standard List") {
+          axios.post("/api/standards/delete", {
+            name: item
+          });
+          props.listData("standard");
+        } else if (type === "Feature List") {
+          axios.post("/api/features/delete", {
+            name: item
+          });
+          props.listData("feature");
+        } else if (type === "Institute List") {
+          axios.post("/api/institutes/delete", {
+            name: item
+          });
+          props.listData("institute");
+        }
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  }
 
   return (
     <div className={classes.root}>
@@ -201,8 +246,14 @@ function AdminDashboard(props) {
                 columns={table.columns}
                 data={table.data}
                 actions={[
-                  {icon: 'edit', tooltip: "Edit"},
-                  {icon: 'delete', tooltip: "Delete"}
+                  { icon: "edit", tooltip: "Edit" },
+                  {
+                    icon: "delete",
+                    tooltip: "Delete",
+                    onClick: (event, rowData) => {
+                      handleDeleteData(table.title, rowData.name);
+                    }
+                  }
                 ]}
                 options={{
                   actionsColumnIndex: -1
@@ -217,6 +268,7 @@ function AdminDashboard(props) {
 }
 
 AdminDashboard.propTypes = {
+  listData: PropTypes.func.isRequired,
   datalist: PropTypes.object.isRequired
 };
 
@@ -224,4 +276,7 @@ const mapStatetoProps = state => ({
   datalist: state.datalist
 });
 
-export default connect(mapStatetoProps)(AdminDashboard);
+export default connect(
+  mapStatetoProps,
+  { listData }
+)(AdminDashboard);
