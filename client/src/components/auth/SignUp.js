@@ -88,7 +88,7 @@ function SignUp(props) {
     };
     props.registerUser(newUser);
   }
-  console.log(props);
+  
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

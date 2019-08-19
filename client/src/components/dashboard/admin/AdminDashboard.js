@@ -1,5 +1,9 @@
 import React from "react";
 import clsx from "clsx";
+import MaterialTable from "material-table";
+import isEmpty from "is-empty";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -97,7 +101,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function AdminDashboard() {
+function AdminDashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -107,6 +111,29 @@ function AdminDashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  const [table, setTable] = React.useState({
+    title: "Title"
+  });
+  React.useEffect(() => {
+    // show data
+    if (!isEmpty(props.datalist)) {
+      var fields = Object.keys(props.datalist.data.item[0]);
+      var columns = fields.map((c) => {
+        return {
+          title: c.toUpperCase(),
+          field: c
+        }
+      });
+      let data = props.datalist.data.item;
+      
+      setTable({
+        title: props.datalist.data.name,
+        columns: columns,
+        data: data
+      });
+    }
+  }, [props.datalist]);
 
   return (
     <div className={classes.root}>
@@ -145,7 +172,7 @@ function AdminDashboard() {
       </AppBar>
 
       <Drawer
-        variant={window.innerWidth>576 ? "permanent" : "temporary"}
+        variant={window.innerWidth > 576 ? "permanent" : "temporary"}
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
         }}
@@ -157,24 +184,21 @@ function AdminDashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List><SidebarItems /></List>
+        <List>
+          <SidebarItems />
+        </List>
       </Drawer>
 
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper} />
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper} />
-            </Grid>
-            {/* Recent Orders */}
             <Grid item xs={12}>
-              <Paper className={classes.paper} />
+              <MaterialTable
+                title={table.title}
+                columns={table.columns}
+                data={table.data}
+              />
             </Grid>
           </Grid>
         </Container>
@@ -183,4 +207,12 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+AdminDashboard.propTypes = {
+  datalist: PropTypes.object.isRequired
+};
+
+const mapStatetoProps = state => ({
+  datalist: state.datalist
+});
+
+export default connect(mapStatetoProps)(AdminDashboard);

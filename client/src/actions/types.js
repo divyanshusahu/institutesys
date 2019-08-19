@@ -1,4 +1,6 @@
 export const GET_ERRORS = "GET_ERRORS";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
-export const USER_LOADING = "USER_LOADING";
 export const REGISTER_STATUS = "REGISTER_STATUS";
+export const ADD_INSTITUTE_STATUS = "ADD_INSTITUTE_STATUS";
+export const CLEAR_PROPS = "CLEAR_PROPS";
+export const LIST_DATA = "LIST_DATA";

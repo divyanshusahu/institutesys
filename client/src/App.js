@@ -17,6 +17,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 
+import "./assets/css/main.css";
+
 const useStyles = makeStyles({
   wrapper: {
     backgroundColor: "white",

@@ -1,4 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { listData } from "../../../actions/listActions";
+
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -17,13 +21,13 @@ import GrievanceCategoryModal from "./GrievanceCategoryModal";
 
 const useStyles = makeStyles(theme => ({
   nested: {
-    paddingLeft: theme.spacing(8) 
+    paddingLeft: theme.spacing(8)
   }
 }));
 
-function SidebarItems() {
+function SidebarItems(props) {
   const classes = useStyles();
-  
+
   const [nestedopen0, setOpen0] = React.useState(false);
   const [nestedopen1, setOpen1] = React.useState(false);
   const [nestedopen2, setOpen2] = React.useState(false);
@@ -36,7 +40,7 @@ function SidebarItems() {
   const [openSM, setOpen11] = React.useState(false);
   const [openCM, setOpen12] = React.useState(false);
   const [openGCM, setOpen13] = React.useState(false);
-  
+
   function handleClick0() {
     setOpen0(!nestedopen0);
   }
@@ -138,7 +142,11 @@ function SidebarItems() {
           >
             <ManageInstituteModal />
           </Dialog>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.listData("institute")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>
@@ -347,4 +355,18 @@ function SidebarItems() {
   );
 }
 
-export default SidebarItems;
+SidebarItems.propTypes = {
+  listData: PropTypes.func.isRequired,
+  institutes: PropTypes.object.isRequired,
+  datalist: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  institutes: state.institutes,
+  datalist: state.datalist
+});
+
+export default connect(
+  mapStateToProps,
+  { listData }
+)(SidebarItems);
