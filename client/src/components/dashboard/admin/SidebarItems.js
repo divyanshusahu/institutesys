@@ -272,13 +272,17 @@ function SidebarItems(props) {
           <Dialog
             open={openSM}
             onClose={handleSMClose}
-            aria-labelledby="manage_institute"
+            aria-labelledby="standard"
             maxWidth="sm"
             fullWidth
           >
             <StandardModal />
           </Dialog>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.listData("standard")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>
@@ -311,7 +315,11 @@ function SidebarItems(props) {
           >
             <CategoryModal />
           </Dialog>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.listData("category")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>
@@ -344,6 +352,16 @@ function SidebarItems(props) {
           >
             <GrievanceCategoryModal />
           </Dialog>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.listData("grievance_category")}
+          >
+            <ListItemIcon>
+              <Icon>list</Icon>
+            </ListItemIcon>
+            <ListItemText primary="List" />
+          </ListItem>
         </List>
       </Collapse>
 

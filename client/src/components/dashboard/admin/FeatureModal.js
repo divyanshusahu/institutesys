@@ -13,9 +13,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import FormHelperText from "@material-ui/core/FormHelperText";
 
 function FeatureModal(props) {
-
   React.useEffect(() => {
-
     if (!isEmpty(props.features.add)) {
       Swal.fire({
         type: props.features.add.success ? "success" : "error",
