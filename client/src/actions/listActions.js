@@ -9,5 +9,12 @@ export const listData = type => dispatch => {
         payload: res.data
       });
     });
+  } else if (type === "feature") {
+    axios.get("/api/features/list").then(res => {
+      dispatch({
+        type: LIST_DATA,
+        payload: res.data
+      });
+    });
   }
 };

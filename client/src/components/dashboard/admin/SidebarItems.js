@@ -179,7 +179,11 @@ function SidebarItems(props) {
           >
             <FeatureModal />
           </Dialog>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.listData("feature")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>
