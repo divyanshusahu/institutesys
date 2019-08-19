@@ -16,7 +16,7 @@ router.post("/create", (req, res) => {
     if (user) {
       return res
         .status(400)
-        .json({ success: false, name: "Feature already exist" });
+        .json({ success: false, message: "Feature already exist" });
     }
 
     const newFeature = new Feature({

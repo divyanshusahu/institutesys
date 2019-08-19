@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, ADD_FEATURE_STATUS, CLEAR_PROPS } from "./types";
+import { ADD_FEATURE_STATUS, CLEAR_PROPS } from "./types";
 
 export const addFeature = userData => dispatch => {
   axios
@@ -12,7 +12,7 @@ export const addFeature = userData => dispatch => {
     })
     .catch(err => {
       dispatch({
-        type: GET_ERRORS,
+        type: ADD_FEATURE_STATUS,
         payload: err.response.data
       });
     });

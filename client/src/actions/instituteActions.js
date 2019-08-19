@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-  GET_ERRORS,
-  ADD_INSTITUTE_STATUS,
-  CLEAR_PROPS
-} from "./types";
+import { ADD_INSTITUTE_STATUS, CLEAR_PROPS } from "./types";
 
 export const addInstitute = userData => dispatch => {
   axios
@@ -16,7 +12,7 @@ export const addInstitute = userData => dispatch => {
     })
     .catch(err => {
       dispatch({
-        type: GET_ERRORS,
+        type: ADD_INSTITUTE_STATUS,
         payload: err.response.data
       });
     });

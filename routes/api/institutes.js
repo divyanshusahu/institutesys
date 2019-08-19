@@ -16,7 +16,7 @@ router.post("/create", (req, res) => {
     if (user) {
       return res
         .status(400)
-        .json({ success: false, name: "Institute already exist" });
+        .json({ success: false, message: "Institute already exist" });
     }
 
     const newInstitute = new Institute({

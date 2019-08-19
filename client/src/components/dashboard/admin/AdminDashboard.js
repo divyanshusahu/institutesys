@@ -21,6 +21,7 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Icon from "@material-ui/core/Icon";
+import Hidden from "@material-ui/core/Hidden";
 
 import SidebarItems from "./SidebarItems";
 
@@ -113,7 +114,7 @@ function AdminDashboard(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const [table, setTable] = React.useState({
     title: "Title",
@@ -121,6 +122,9 @@ function AdminDashboard(props) {
     data: []
   });
   React.useEffect(() => {
+    if (window.innerWidth < 576) {
+      setOpen(false);
+    }
     // show data
     if (!isEmpty(props.datalist) && props.datalist.data.item.length) {
       var fields = Object.keys(props.datalist.data.item[0]);
@@ -182,25 +186,35 @@ function AdminDashboard(props) {
     });
   }
 
+  function handleRefresh(type) {
+    if (type === "Grievance Category List") {
+      props.listData("grievance_category");
+    } else if (type === "Institute List") {
+      props.listData("institute");
+    } else if (type === "Feature List") {
+      props.listData("feature");
+    } else if (type === "Standard List") {
+      props.listData("standard");
+    } else if (type === "Category List") {
+      props.listData("category");
+    }
+  }
+
   return (
     <div className={classes.root}>
-      <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
-      >
+      <AppBar position="absolute" className={clsx(classes.appBar)}>
         <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
-          >
-            <Icon>menu</Icon>
-          </IconButton>
+          <Hidden smUp>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              className={clsx(classes.menuButton)}
+            >
+              <Icon>menu</Icon>
+            </IconButton>
+          </Hidden>
           <Typography
             component="h1"
             variant="h6"
@@ -224,11 +238,12 @@ function AdminDashboard(props) {
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
         }}
         open={open}
+        onClose={handleDrawerClose}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/*<IconButton onClick={handleDrawerClose}>
             <Icon>chevron_left</Icon>
-          </IconButton>
+      </IconButton>*/}
         </div>
         <Divider />
         <List>
@@ -252,6 +267,14 @@ function AdminDashboard(props) {
                     tooltip: "Delete",
                     onClick: (event, rowData) => {
                       handleDeleteData(table.title, rowData.name);
+                    }
+                  },
+                  {
+                    icon: "refresh",
+                    tooltip: "Refresh",
+                    isFreeAction: true,
+                    onClick: () => {
+                      handleRefresh(table.title);
                     }
                   }
                 ]}

@@ -16,7 +16,7 @@ router.post("/create", (req, res) => {
     if (user) {
       return res
         .status(400)
-        .json({ success: false, name: "Grievance Category already exist" });
+        .json({ success: false, message: "Grievance Category already exist" });
     }
 
     const newGrievanceCategory = new GrievanceCategory({

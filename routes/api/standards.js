@@ -16,7 +16,7 @@ router.post("/create", (req, res) => {
     if (user) {
       return res
         .status(400)
-        .json({ success: false, name: "Standard already exist" });
+        .json({ success: false, message: "Standard already exist" });
     }
 
     const newStandard = new Standard({

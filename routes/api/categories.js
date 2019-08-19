@@ -16,7 +16,7 @@ router.post("/create", (req, res) => {
     if (user) {
       return res
         .status(400)
-        .json({ success: false, name: "Category already exist" });
+        .json({ success: false, message: "Category already exist" });
     }
 
     const newCategory = new Category({
