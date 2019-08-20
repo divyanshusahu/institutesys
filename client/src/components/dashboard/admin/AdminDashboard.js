@@ -127,7 +127,7 @@ function AdminDashboard(props) {
     if (!isEmpty(props.datalist) && props.datalist.data.item.length) {
       var fields = Object.keys(props.datalist.data.item[0]);
       var columns = fields.map(c => {
-        if (c === "name") {
+        if (c === "name" || c === "country_name") {
           return {
             title: c.replace("_", " ").toUpperCase(),
             field: c,
@@ -184,6 +184,11 @@ function AdminDashboard(props) {
             name: item
           });
           props.listData("institute");
+        } else if (type === "Tax List") {
+          axios.post("/api/tax/delete", {
+            country_name: item
+          });
+          props.listData("tax");
         }
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
@@ -201,15 +206,18 @@ function AdminDashboard(props) {
       props.listData("standard");
     } else if (type === "Category List") {
       props.listData("category");
+    } else if (type === "Tax List") {
+      props.listData("tax");
     }
   }
 
   function handleUpdate(type, newData) {
-    var status, message;
     if (type === "Institute List") {
       axios.post("/api/institutes/update", newData);
     } else if (type === "Feature List") {
       axios.post("/api/features/update", newData);
+    } else if (type === "Tax List") {
+      axios.post("/api/tax/update", newData);
     } else if (type === "Standard List") {
       axios.post("/api/standards/update", newData);
     } else if (type === "Grievance Category List") {
@@ -261,9 +269,6 @@ function AdminDashboard(props) {
         onClose={handleDrawerClose}
       >
         <div className={classes.toolbarIcon}>
-          {/*<IconButton onClick={handleDrawerClose}>
-            <Icon>chevron_left</Icon>
-      </IconButton>*/}
         </div>
         <Divider />
         <List>
@@ -285,7 +290,7 @@ function AdminDashboard(props) {
                     icon: "delete",
                     tooltip: "Delete",
                     onClick: (event, rowData) => {
-                      handleDeleteData(table.title, rowData.name);
+                      handleDeleteData(table.title, rowData.name || rowData.country_name);
                     }
                   },
                   {

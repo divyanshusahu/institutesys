@@ -3,6 +3,7 @@ import authReducer from "./authReducer";
 import errorReducer from "./errorReducer";
 import instituteReducer from "./instituteReducer";
 import featureReducer from "./featureReducer";
+import taxReducer from "./taxReducer";
 import standardReducer from "./standardReducer";
 import categoryReducer from "./categoryReducer";
 import grievanceCategoryReducer from "./grievanceCategoryReducer";
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   errors: errorReducer,
   institutes: instituteReducer,
   features: featureReducer,
+  tax: taxReducer,
   standards: standardReducer,
   categories: categoryReducer,
   grievance_categories: grievanceCategoryReducer,

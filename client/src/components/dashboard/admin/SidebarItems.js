@@ -15,6 +15,7 @@ import Dialog from "@material-ui/core/Dialog";
 
 import ManageInstituteModal from "./ManageInstituteModal";
 import FeatureModal from "./FeatureModal";
+import TaxModal from "./TaxModal";
 import StandardModal from "./StandardModal";
 import CategoryModal from "./CategoryModal";
 import GrievanceCategoryModal from "./GrievanceCategoryModal";
@@ -37,6 +38,7 @@ function SidebarItems(props) {
   const [nestedopen6, setOpen6] = React.useState(false);
   const [openMIM, setOpen7] = React.useState(false);
   const [openFM, setOpen8] = React.useState(false);
+  const [openTM, setOpen10] = React.useState(false);
   const [openSM, setOpen11] = React.useState(false);
   const [openCM, setOpen12] = React.useState(false);
   const [openGCM, setOpen13] = React.useState(false);
@@ -83,6 +85,14 @@ function SidebarItems(props) {
 
   function handleFMClose() {
     setOpen8(false);
+  }
+
+  function handleTMOpen() {
+    setOpen10(true);
+  }
+
+  function handleTMClose() {
+    setOpen10(false);
   }
 
   function handleSMOpen() {
@@ -239,13 +249,26 @@ function SidebarItems(props) {
       </ListItem>
       <Collapse in={nestedopen3} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+          <ListItem button className={classes.nested} onClick={handleTMOpen}>
             <ListItemIcon>
               <Icon>edit</Icon>
             </ListItemIcon>
             <ListItemText primary="Create" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <Dialog
+            open={openTM}
+            onClose={handleTMClose}
+            aria-labelledby="tax"
+            maxWidth="sm"
+            fullWidth
+          >
+            <TaxModal />
+          </Dialog>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.listData("tax")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>

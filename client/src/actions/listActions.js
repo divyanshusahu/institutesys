@@ -16,7 +16,15 @@ export const listData = type => dispatch => {
         payload: res.data
       });
     });
-  } else if (type === "standard") {
+  } else if (type === "tax") {
+    axios.get("/api/tax/list").then(res => {
+      dispatch({
+        type: LIST_DATA,
+        payload: res.data
+      });
+    });
+  }
+   else if (type === "standard") {
     axios.get("/api/standards/list").then(res => {
       dispatch({
         type: LIST_DATA,
