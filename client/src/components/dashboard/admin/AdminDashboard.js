@@ -19,7 +19,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import Icon from "@material-ui/core/Icon";
 import Hidden from "@material-ui/core/Hidden";
 
@@ -114,7 +113,6 @@ function AdminDashboard(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const [table, setTable] = React.useState({
     title: "Title",
@@ -129,13 +127,19 @@ function AdminDashboard(props) {
     if (!isEmpty(props.datalist) && props.datalist.data.item.length) {
       var fields = Object.keys(props.datalist.data.item[0]);
       var columns = fields.map(c => {
+        if (c === "name") {
+          return {
+            title: c.replace("_", " ").toUpperCase(),
+            field: c,
+            editable: "never"
+          };
+        }
         return {
-          title: c.toUpperCase(),
+          title: c.replace("_", " ").toUpperCase(),
           field: c
         };
       });
       let data = props.datalist.data.item;
-
       setTable({
         title: props.datalist.data.name,
         columns: columns,
@@ -200,6 +204,22 @@ function AdminDashboard(props) {
     }
   }
 
+  function handleUpdate(type, newData) {
+    var status, message;
+    if (type === "Institute List") {
+      axios.post("/api/institutes/update", newData);
+    } else if (type === "Feature List") {
+      axios.post("/api/features/update", newData);
+    } else if (type === "Standard List") {
+      axios.post("/api/standards/update", newData);
+    } else if (type === "Grievance Category List") {
+      axios.post("/api/grievance_categories/update", newData);
+    } else if (type === "Category List") {
+      axios.post("/api/categories/update", newData);
+    }
+    handleRefresh(type);
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="absolute" className={clsx(classes.appBar)}>
@@ -261,7 +281,6 @@ function AdminDashboard(props) {
                 columns={table.columns}
                 data={table.data}
                 actions={[
-                  { icon: "edit", tooltip: "Edit" },
                   {
                     icon: "delete",
                     tooltip: "Delete",
@@ -280,6 +299,17 @@ function AdminDashboard(props) {
                 ]}
                 options={{
                   actionsColumnIndex: -1
+                }}
+                editable={{
+                  onRowUpdate: (newData, oldData) =>
+                    new Promise((resolve, reject) => {
+                      setTimeout(() => {
+                        {
+                          handleUpdate(table.title, newData);
+                        }
+                        resolve();
+                      }, 1000);
+                    })
                 }}
               />
             </Grid>

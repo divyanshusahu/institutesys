@@ -41,16 +41,16 @@ router.post("/create", (req, res) => {
 router.get("/list", (req, res) => {
   Institute.find({}).then(user => {
     if (user) {
-      var send_data = user.map((user) => {
+      var send_data = user.map(user => {
         return {
           status: user.status,
           name: user.name,
-          "phone number": user.phone_number,
-          "registration number": user.registration_number,
-          "owner email": user.owner_email,
-          "funding body": user.funding_body
-        }
-      })
+          "phone_number": user.phone_number,
+          "registration_number": user.registration_number,
+          "owner_email": user.owner_email,
+          "funding_body": user.funding_body
+        };
+      });
       return res
         .status(200)
         .json({ success: true, item: send_data, name: "Institute List" });
@@ -66,6 +66,24 @@ router.post("/delete", (req, res) => {
     }
     return res.status(200).json({ success: true });
   });
+});
+
+router.post("/update", (req, res) => {
+  Institute.findOneAndUpdate(
+    { name: req.body.name },
+    req.body,
+    {new: true},
+    function(err, doc) {
+      if (err) {
+        return res
+          .status(500)
+          .json({ status: false, message: "Internal Server Error" });
+      }
+      return res
+        .status(200)
+        .json({ status: true, message: "Successfully Updated" });
+    }
+  );
 });
 
 module.exports = router;

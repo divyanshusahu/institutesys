@@ -61,4 +61,22 @@ router.post("/delete", (req, res) => {
   });
 });
 
+router.post("/update", (req, res) => {
+  Standard.findOneAndUpdate(
+    { name: req.body.name },
+    req.body,
+    { new: true },
+    function(err, doc) {
+      if (err) {
+        return res
+          .status(500)
+          .json({ status: false, message: "Internal Server Error" });
+      }
+      return res
+        .status(200)
+        .json({ status: true, message: "Successfully Updated" });
+    }
+  );
+});
+
 module.exports = router;
