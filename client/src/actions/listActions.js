@@ -16,6 +16,13 @@ export const listData = type => dispatch => {
         payload: res.data
       });
     });
+  } else if (type === "subscription") {
+    axios.get("/api/subscriptions/list").then(res => {
+      dispatch({
+        type: LIST_DATA,
+        payload: res.data
+      });
+    });
   } else if (type === "tax") {
     axios.get("/api/tax/list").then(res => {
       dispatch({

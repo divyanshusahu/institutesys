@@ -15,6 +15,7 @@ import Dialog from "@material-ui/core/Dialog";
 
 import ManageInstituteModal from "./ManageInstituteModal";
 import FeatureModal from "./FeatureModal";
+import SubscriptionModal from "./SubscriptionModal";
 import TaxModal from "./TaxModal";
 import StandardModal from "./StandardModal";
 import CategoryModal from "./CategoryModal";
@@ -38,6 +39,7 @@ function SidebarItems(props) {
   const [nestedopen6, setOpen6] = React.useState(false);
   const [openMIM, setOpen7] = React.useState(false);
   const [openFM, setOpen8] = React.useState(false);
+  const [openSubM, setOpen9] = React.useState(false);
   const [openTM, setOpen10] = React.useState(false);
   const [openSM, setOpen11] = React.useState(false);
   const [openCM, setOpen12] = React.useState(false);
@@ -85,6 +87,14 @@ function SidebarItems(props) {
 
   function handleFMClose() {
     setOpen8(false);
+  }
+
+  function handleSubMOpen() {
+    setOpen9(true);
+  }
+
+  function handleSubMClose() {
+    setOpen9(false);
   }
 
   function handleTMOpen() {
@@ -211,13 +221,26 @@ function SidebarItems(props) {
       </ListItem>
       <Collapse in={nestedopen2} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+          <ListItem button className={classes.nested} onClick={handleSubMOpen}>
             <ListItemIcon>
               <Icon>edit</Icon>
             </ListItemIcon>
             <ListItemText primary="Create" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <Dialog
+            open={openSubM}
+            onClose={handleSubMClose}
+            aria-labelledby="subscription_modal"
+            maxWidth="sm"
+            fullWidth
+          >
+            <SubscriptionModal />
+          </Dialog>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.listData("subscription")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>

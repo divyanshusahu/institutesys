@@ -49,11 +49,16 @@ function App() {
           <CssBaseline />
           <div className={classes.wrapper}>
             <Header />
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/login" component={SignIn} />
-            <Route exact path="/signup" component={SignUp} />
             <Switch>
-              <PrivateRoute  exact path="/admindashboard" component={AdminDashboard} />
+              <Route exact path="/" component={Landing} />
+              <Route exact path="/home" component={Landing} />
+              <Route exact path="/login" component={SignIn} />
+              <Route exact path="/signup" component={SignUp} />
+              <PrivateRoute
+                exact
+                path="/admindashboard"
+                component={AdminDashboard}
+              />
             </Switch>
             <Footer />
           </div>

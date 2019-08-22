@@ -124,21 +124,25 @@ function AdminDashboard(props) {
       setOpen(false);
     }
     // show data
-    if (!isEmpty(props.datalist) && props.datalist.data.item.length) {
-      var fields = Object.keys(props.datalist.data.item[0]);
-      var columns = fields.map(c => {
-        if (c === "name" || c === "country_name") {
+    if (!isEmpty(props.datalist)) {
+      try {
+        var fields = Object.keys(props.datalist.data.item[0]);
+        var columns = fields.map(c => {
+          if (c === "name" || c === "country_name") {
+            return {
+              title: c.replace(/_/g, " ").toUpperCase(),
+              field: c,
+              editable: "never"
+            };
+          }
           return {
-            title: c.replace("_", " ").toUpperCase(),
-            field: c,
-            editable: "never"
+            title: c.replace(/_/g, " ").toUpperCase(),
+            field: c
           };
-        }
-        return {
-          title: c.replace("_", " ").toUpperCase(),
-          field: c
-        };
-      });
+        });
+      } catch {
+        // this can be empty
+      }
       let data = props.datalist.data.item;
       setTable({
         title: props.datalist.data.name,
@@ -189,6 +193,11 @@ function AdminDashboard(props) {
             country_name: item
           });
           props.listData("tax");
+        } else if (type === "Subscription List") {
+          axios.post("/api/subscriptions/delete", {
+            country_name: item
+          });
+          props.listData("subscription");
         }
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
@@ -208,6 +217,8 @@ function AdminDashboard(props) {
       props.listData("category");
     } else if (type === "Tax List") {
       props.listData("tax");
+    } else if (type === "Subscription List") {
+      props.listData("subscription");
     }
   }
 
@@ -224,6 +235,8 @@ function AdminDashboard(props) {
       axios.post("/api/grievance_categories/update", newData);
     } else if (type === "Category List") {
       axios.post("/api/categories/update", newData);
+    } else if (type === "Subscription List") {
+      axios.post("/api/subscriptions/update", newData);
     }
     handleRefresh(type);
   }
@@ -268,8 +281,7 @@ function AdminDashboard(props) {
         open={open}
         onClose={handleDrawerClose}
       >
-        <div className={classes.toolbarIcon}>
-        </div>
+        <div className={classes.toolbarIcon} />
         <Divider />
         <List>
           <SidebarItems />
@@ -290,7 +302,10 @@ function AdminDashboard(props) {
                     icon: "delete",
                     tooltip: "Delete",
                     onClick: (event, rowData) => {
-                      handleDeleteData(table.title, rowData.name || rowData.country_name);
+                      handleDeleteData(
+                        table.title,
+                        rowData.name || rowData.country_name
+                      );
                     }
                   },
                   {
