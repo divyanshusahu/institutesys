@@ -12,6 +12,7 @@ import Footer from "./components/layouts/Footer";
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
 import AdminDashboard from "./components/dashboard/admin/AdminDashboard";
+import InstituteDashboard from "./components/dashboard/institute/InstituteDashboard";
 
 import PrivateRoute from "./components/PrivateRoute";
 import setAuthToken from "./utils/setAuthToken";
@@ -58,6 +59,11 @@ function App() {
                 exact
                 path="/admindashboard"
                 component={AdminDashboard}
+              />
+              <PrivateRoute
+                exact
+                path="/institutedashboard"
+                component={InstituteDashboard}
               />
             </Switch>
             <Footer />

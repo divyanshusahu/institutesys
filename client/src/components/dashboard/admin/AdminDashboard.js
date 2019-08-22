@@ -106,6 +106,7 @@ const useStyles = makeStyles(theme => ({
 
 function AdminDashboard(props) {
   const classes = useStyles();
+
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -321,15 +322,14 @@ function AdminDashboard(props) {
                   actionsColumnIndex: -1
                 }}
                 editable={{
-                  onRowUpdate: (newData, oldData) =>
-                    new Promise((resolve, reject) => {
+                  onRowUpdate: newData => {
+                    return new Promise(resolve => {
                       setTimeout(() => {
-                        {
-                          handleUpdate(table.title, newData);
-                        }
+                        handleUpdate(table.title, newData);
                         resolve();
                       }, 1000);
-                    })
+                    });
+                  }
                 }}
               />
             </Grid>

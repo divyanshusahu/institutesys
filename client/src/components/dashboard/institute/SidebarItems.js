@@ -1,8 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
+/*import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { listData } from "../../../actions/listActions";
-import { logoutUser } from "../../../actions/authActions";
+import { logoutUser } from "../../../actions/authActions";*/
 
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -13,14 +13,6 @@ import List from "@material-ui/core/List";
 import Collapse from "@material-ui/core/Collapse";
 import { makeStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
-
-import ManageInstituteModal from "./ManageInstituteModal";
-import FeatureModal from "./FeatureModal";
-import SubscriptionModal from "./SubscriptionModal";
-import TaxModal from "./TaxModal";
-import StandardModal from "./StandardModal";
-import CategoryModal from "./CategoryModal";
-import GrievanceCategoryModal from "./GrievanceCategoryModal";
 
 const useStyles = makeStyles(theme => ({
   nested: {
@@ -132,7 +124,7 @@ function SidebarItems(props) {
 
   return (
     <div>
-      <ListItem button>
+      {/*<ListItem button>
         <ListItemIcon>
           <Icon>dashboard</Icon>
         </ListItemIcon>
@@ -419,12 +411,18 @@ function SidebarItems(props) {
           <Icon>power_settings_new</Icon>
         </ListItemIcon>
         <ListItemText primary="Logout" />
+      </ListItem>*/}
+      <ListItem button>
+        <ListItemIcon>
+          <Icon>power_settings_new</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Buy Plan" />
       </ListItem>
     </div>
   );
 }
 
-SidebarItems.propTypes = {
+/*SidebarItems.propTypes = {
   listData: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
   institutes: PropTypes.object.isRequired,
@@ -439,4 +437,6 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { listData, logoutUser }
-)(SidebarItems);
+)(SidebarItems);*/
+
+export default SidebarItems;
