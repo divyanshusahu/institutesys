@@ -5,9 +5,7 @@ import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
 import CardMedia from "@material-ui/core/CardMedia";
 import Icon from "@material-ui/core/Icon";
 import WOW from "wowjs";
@@ -16,6 +14,8 @@ import background from "../assets/images/background.jpeg";
 import storage from "../assets/images/storage.svg";
 import security from "../assets/images/security.svg";
 import support from "../assets/images/support.svg";
+
+import Plans from "./layouts/Plans";
 
 const useStyles = makeStyles(theme => ({
   landingContainer: {
@@ -51,81 +51,17 @@ const useStyles = makeStyles(theme => ({
   featureCard: {
     boxShadow: "none"
   },
-  "@global": {
-    ul: {
-      margin: 0,
-      padding: 0
-    },
-    li: {
-      listStyle: "none"
-    }
-  },
   pricingRoot: {
     padding: theme.spacing(8, 0, 6)
-  },
-  pricingCardHeader: {
-    backgroundColor: theme.palette.grey[200]
-  },
-  cardPricing: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "baseline",
-    marginBottom: theme.spacing(2)
   }
 }));
-
-const tiers = [
-  {
-    title: "Silver",
-    subheader: "Min Users: 20",
-    trial: "Trial 20 days FREE trial",
-    price: 20,
-    description: [
-      "Assignments",
-      "e-commerce",
-      "Exams",
-      "Message Book",
-      "WebRTC",
-      "Appoinments",
-      "Dropbox",
-      "Leave Management"
-    ],
-    buttonText: "Get Started",
-    buttonVariant: "outlined"
-  },
-  {
-    title: "Bronze",
-    subheader: "Min Users: 10",
-    price: 10,
-    description: ["Appointment", "Leave Management"],
-    buttonText: "Get Started",
-    buttonVariant: "contained"
-  },
-  {
-    title: "Platinum",
-    subheader: "Min Users: 1",
-    price: 30,
-    description: [
-      "Assignments",
-      "e-commerce",
-      "Exams",
-      "Message Book",
-      "WebRTC",
-      "Appoinments",
-      "Dropbox",
-      "Leave Management"
-    ],
-    buttonText: "Get Started",
-    buttonVariant: "outlined"
-  }
-];
 
 function Landing() {
   const classes = useStyles();
 
   useEffect(() => {
     new WOW.WOW().init();
-  });
+  }, []);
 
   return (
     <div>
@@ -139,16 +75,10 @@ function Landing() {
               maxWidth={window.innerWidth >= 1367 ? "md" : "sm"}
               className={classes.landingContent}
             >
-              <Typography
-                variant="h3"
-                className={classes.landingContentChild}
-              >
+              <Typography variant="h3" className={classes.landingContentChild}>
                 Securely connect, sync, and collaborate
               </Typography>
-              <Typography
-                variant="h6"
-                className={classes.landingContentChild}
-              >
+              <Typography variant="h6" className={classes.landingContentChild}>
                 Institute System is the secure institite system that teachers
                 and students love and trust
               </Typography>
@@ -234,8 +164,8 @@ function Landing() {
                     align="center"
                     gutterBottom
                   >
-                    Get visibility and control over team folders, including
-                    sync management.
+                    Get visibility and control over team folders, including sync
+                    management.
                   </Typography>
                 </CardContent>
               </Card>
@@ -278,8 +208,8 @@ function Landing() {
                     align="center"
                     gutterBottom
                   >
-                    A simple, powerful way to create, share, and keep your
-                    team in sync — with the added benefit of admin controls.
+                    A simple, powerful way to create, share, and keep your team
+                    in sync — with the added benefit of admin controls.
                   </Typography>
                 </CardContent>
               </Card>
@@ -333,66 +263,7 @@ function Landing() {
             user activity.
           </Typography>
         </Container>
-        <Container
-          maxWidth="lg"
-          component="main"
-          style={{ marginTop: "5rem" }}
-        >
-          <Grid container spacing={5} alignItems="flex-end">
-            {tiers.map(tier => (
-              <Grid item key={tier.title} xs={12} sm={4}>
-                <Card
-                  className="wow zoomIn"
-                  data-wow-duration="1s"
-                  data-wow-offset="50"
-                >
-                  <CardHeader
-                    title={tier.title}
-                    subheader={tier.subheader}
-                    titleTypographyProps={{ align: "center" }}
-                    subheaderTypographyProps={{ align: "center" }}
-                    className={classes.pricingCardHeader}
-                  />
-                  <CardContent>
-                    <div className={classes.cardPricing}>
-                      <Typography
-                        component="h2"
-                        variant="h3"
-                        color="textPrimary"
-                      >
-                        ${tier.price}
-                      </Typography>
-                      <Typography variant="h6" color="textSecondary">
-                        /mo
-                      </Typography>
-                    </div>
-                    <ul>
-                      {tier.description.map(line => (
-                        <Typography
-                          component="li"
-                          variant="subtitle1"
-                          align="center"
-                          key={line}
-                        >
-                          {line}
-                        </Typography>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      fullWidth
-                      variant={tier.buttonVariant}
-                      color="primary"
-                    >
-                      {tier.buttonText}
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
+        <Plans />
       </div>
 
       <div id="aboutus" style={{ marginTop: "5rem" }}>
@@ -508,17 +379,13 @@ function Landing() {
         >
           CONTACT SALES
         </Typography>
-        <Container maxWidth="lg" style={{marginTop: "5rem"}}>
+        <Container maxWidth="lg" style={{ marginTop: "5rem" }}>
           <Grid container spacing={5}>
             <Grid item xs={12} sm={4}>
               <Card elevation={0}>
                 <CardContent align="center">
                   <Icon fontSize="large">chat_bubble_outline</Icon>
-                  <Typography
-                    variant="h6"
-                    component="p"
-                    color="textSecondary"
-                  >
+                  <Typography variant="h6" component="p" color="textSecondary">
                     Chat
                   </Typography>
                 </CardContent>
@@ -528,11 +395,7 @@ function Landing() {
               <Card elevation={0}>
                 <CardContent align="center">
                   <Icon fontSize="large">email</Icon>
-                  <Typography
-                    variant="h6"
-                    component="p"
-                    color="textSecondary"
-                  >
+                  <Typography variant="h6" component="p" color="textSecondary">
                     Email
                   </Typography>
                 </CardContent>
@@ -542,11 +405,7 @@ function Landing() {
               <Card elevation={0}>
                 <CardContent align="center">
                   <Icon fontSize="large">phone</Icon>
-                  <Typography
-                    variant="h6"
-                    component="p"
-                    color="textSecondary"
-                  >
+                  <Typography variant="h6" component="p" color="textSecondary">
                     +44 8552376726
                   </Typography>
                 </CardContent>

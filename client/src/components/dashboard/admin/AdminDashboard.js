@@ -145,7 +145,9 @@ function AdminDashboard(props) {
               render: rowData => (
                 <Select value={rowData.features[0]}>
                   {rowData.features.map(feature => (
-                    <MenuItem value={feature} key={feature}>{feature}</MenuItem> 
+                    <MenuItem value={feature} key={feature}>
+                      {feature}
+                    </MenuItem>
                   ))}
                 </Select>
               )
@@ -211,7 +213,7 @@ function AdminDashboard(props) {
           props.listData("tax");
         } else if (type === "Subscription List") {
           axios.post("/api/subscriptions/delete", {
-            country_name: item
+            name: item
           });
           props.listData("subscription");
         }

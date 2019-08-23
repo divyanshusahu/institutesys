@@ -1,12 +1,5 @@
 import React from "react";
 import clsx from "clsx";
-import MaterialTable from "material-table";
-import isEmpty from "is-empty";
-import { connect } from "react-redux";
-import { listData } from "../../../actions/listActions";
-import PropTypes from "prop-types";
-import axios from "axios";
-import Swal from "sweetalert2";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -18,12 +11,11 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import Hidden from "@material-ui/core/Hidden";
-import Button from "@material-ui/core/Button";
 
 import SidebarItems from "./SidebarItems";
+import Plans from "../../layouts/Plans";
 
 const drawerWidth = 300;
 
@@ -116,17 +108,17 @@ function InstituteDashboard(props) {
     setOpen(false);
   };
 
-  /*React.useEffect(() => {
+  React.useEffect(() => {
     if (window.innerWidth < 576) {
       setOpen(false);
     }
-  }*/
+  }, []);
 
-  const buySubscription = () => {
+  /*const buySubscription = () => {
     axios.post("/api/payment/buy").then((res) => {
       window.open(res.data.redirect_url, "_parent");
     });
-  }
+  }*/
 
   return (
     <div className={classes.root}>
@@ -178,17 +170,7 @@ function InstituteDashboard(props) {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} lg={4}>
-              <Button onClick={buySubscription}>Buy Bronze</Button>
-            </Grid>
-            <Grid item xs={12} lg={4}>
-              <Button onClick={buySubscription}>Buy Silver</Button>
-            </Grid>
-            <Grid item xs={12} lg={4}>
-              <Button onClick={buySubscription}>Buy Platinum</Button>
-            </Grid>
-          </Grid>
+          <Plans />
         </Container>
       </main>
     </div>
