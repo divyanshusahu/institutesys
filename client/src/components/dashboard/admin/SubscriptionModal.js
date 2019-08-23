@@ -73,9 +73,9 @@ function SubscriptionModal(props) {
   function handleSubscriptionSubmit() {
     let post_data = {
       name: document.getElementById("create_subscription_name").value,
-      description: document.getElementById(
-        "create_subscription_description"
-      ).value,
+      description: document.getElementById("create_subscription_description")
+        .value,
+      min_users: document.getElementById("create_subscription_min_users").value,
       price_per_user_per_month: document.getElementById(
         "create_subscription_price_per_user_per_month"
       ).value,
@@ -126,6 +126,21 @@ function SubscriptionModal(props) {
           <FormHelperText error>
             {!isEmpty(props.errors)
               ? props.errors.create_subscription_description
+              : null}
+          </FormHelperText>
+
+          <TextField
+            margin="dense"
+            id="create_subscription_min_users"
+            label="Min Users"
+            type="text"
+            fullWidth
+            variant="outlined"
+            required
+          />
+          <FormHelperText error>
+            {!isEmpty(props.errors)
+              ? props.errors.create_subscription_min_users
               : null}
           </FormHelperText>
 

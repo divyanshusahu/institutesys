@@ -10,6 +10,10 @@ const SubscriptionSchema = new Schema({
     type: String,
     required: true
   },
+  min_users: {
+    type: Number,
+    required: true
+  },
   price_per_user_per_month: {
     type: String,
     required: true
@@ -32,4 +36,7 @@ const SubscriptionSchema = new Schema({
   }
 });
 
-module.exports = Subscription = mongoose.model("subscriptions", SubscriptionSchema);
+module.exports = Subscription = mongoose.model(
+  "subscriptions",
+  SubscriptionSchema
+);

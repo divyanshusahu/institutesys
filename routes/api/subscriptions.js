@@ -22,6 +22,7 @@ router.post("/create", (req, res) => {
     const newSubscription = new Subscription({
       name: req.body.name,
       description: req.body.description,
+      min_users: req.body.min_users,
       price_per_user_per_month: req.body.price_per_user_per_month,
       price_per_user_per_year: req.body.price_per_user_per_year,
       number_of_free_days: req.body.number_of_free_days,
@@ -36,7 +37,9 @@ router.post("/create", (req, res) => {
           .status(200)
           .json({ success: true, message: "Subscription created successfully" })
       )
-      .catch(err => res.status(500).json({ success: false, error: err.response.data }));
+      .catch(err =>
+        res.status(500).json({ success: false, error: err.response.data })
+      );
   });
 });
 
@@ -47,6 +50,7 @@ router.get("/list", (req, res) => {
         return {
           name: user.name,
           description: user.description,
+          min_users: user.min_users,
           price_per_user_per_month: user.price_per_user_per_month,
           price_per_user_per_year: user.price_per_user_per_year,
           number_of_free_days: user.number_of_free_days,

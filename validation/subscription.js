@@ -5,6 +5,7 @@ function validateSubscriptionInputs(data) {
   let errors = {};
   data.name = !isEmpty(data.name) ? data.name : "";
   data.description = !isEmpty(data.description) ? data.description : "";
+  data.min_users = !isEmpty(data.min_users) ? data.min_users : "";
   data.price_per_user_per_month = !isEmpty(data.price_per_user_per_month)
     ? data.price_per_user_per_month
     : "";
@@ -27,20 +28,28 @@ function validateSubscriptionInputs(data) {
     errors.create_subscription_description = "Description field is required";
   }
 
+  if (Validator.isEmpty(data.min_users)) {
+    errors.create_subscription_min_users = "Min Users field is required";
+  }
+
   if (Validator.isEmpty(data.price_per_user_per_month)) {
-    errors.create_subscription_price_per_user_per_month = "Price per user per month field is required";
+    errors.create_subscription_price_per_user_per_month =
+      "Price per user per month field is required";
   }
 
   if (Validator.isEmpty(data.price_per_user_per_year)) {
-    errors.create_subscription_price_per_user_per_year = "Price per user per year field is required";
+    errors.create_subscription_price_per_user_per_year =
+      "Price per user per year field is required";
   }
 
   if (Validator.isEmpty(data.number_of_free_days)) {
-    errors.create_subscription_number_of_free_days = "Number of free days field is required";
+    errors.create_subscription_number_of_free_days =
+      "Number of free days field is required";
   }
 
   if (Validator.isEmpty(data.number_of_free_users)) {
-    errors.create_subscription_number_of_free_users = "Number of free users field is required";
+    errors.create_subscription_number_of_free_users =
+      "Number of free users field is required";
   }
 
   /*if (Validator.isEmpty(data.features)) {
