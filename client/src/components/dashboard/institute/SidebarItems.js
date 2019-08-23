@@ -30,13 +30,13 @@ function SidebarItems(props) {
   const [nestedopen4, setOpen4] = React.useState(false);
   const [nestedopen5, setOpen5] = React.useState(false);
   const [nestedopen6, setOpen6] = React.useState(false);
-  const [openMIM, setOpen7] = React.useState(false);
+  /*const [openMIM, setOpen7] = React.useState(false);
   const [openFM, setOpen8] = React.useState(false);
   const [openSubM, setOpen9] = React.useState(false);
   const [openTM, setOpen10] = React.useState(false);
   const [openSM, setOpen11] = React.useState(false);
   const [openCM, setOpen12] = React.useState(false);
-  const [openGCM, setOpen13] = React.useState(false);
+  const [openGCM, setOpen13] = React.useState(false);*/
 
   function handleClick0() {
     setOpen0(!nestedopen0);
@@ -66,7 +66,7 @@ function SidebarItems(props) {
     setOpen6(!nestedopen6);
   }
 
-  function handleMIMOpen() {
+  /*function handleMIMOpen() {
     setOpen7(true);
   }
 
@@ -120,11 +120,11 @@ function SidebarItems(props) {
 
   function handleGCMClose() {
     setOpen13(false);
-  }
+  }*/
 
   return (
     <div>
-      {/*<ListItem button>
+      <ListItem button>
         <ListItemIcon>
           <Icon>dashboard</Icon>
         </ListItemIcon>
@@ -135,105 +135,18 @@ function SidebarItems(props) {
         <ListItemIcon>
           <Icon>settings</Icon>
         </ListItemIcon>
-        <ListItemText primary="Manage Institutions" />
+        <ListItemText primary="Manage Branches" />
         {nestedopen0 ? <Icon>expand_less</Icon> : <Icon>expand_more</Icon>}
       </ListItem>
       <Collapse in={nestedopen0} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested} onClick={handleMIMOpen}>
-            <ListItemIcon>
-              <Icon>edit</Icon>
-            </ListItemIcon>
-            <ListItemText primary="Create" />
-          </ListItem>
-          <Dialog
-            open={openMIM}
-            onClose={handleMIMClose}
-            aria-labelledby="manage_institute"
-            maxWidth="sm"
-            fullWidth
-          >
-            <ManageInstituteModal />
-          </Dialog>
-          <ListItem
-            button
-            className={classes.nested}
-            onClick={() => props.listData("institute")}
-          >
-            <ListItemIcon>
-              <Icon>list</Icon>
-            </ListItemIcon>
-            <ListItemText primary="List" />
-          </ListItem>
-        </List>
-      </Collapse>
-
-      <ListItem button onClick={handleClick1}>
-        <ListItemIcon>
-          <Icon>star</Icon>
-        </ListItemIcon>
-        <ListItemText primary="Features" />
-        {nestedopen1 ? <Icon>expand_less</Icon> : <Icon>expand_more</Icon>}
-      </ListItem>
-      <Collapse in={nestedopen1} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItem button className={classes.nested}>
             <ListItemIcon>
               <Icon>edit</Icon>
             </ListItemIcon>
-            <ListItemText primary="Create" onClick={handleFMOpen} />
-          </ListItem>
-          <Dialog
-            open={openFM}
-            onClose={handleFMClose}
-            aria-labelledby="featute_modal"
-            maxWidth="sm"
-            fullWidth
-          >
-            <FeatureModal />
-          </Dialog>
-          <ListItem
-            button
-            className={classes.nested}
-            onClick={() => props.listData("feature")}
-          >
-            <ListItemIcon>
-              <Icon>list</Icon>
-            </ListItemIcon>
-            <ListItemText primary="List" />
-          </ListItem>
-        </List>
-      </Collapse>
-
-      <ListItem button onClick={handleClick2}>
-        <ListItemIcon>
-          <Icon>subscriptions</Icon>
-        </ListItemIcon>
-        <ListItemText primary="Subscriptions" />
-        {nestedopen2 ? <Icon>expand_less</Icon> : <Icon>expand_more</Icon>}
-      </ListItem>
-      <Collapse in={nestedopen2} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested} onClick={handleSubMOpen}>
-            <ListItemIcon>
-              <Icon>edit</Icon>
-            </ListItemIcon>
             <ListItemText primary="Create" />
           </ListItem>
-          <Dialog
-            open={openSubM}
-            onClose={handleSubMClose}
-            aria-labelledby="subscription_modal"
-            maxWidth="sm"
-            fullWidth
-          >
-            <SubscriptionModal />
-          </Dialog>
-          <ListItem
-            button
-            className={classes.nested}
-            onClick={() => props.listData("subscription")}
-          >
+          <ListItem button className={classes.nested}>
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>
@@ -256,7 +169,25 @@ function SidebarItems(props) {
         <ListItemText primary="SMTP" />
       </ListItem>
 
-      <ListItem button onClick={handleClick3}>
+      <ListItem button>
+        <ListItemIcon>
+          <Icon>shoping_basket</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Buy Plan" />
+      </ListItem>
+
+      <Divider />
+
+      <ListItem button>
+        <ListItemIcon>
+          <Icon>power_settings_new</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Logout" />
+      </ListItem>
+
+      <Divider />
+
+      {/*<ListItem button onClick={handleClick3}>
         <ListItemIcon>
           <Icon>insert_drive_file</Icon>
         </ListItemIcon>
@@ -412,12 +343,6 @@ function SidebarItems(props) {
         </ListItemIcon>
         <ListItemText primary="Logout" />
       </ListItem>*/}
-      <ListItem button>
-        <ListItemIcon>
-          <Icon>power_settings_new</Icon>
-        </ListItemIcon>
-        <ListItemText primary="Buy Plan" />
-      </ListItem>
     </div>
   );
 }

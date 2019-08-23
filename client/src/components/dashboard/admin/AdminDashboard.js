@@ -21,6 +21,8 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import Hidden from "@material-ui/core/Hidden";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import SidebarItems from "./SidebarItems";
 
@@ -129,11 +131,24 @@ function AdminDashboard(props) {
       try {
         var fields = Object.keys(props.datalist.data.item[0]);
         var columns = fields.map(c => {
-          if (c === "name" || c === "country_name") {
+          if (c === "name" || c === "country_name" || c === "owner_email") {
             return {
               title: c.replace(/_/g, " ").toUpperCase(),
               field: c,
               editable: "never"
+            };
+          }
+          if (c === "features") {
+            return {
+              title: c.toUpperCase(),
+              field: c,
+              render: rowData => (
+                <Select value={rowData.features[0]}>
+                  {rowData.features.map(feature => (
+                    <MenuItem value={feature} key={feature}>{feature}</MenuItem> 
+                  ))}
+                </Select>
+              )
             };
           }
           return {
