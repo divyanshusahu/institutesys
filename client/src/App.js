@@ -11,8 +11,10 @@ import Landing from "./components/Landing";
 import Footer from "./components/layouts/Footer";
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
+import InvitationRegister from "./components/auth/InvitationRegister";
 import AdminDashboard from "./components/dashboard/admin/AdminDashboard";
 import InstituteDashboard from "./components/dashboard/institute/InstituteDashboard";
+import SchoolDashboard from "./components/dashboard/school/SchoolDashboard";
 
 import PrivateRoute from "./components/PrivateRoute";
 import setAuthToken from "./utils/setAuthToken";
@@ -55,6 +57,7 @@ function App() {
               <Route exact path="/home" component={Landing} />
               <Route exact path="/login" component={SignIn} />
               <Route exact path="/signup" component={SignUp} />
+              <Route path="/invitation_register" component={InvitationRegister} />
               <PrivateRoute
                 exact
                 path="/admindashboard"
@@ -64,6 +67,11 @@ function App() {
                 exact
                 path="/institutedashboard"
                 component={InstituteDashboard}
+              />
+              <PrivateRoute
+                exact
+                path="/schooldashboard"
+                component={SchoolDashboard}
               />
             </Switch>
             <Footer />

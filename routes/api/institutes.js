@@ -69,12 +69,27 @@ router.post("/create", (req, res) => {
           "Please join us by clicking the link:<br />" +
           "http://" +
           req.headers.host +
-          "/invitation_register?token=" +
+          "/api/institutes/invitation_register?token=" +
           newInvitation.token +
           "<br />Your Invitation will expire in 24 hours."
       };
 
       transporter.sendMail(mailinfo);
+    });
+  });
+});
+
+router.get("/invitation_register", (req, res) => {
+  const token = req.query.token;
+  Invitation.findOne({ token: token}).then((t) => {
+    var _id = t._userid;
+    Institute.findOne({ _id }).then((user) => {
+      const send_data = {
+        _id: _id,
+        name: user.name,
+        owner_email: user.owner_email
+      };
+      res.status(200).json({success: true, institute: send_data});
     });
   });
 });

@@ -138,6 +138,14 @@ function AdminDashboard(props) {
               editable: "never"
             };
           }
+          if (c === "active") {
+            return {
+              title: c.toUpperCase(),
+              field: c,
+              type: "boolean",
+              editable: "never"
+            }
+          }
           if (c === "features") {
             return {
               title: c.toUpperCase(),
