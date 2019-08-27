@@ -23,9 +23,9 @@ const InstituteSchema = new Schema({
     type: String,
     required: true
   },
-  status: {
-    type: String,
-    default: "active"
+  isActive: {
+    type: Boolean,
+    default: false
   }
 });
 

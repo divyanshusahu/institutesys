@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 
 const validateInstituteInputs = require("../../validation/institute");
 
 const Institute = require("../../models/Institute");
+const Invitation = require("../../models/Invitation");
 
 router.post("/create", (req, res) => {
   const { errors, isValid } = validateInstituteInputs(req.body);
@@ -30,11 +33,49 @@ router.post("/create", (req, res) => {
     newInstitute
       .save()
       .then(() =>
-        res
-          .status(200)
-          .json({ success: true, message: "Institute created successfully" })
+        res.status(200).json({
+          success: true,
+          message:
+            "Institute created successfully. An email has been sent to the owner to join the app."
+        })
       )
       .catch(err => res.status(500).json({ status: false, error: err }));
+
+    crypto.randomBytes(48, (err, buffer) => {
+      const newInvitation = new Invitation({
+        _userid: newInstitute._id,
+        token: buffer.toString("hex")
+      });
+
+      newInvitation.save();
+
+      let transporter = nodemailer.createTransport({
+        service: "SendGrid",
+        auth: {
+          user: process.env.SENDGRID_USER,
+          pass: process.env.SENDGRID_PASSWORD
+        }
+      });
+
+      let mailinfo = {
+        from: "'Institute System Admin' admin@institutesys.com",
+        to: newInstitute.owner_email,
+        subject: "Invitation to join Institute System App",
+        html:
+          "Hey, " +
+          newInstitute.name +
+          ". You are invited to join the Institute System App.<br />" +
+          "Institute System is the secure institite system that teachers and students love and trust.<br />" +
+          "Please join us by clicking the link:<br />" +
+          "http://" +
+          req.headers.host +
+          "/invitation_register?token=" +
+          newInvitation.token +
+          "<br />Your Invitation will expire in 24 hours."
+      };
+
+      transporter.sendMail(mailinfo);
+    });
   });
 });
 
@@ -43,12 +84,12 @@ router.get("/list", (req, res) => {
     if (user) {
       var send_data = user.map(user => {
         return {
-          status: user.status,
+          active: user.isActive,
           name: user.name,
-          "phone_number": user.phone_number,
-          "registration_number": user.registration_number,
-          "owner_email": user.owner_email,
-          "funding_body": user.funding_body
+          phone_number: user.phone_number,
+          registration_number: user.registration_number,
+          owner_email: user.owner_email,
+          funding_body: user.funding_body
         };
       });
       return res
@@ -72,7 +113,7 @@ router.post("/update", (req, res) => {
   Institute.findOneAndUpdate(
     { name: req.body.name },
     req.body,
-    {new: true},
+    { new: true },
     function(err, doc) {
       if (err) {
         return res
