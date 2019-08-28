@@ -23,6 +23,9 @@ const InstituteSchema = new Schema({
     type: String,
     required: true
   },
+  myPlan: {
+    type: String
+  },
   isActive: {
     type: Boolean,
     default: false

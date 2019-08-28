@@ -92,7 +92,6 @@ function Header(props) {
                   <MenuItem>Pricing</MenuItem>
                   <MenuItem>About Us</MenuItem>
                   <MenuItem>Contact</MenuItem>
-                  <MenuItem>Login</MenuItem>
                   {props.auth.isAuthenticated ? (
                     <MenuItem onClick={props.logoutUser}>Logout</MenuItem>
                   ) : (

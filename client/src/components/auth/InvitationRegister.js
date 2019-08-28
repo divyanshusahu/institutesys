@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import { Link as RLink } from "react-router-dom";
 import axios from "axios";
-/*import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";*/
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -15,15 +12,6 @@ import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-/*import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
-
-import Swal from "sweetalert2";
-import isEmpty from "is-empty";*/
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -49,23 +37,41 @@ function InvitationRegister(props) {
   const classes = useStyles();
   const [insData, setData] = React.useState({
     name: "",
-    owner_email: ""
+    owner_email: "",
+    _id: ""
   });
 
   useEffect(() => {
     let token = window.location.search.substring(1).split("=")[1];
-    axios.get("/api/institutes/invitation_register?token="+token).then((res) => {
-      setData({
-        name: res.data.institute.name,
-        owner_email: res.data.institute.owner_email
+    axios
+      .get("/api/institutes/invitation_register?token=" + token)
+      .then(res => {
+        setData({
+          name: res.data.institute.name,
+          owner_email: res.data.institute.owner_email,
+          _id: res.data.institute._id
+        });
       });
+  }, []);
+
+  const registerSubmit = event => {
+    event.preventDefault();
+
+    let newUser = {
+      name: insData.name,
+      username: document.getElementById("username").value,
+      email: insData.owner_email,
+      password: document.getElementById("password").value,
+      role: "institute",
+      isVerified: true,
+      _id: insData._id
+    };
+    axios.post("/api/institutes/register", newUser).then(res => {
+      if (res.data.success) {
+        window.location.pathname = "/login";
+      }
     });
-    
-  },[]);
-
-  const registerSubmit = () => {
-
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -151,19 +157,4 @@ function InvitationRegister(props) {
   );
 }
 
-/*InvitationRegister.propTypes = {
-  registerUser: PropTypes.func.isRequired,
-  errors: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  errors: state.errors,
-  auth: state.auth
-});
-
-export default connect(
-  mapStateToProps,
-  { registerUser }
-)(InvitationRegister);*/
 export default InvitationRegister;

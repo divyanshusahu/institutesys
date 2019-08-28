@@ -2,11 +2,14 @@ const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 
 const validateInstituteInputs = require("../../validation/institute");
+const validateLoginInputs = require("../../validation/login");
 
 const Institute = require("../../models/Institute");
 const Invitation = require("../../models/Invitation");
+const User = require("../../models/User");
 
 router.post("/create", (req, res) => {
   const { errors, isValid } = validateInstituteInputs(req.body);
@@ -81,16 +84,63 @@ router.post("/create", (req, res) => {
 
 router.get("/invitation_register", (req, res) => {
   const token = req.query.token;
-  Invitation.findOne({ token: token}).then((t) => {
+  Invitation.findOne({ token: token }).then(t => {
     var _id = t._userid;
-    Institute.findOne({ _id }).then((user) => {
+    Institute.findOne({ _id }).then(user => {
       const send_data = {
         _id: _id,
         name: user.name,
         owner_email: user.owner_email
       };
-      res.status(200).json({success: true, institute: send_data});
+      res.status(200).json({ success: true, institute: send_data });
     });
+  });
+});
+
+router.post("/register", (req, res) => {
+  const { errors, isValid } = validateLoginInputs(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  User.findOne({ email: req.body.email }).then(user => {
+    if (user) {
+      return res.status(400).json({
+        email:
+          "The email address you have entered is already associated with another account"
+      });
+    }
+    const newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      username: req.body.username,
+      password: req.body.password,
+      role: req.body.role,
+      isVerified: req.body.isVerified
+    });
+
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) {
+          throw err;
+        }
+        newUser.password = hash;
+        newUser
+          .save()
+          .then(() => {
+            let _id = req.body._id;
+            Institute.findOne({ _id }).then(user => {
+              user.isActive = true;
+              user.save();
+            });
+          })
+          .catch(err => res.status(500).json({ error: err.response.data }));
+      });
+    });
+    res
+      .status(200)
+      .json({ success: true, message: "Account created successfully" });
   });
 });
 

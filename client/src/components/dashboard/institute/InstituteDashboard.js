@@ -1,5 +1,9 @@
 import React from "react";
+import ReactDom from "react-dom";
 import clsx from "clsx";
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
+import { logoutUser } from "../../../actions/authActions";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -13,8 +17,12 @@ import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Icon from "@material-ui/core/Icon";
 import Hidden from "@material-ui/core/Hidden";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from "@material-ui/core/Collapse";
 
-import SidebarItems from "./SidebarItems";
+import CreateBranch from "./CreateBranch";
 import Plans from "../../layouts/Plans";
 
 const drawerWidth = 300;
@@ -94,11 +102,19 @@ const useStyles = makeStyles(theme => ({
   },
   fixedHeight: {
     height: 240
+  },
+  nested: {
+    paddingLeft: theme.spacing(8)
   }
 }));
 
 function InstituteDashboard(props) {
   const classes = useStyles();
+
+  const [nestedopen0, setOpen0] = React.useState(false);
+  function handleClick0() {
+    setOpen0(!nestedopen0);
+  }
 
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -106,6 +122,21 @@ function InstituteDashboard(props) {
   };
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleShow = type => {
+    if (type === "create_branch") {
+      ReactDom.render(
+        <CreateBranch />,
+        document.getElementById("institute_dashboard_container")
+      );
+    }
+    if (type === "buy_plans") {
+      ReactDom.render(
+        <Plans />,
+        document.getElementById("institute_dashboard_container")
+      );
+    }
   };
 
   React.useEffect(() => {
@@ -119,6 +150,93 @@ function InstituteDashboard(props) {
       window.open(res.data.redirect_url, "_parent");
     });
   }*/
+
+  const sideBar = (
+    <div>
+      <ListItem button>
+        <ListItemIcon>
+          <Icon>dashboard</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+
+      <ListItem button onClick={handleClick0}>
+        <ListItemIcon>
+          <Icon>settings</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Manage Branches" />
+        {nestedopen0 ? <Icon>expand_less</Icon> : <Icon>expand_more</Icon>}
+      </ListItem>
+      <Collapse in={nestedopen0} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => handleShow("create_branch")}
+          >
+            <ListItemIcon>
+              <Icon>edit</Icon>
+            </ListItemIcon>
+            <ListItemText primary="Create" />
+          </ListItem>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+              <Icon>list</Icon>
+            </ListItemIcon>
+            <ListItemText primary="List" />
+          </ListItem>
+        </List>
+      </Collapse>
+
+      <ListItem button>
+        <ListItemIcon>
+          <Icon>payment</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Manage Paypal" />
+      </ListItem>
+
+      <ListItem button>
+        <ListItemIcon>
+          <Icon>mail</Icon>
+        </ListItemIcon>
+        <ListItemText primary="SMTP" />
+      </ListItem>
+
+      <ListItem button>
+        <ListItemIcon>
+          <Icon>subscriptions</Icon>
+        </ListItemIcon>
+        <ListItemText primary="My Plan" />
+      </ListItem>
+
+      <ListItem button>
+        <ListItemIcon>
+          <Icon>update</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Update Details" />
+      </ListItem>
+
+      <Divider />
+
+      <ListItem button onClick={() => handleShow("buy_plans")}>
+        <ListItemIcon>
+          <Icon>shoping_basket</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Buy Plan" />
+      </ListItem>
+
+      <Divider />
+
+      <ListItem button onClick={props.logoutUser}>
+        <ListItemIcon>
+          <Icon>power_settings_new</Icon>
+        </ListItemIcon>
+        <ListItemText primary="Logout" />
+      </ListItem>
+
+      <Divider />
+    </div>
+  );
 
   return (
     <div className={classes.root}>
@@ -162,19 +280,26 @@ function InstituteDashboard(props) {
       >
         <div className={classes.toolbarIcon} />
         <Divider />
-        <List>
-          <SidebarItems />
-        </List>
+        <List>{sideBar}</List>
       </Drawer>
 
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Plans />
+          <div id="institute_dashboard_container"></div>
         </Container>
       </main>
     </div>
   );
 }
 
-export default InstituteDashboard;
+InstituteDashboard.propTypes = {
+  logoutUser: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({});
+
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(InstituteDashboard);
