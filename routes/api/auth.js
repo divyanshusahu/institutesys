@@ -6,17 +6,23 @@ const keys = require("../../config/keys");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
-const validateRegisterInputs = require("../../validation/register");
+//const validateRegisterInputs = require("../../validation/register");
 const validateLoginInputs = require("../../validation/login");
+const validateInstituteInputs = require("../../validation/institute");
 
 const User = require("../../models/User");
 const Token = require("../../models/Token");
+const Institute = require("../../models/Institute");
 
 const dotenv = require("dotenv");
 dotenv.config();
 
 router.post("/register", (req, res) => {
-  const { errors, isValid } = validateRegisterInputs(req.body);
+  //const { errors, isValid } = validateRegisterInputs(req.body);
+  const { errors, isValid } = validateInstituteInputs(
+    req.body,
+    req.connection.remoteAddress
+  );
 
   if (!isValid) {
     return res.status(400).json(errors);
@@ -48,6 +54,23 @@ router.post("/register", (req, res) => {
       });
     });
 
+    const newInstitute = new Institute({
+      name: req.body.name,
+      owner_email: req.body.email,
+      country_name: req.body.country_name,
+      phone_number: req.body.phone_number,
+      registration_number: req.body.registration_number,
+      funding_body: req.body.phone_number,
+      size_of_the_institute: req.body.size_of_the_institute
+    });
+
+    newInstitute.save();
+
+    res.status(200).json({
+      message: "A verification email has been sent to " + newUser.email,
+      success: true
+    });
+
     crypto.randomBytes(48, (err, buffer) => {
       const newToken = new Token({
         _userid: newUser._id,
@@ -75,7 +98,7 @@ router.post("/register", (req, res) => {
       });
 
       let mailinfo = {
-        from: "'Institute System Admin' noreply@pepisandbox.com",
+        from: "'Institute System Admin' admin@institutesys.com",
         to: newUser.email,
         subject: "Account Verification Token",
         html:
@@ -85,7 +108,7 @@ router.post("/register", (req, res) => {
           "Please verify your account by clicking the link:<br />" +
           "http://" +
           req.headers.host +
-          "/api/auth/confirmation?token=" +
+          "/confirmation?token=" +
           newToken.token +
           "<br />"
       };
@@ -94,10 +117,10 @@ router.post("/register", (req, res) => {
         if (err) {
           return res.status(500).json({ error: err.message });
         }
-        res.status(200).json({
+        /*res.status(200).json({
           message: "A verification email has been sent to " + newUser.email,
           success: true
-        });
+        });*/
       });
     });
   });
@@ -152,7 +175,9 @@ router.get("/confirmation", (req, res) => {
     var _id = t._userid;
     User.findOne({ _id }).then(user => {
       if (user.isVerified) {
-        return res.status(400).json({ info: "Email already verified" });
+        return res
+          .status(200)
+          .json({ success: false, message: "Email already verified" });
       }
 
       user.isVerified = true;

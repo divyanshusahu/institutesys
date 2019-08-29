@@ -7,6 +7,10 @@ const InstituteSchema = new Schema({
     required: true,
     unique: true
   },
+  country_name: {
+    type: String,
+    required: true
+  },
   phone_number: {
     type: String,
     required: true
@@ -23,12 +27,16 @@ const InstituteSchema = new Schema({
     type: String,
     required: true
   },
+  size_of_the_institute: {
+    type: String,
+    required: true
+  },
   myPlan: {
     type: String
   },
   isActive: {
     type: Boolean,
-    default: false
+    default: true
   }
 });
 

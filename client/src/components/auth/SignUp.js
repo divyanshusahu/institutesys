@@ -24,6 +24,8 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import Swal from "sweetalert2";
 import isEmpty from "is-empty";
 
+import countries from "../dashboard/admin/countries";
+
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(10),
@@ -46,15 +48,15 @@ const useStyles = makeStyles(theme => ({
 
 function SignUp(props) {
   const classes = useStyles();
-  /*const [values, setValues] = React.useState({
-    role: ""
+  const [values, setValues] = React.useState({
+    country_name: ""
   });
 
   const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);*/
+  const [labelWidth, setLabelWidth] = React.useState(0);
 
   useEffect(() => {
-    //setLabelWidth(inputLabel.current.offsetWidth);
+    setLabelWidth(inputLabel.current.offsetWidth);
 
     /*if (props.auth.isAuthenticated) {
       let dashboard = props.auth.user["role"] + "dashboard";
@@ -63,28 +65,39 @@ function SignUp(props) {
     if (!isEmpty(props.auth.registerMessage)) {
       Swal.fire({
         type: props.auth.registerMessage.success ? "success" : "error",
-        text: props.auth.registerMessage.message
+        text: props.auth.registerMessage.message,
+        onClose: () => {
+          props.history.push("login");
+        }
       });
     }
     //console.log(props);
-  }, [props.auth.registerMessage]);
+  }, [props.auth.registerMessage, props.history]);
 
-  /*function handleChange(event) {
+  function handleChange(event) {
     setValues(oldValues => ({
       ...oldValues,
       [event.target.name]: event.target.value
     }));
-  }*/
+  }
 
   function registerSubmit(event) {
     event.preventDefault();
 
     let newUser = {
       name: document.getElementById("name").value,
-      username: document.getElementById("username").value,
+      username: document.getElementById("email").value,
       email: document.getElementById("email").value,
       password: document.getElementById("password").value,
-      role: document.getElementById("role").value
+      confirm_password: document.getElementById("confirm_password").value,
+      role: "institute",
+      country_name: values.country_name,
+      phone_number: document.getElementById("phone_number").value,
+      registration_number: document.getElementById("registration_number").value,
+      funding_body: document.getElementById("funding_body").value,
+      size_of_the_institute: document.getElementById("size_of_the_institute")
+        .value,
+      captcha: document.getElementById("g-recaptcha-response").value
     };
     props.registerUser(newUser);
   }
@@ -101,18 +114,32 @@ function SignUp(props) {
         </Typography>
         <form className={classes.form} noValidate onSubmit={registerSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <TextField
-                autoComplete="country_name"
-                name="country_name"
-                variant="outlined"
-                required
-                fullWidth
-                id="country_name"
-                label="Country Name"
-                margin="dense"
-              />
-              {/*<FormHelperText error></FormHelperText>*/}
+            <Grid item xs={12}>
+              <FormControl required variant="outlined" fullWidth>
+                <InputLabel ref={inputLabel} htmlFor="country_name">
+                  Country Name
+                </InputLabel>
+                <Select
+                  value={values.country_name}
+                  onChange={handleChange}
+                  input={
+                    <OutlinedInput
+                      labelWidth={labelWidth}
+                      name="country_name"
+                      id="country_name"
+                    />
+                  }
+                >
+                  {countries.map(c => (
+                    <MenuItem value={c} key={c}>
+                      {c}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormHelperText error margin="dense">
+                {props.errors["create_institute_country_name"]}
+              </FormHelperText>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
@@ -125,7 +152,9 @@ function SignUp(props) {
                 label="Institute Name"
                 margin="dense"
               />
-              {/*<FormHelperText error>{props.errors["name"]}</FormHelperText>*/}
+              <FormHelperText error margin="dense">
+                {props.errors["create_institute_name"]}
+              </FormHelperText>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
@@ -138,7 +167,9 @@ function SignUp(props) {
                 label="Phone Number"
                 margin="dense"
               />
-              {/*<FormHelperText error>{props.errors["name"]}</FormHelperText>*/}
+              <FormHelperText error margin="dense">
+                {props.errors["create_institute_phone_number"]}
+              </FormHelperText>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
@@ -151,7 +182,9 @@ function SignUp(props) {
                 label="Registration Number"
                 margin="dense"
               />
-              {/*<FormHelperText error>{props.errors["name"]}</FormHelperText>*/}
+              <FormHelperText error margin="dense">
+                {props.errors["create_institute_registration_number"]}
+              </FormHelperText>
             </Grid>
             {/*<Grid item xs={12}>
               <TextField
@@ -176,7 +209,9 @@ function SignUp(props) {
                 autoComplete="email"
                 margin="dense"
               />
-              {/*<FormHelperText error>{props.errors["email"]}</FormHelperText>*/}
+              <FormHelperText error margin="dense">
+                {props.errors["create_institute_owner_email"]}
+              </FormHelperText>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
@@ -189,33 +224,9 @@ function SignUp(props) {
                 autoComplete="funding_body"
                 margin="dense"
               />
-              {/*<FormHelperText error>{props.errors["password"]}</FormHelperText>*/}
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                margin="dense"
-              />
-              {/*<FormHelperText error>{props.errors["password"]}</FormHelperText>*/}
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="canfirm_password"
-                label="Confirm Password"
-                type="password"
-                id="confirm_password"
-                margin="dense"
-              />
-              {/*<FormHelperText error>{props.errors["password"]}</FormHelperText>*/}
+              <FormHelperText error margin="dense">
+                {props.errors["create_institute_funding_body"]}
+              </FormHelperText>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
@@ -229,7 +240,39 @@ function SignUp(props) {
                 autoComplete="size_of_the_institute"
                 margin="dense"
               />
-              {/*<FormHelperText error>{props.errors["password"]}</FormHelperText>*/}
+              <FormHelperText error margin="dense">
+                {props.errors["create_institute_size_of_the_institute"]}
+              </FormHelperText>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                margin="dense"
+              />
+              <FormHelperText error margin="dense">
+                {props.errors["create_institute_password"]}
+              </FormHelperText>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="canfirm_password"
+                label="Confirm Password"
+                type="password"
+                id="confirm_password"
+                margin="dense"
+              />
+              <FormHelperText error margin="dense">
+                {props.errors["create_institute_confirm_password"]}
+              </FormHelperText>
             </Grid>
             {/*<Grid item xs={12}>
               <FormControl required variant="outlined" fullWidth>
@@ -258,9 +301,12 @@ function SignUp(props) {
             </Grid>*/}
             <Grid item xs={12}>
               <div
-                class="g-recaptcha"
+                className="g-recaptcha"
                 data-sitekey="6LetqLUUAAAAAOiP3SzMZMqSkAX98coVN7YsHj7L"
               ></div>
+              <FormHelperText error margin="dense">
+                {props.errors["create_institute_captcha"]}
+              </FormHelperText>
             </Grid>
           </Grid>
           <Button

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import ReactDom from "react-dom";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -17,7 +16,6 @@ import security from "../assets/images/security.svg";
 import support from "../assets/images/support.svg";
 
 import Plans from "./layouts/Plans";
-import SignUp from "./auth/SignUp";
 
 const useStyles = makeStyles(theme => ({
   landingContainer: {
