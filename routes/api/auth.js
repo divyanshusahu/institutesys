@@ -133,16 +133,16 @@ router.post("/login", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  var username = req.body.username;
+  var email = req.body.email;
   var password = req.body.password;
 
-  User.findOne({ username }).then(user => {
+  User.findOne({ email }).then(user => {
     if (!user) {
-      return res.status(400).json({ username: "No user found" });
+      return res.status(400).json({ email: "No user found" });
     }
 
     if (!user.isVerified) {
-      return res.status(400).json({ username: "Email not verified" });
+      return res.status(400).json({ email: "Email not verified" });
     }
 
     bcrypt.compare(password, user.password).then(isMatch => {

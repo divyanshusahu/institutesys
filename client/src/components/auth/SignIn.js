@@ -43,7 +43,7 @@ function SignIn(props) {
   function loginSubmit(event) {
     event.preventDefault();
     let userData = {
-      username: document.getElementById("username").value,
+      email: document.getElementById("email").value,
       password: document.getElementById("password").value
     };
     props.loginUser(userData);
@@ -71,13 +71,13 @@ function SignIn(props) {
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
+            id="email"
+            label="Email"
+            name="email"
             autoComplete="username"
             autoFocus
           />
-          <FormHelperText error>{props.errors["username"]}</FormHelperText>
+          <FormHelperText error>{props.errors["email"]}</FormHelperText>
           <TextField
             variant="outlined"
             margin="normal"
