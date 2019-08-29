@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Plans() {
+function Plans(props) {
   const [tiers, setTiers] = React.useState([]);
 
   React.useEffect(() => {
@@ -88,7 +88,12 @@ function Plans() {
                 </ul>
               </CardContent>
               <CardActions>
-                <Button fullWidth variant="outlined" color="primary">
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  href={props.landing ? "/signup" : null}
+                >
                   Get Started
                 </Button>
               </CardActions>

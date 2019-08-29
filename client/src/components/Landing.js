@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import ReactDom from "react-dom";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -16,6 +17,7 @@ import security from "../assets/images/security.svg";
 import support from "../assets/images/support.svg";
 
 import Plans from "./layouts/Plans";
+import SignUp from "./auth/SignUp";
 
 const useStyles = makeStyles(theme => ({
   landingContainer: {
@@ -263,7 +265,7 @@ function Landing() {
             user activity.
           </Typography>
         </Container>
-        <Plans />
+        <Plans landing />
       </div>
 
       <div id="aboutus" style={{ marginTop: "5rem" }}>
@@ -381,7 +383,7 @@ function Landing() {
         </Typography>
         <Container maxWidth="lg" style={{ marginTop: "5rem" }}>
           <Grid container spacing={5}>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={4}>
               <Card elevation={0}>
                 <CardContent align="center">
                   <Icon fontSize="large">chat_bubble_outline</Icon>
@@ -391,7 +393,7 @@ function Landing() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={4}>
               <Card elevation={0}>
                 <CardContent align="center">
                   <Icon fontSize="large">email</Icon>
@@ -401,7 +403,7 @@ function Landing() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={4}>
               <Card elevation={0}>
                 <CardContent align="center">
                   <Icon fontSize="large">phone</Icon>

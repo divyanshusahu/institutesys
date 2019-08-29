@@ -92,13 +92,13 @@ function Header(props) {
                   <MenuItem>Pricing</MenuItem>
                   <MenuItem>About Us</MenuItem>
                   <MenuItem>Contact</MenuItem>
-                  {props.auth.isAuthenticated ? (
+                  {/*props.auth.isAuthenticated ? (
                     <MenuItem onClick={props.logoutUser}>Logout</MenuItem>
                   ) : (
                     <Link color="inherit" to="/login" component={RLink}>
                       <MenuItem>Login</MenuItem>
                     </Link>
-                  )}
+                  )*/}
                 </Menu>
               </Hidden>
               <Hidden xsDown>
@@ -114,7 +114,7 @@ function Header(props) {
                 <Link href="/#contactus" color="inherit">
                   <Button className={classes.navbarButtons}>Contact</Button>
                 </Link>
-                {!props.auth.isAuthenticated ? (
+                {/*!props.auth.isAuthenticated ? (
                   <Link to="/login" component={RLink} color="inherit">
                     <Button
                       className={classes.navbarButtons}
@@ -133,7 +133,7 @@ function Header(props) {
                   >
                     Logout
                   </Button>
-                )}
+                )*/}
               </Hidden>
             </div>
           </Toolbar>
