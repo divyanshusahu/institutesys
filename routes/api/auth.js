@@ -60,7 +60,7 @@ router.post("/register", (req, res) => {
       country_name: req.body.country_name,
       phone_number: req.body.phone_number,
       registration_number: req.body.registration_number,
-      funding_body: req.body.phone_number,
+      funding_body: req.body.funding_body,
       size_of_the_institute: req.body.size_of_the_institute
     });
 
