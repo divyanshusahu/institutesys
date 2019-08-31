@@ -15,6 +15,7 @@ const standards = require("./routes/api/standards");
 const categories = require("./routes/api/categories");
 const grievance_categories = require("./routes/api/grievance_categories");
 const payment = require("./routes/api/payment");
+const branches = require("./routes/api/branches");
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use("/api/standards", standards);
 app.use("/api/categories", categories);
 app.use("/api/grievance_categories", grievance_categories);
 app.use("/api/payment", payment);
+app.use("/api/branches", branches);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
