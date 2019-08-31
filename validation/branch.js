@@ -10,6 +10,7 @@ function validateBranchInputs(data) {
   data.phone_number = !isEmpty(data.phone_number) ? data.phone_number : "";
   data.standard = !isEmpty(data.standard) ? data.standard : "";
   data.institution = !isEmpty(data.institution) ? data.institution : "";
+  data.timezone = !isEmpty(data.timezone) ? data.timezone : "";
 
   if (Validator.isEmpty(data.branch_name)) {
     errors.create_branch_name = "Name field is required";
@@ -39,6 +40,10 @@ function validateBranchInputs(data) {
 
   if (Validator.isEmpty(data.institution)) {
     errors.create_branch_institution = "Institution field is required";
+  }
+
+  if (Validator.isEmpty(data.timezone)) {
+    errors.create_branch_timezone = "Timezone field is required";
   }
 
   return {

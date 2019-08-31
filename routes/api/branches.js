@@ -45,7 +45,8 @@ router.post("/create", (req, res) => {
     address: req.body.address,
     phone_number: req.body.phone_number,
     standard: req.body.standard,
-    institution: req.body.institution
+    institution: req.body.institution,
+    timezone: req.body.timezone
   });
 
   newBranch
@@ -89,14 +90,16 @@ router.post("/create", (req, res) => {
 });
 
 router.get("/list", (req, res) => {
-  Branch.find({}).then(user => {
+  const institute_name = req.query.institute_name;
+  Branch.find({ institute_name: institute_name }).then(user => {
     if (user) {
       var send_data = user.map(user => {
         return {
-          name: user.name,
+          branch_name: user.branch_name,
           email: user.email,
           address: user.address,
-          phone_number: user.phone_number
+          phone_number: user.phone_number,
+          timezone: user.timezone
         };
       });
       return res

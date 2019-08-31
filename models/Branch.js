@@ -10,6 +10,10 @@ const BranchSchema = new Schema({
     type: String,
     required: true
   },
+  address: {
+    type: String,
+    required: true
+  },
   phone_number: {
     type: Number,
     required: true
@@ -23,6 +27,10 @@ const BranchSchema = new Schema({
     required: true
   },
   institution: {
+    type: String,
+    required: true
+  },
+  timezone: {
     type: String,
     required: true
   }
