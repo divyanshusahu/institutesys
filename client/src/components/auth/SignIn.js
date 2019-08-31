@@ -51,7 +51,7 @@ function SignIn(props) {
 
   useEffect(() => {
     if (props.auth.isAuthenticated) {
-      let dashboard = props.auth.user["role"] + "dashboard";
+      let dashboard = props.auth.user["role"];
       props.history.push(dashboard.toLowerCase());
     }
   });

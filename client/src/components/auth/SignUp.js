@@ -58,10 +58,6 @@ function SignUp(props) {
   useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
 
-    /*if (props.auth.isAuthenticated) {
-      let dashboard = props.auth.user["role"] + "dashboard";
-      props.history.push(dashboard.toLowerCase());
-    }*/
     if (!isEmpty(props.auth.registerMessage)) {
       Swal.fire({
         type: props.auth.registerMessage.success ? "success" : "error",

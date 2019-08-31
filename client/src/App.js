@@ -65,17 +65,17 @@ function App() {
               />
               <PrivateRoute
                 exact
-                path="/admindashboard"
+                path="/admin"
                 component={AdminDashboard}
               />
               <PrivateRoute
                 exact
-                path="/institutedashboard"
+                path="/institute"
                 component={InstituteDashboard}
               />
               <PrivateRoute
                 exact
-                path="/schooldashboard"
+                path="/school"
                 component={SchoolDashboard}
               />
             </Switch>
