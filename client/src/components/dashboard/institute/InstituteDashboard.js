@@ -25,6 +25,7 @@ import DefaultDashboard from "./DefaultDashboard";
 import CreateBranch from "./CreateBranch";
 import ListBranches from "./ListBranches";
 import MyPlan from "./MyPlan";
+import UpdateDetails from "./UpdateDetails";
 import Plans from "../../layouts/Plans";
 
 const drawerWidth = 300;
@@ -139,6 +140,8 @@ function InstituteDashboard(props) {
       setShow(<ListBranches institute={props.auth.user} />);
     } else if (type === "my_plan") {
       setShow(<MyPlan />);
+    } else if (type === "update_details") {
+      setShow(<UpdateDetails institute={props.auth.user} />);
     } else if (type === "buy_plans") {
       setShow(<Plans />);
     }
@@ -218,7 +221,7 @@ function InstituteDashboard(props) {
         <ListItemText primary="My Plan" />
       </ListItem>
 
-      <ListItem button>
+      <ListItem button onClick={() => handleShow("update_details")}>
         <ListItemIcon>
           <Icon>update</Icon>
         </ListItemIcon>
