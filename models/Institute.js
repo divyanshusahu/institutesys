@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const InstituteSchema = new Schema({
   name: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   country_name: {
     type: String,
@@ -21,7 +20,8 @@ const InstituteSchema = new Schema({
   },
   owner_email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   funding_body: {
     type: String,

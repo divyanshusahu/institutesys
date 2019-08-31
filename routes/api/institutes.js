@@ -165,6 +165,19 @@ router.get("/list", (req, res) => {
   });
 });
 
+router.get("/details", (req, res) => {
+  Institute.findOne({ owner_email: req.query.owner_email }).then(user => {
+    var result = {
+      name: user.name,
+      phone_number: user.phone_number,
+      registration_number: user.registration_number,
+      owner_email: user.owner_email,
+      funding_body: user.funding_body
+    };
+    return res.status(200).json({ success: true, institute: result });
+  });
+});
+
 router.post("/delete", (req, res) => {
   Institute.deleteOne({ name: req.body.name }, function(err) {
     if (err) {

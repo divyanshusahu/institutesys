@@ -20,7 +20,8 @@ const BranchSchema = new Schema({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   standard: {
     type: String,
