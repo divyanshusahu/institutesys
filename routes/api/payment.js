@@ -1,13 +1,13 @@
 const paypal = require("paypal-rest-sdk");
 const express = require("express");
 const router = express.Router();
+const dotenv = require("dotenv");
+dotenv.config();
 
 paypal.configure({
   mode: "sandbox", // or live
-  client_id:
-    "Aa-s2kBJv0irVIXvM09YGYHacolGoUZqi74OicNzNesyowcXR8PNMlGB6eM1izGFfTRvUEiZL74pWf0c",
-  client_secret:
-    "EK0KzjnzYY68IgWVVgTaxHOG8mKH53gdctbMimWPyeDYUCfLkMfIE42qdKSWDkNgzo10amjhyJ_T5YaP"
+  client_id: process.env.PAYPAL_CLIENT_ID,
+  client_secret: process.env.PAYPAL_CLIENT_SECRET
 });
 
 router.post("/buy", (req, res) => {
@@ -25,17 +25,17 @@ router.post("/buy", (req, res) => {
         item_list: {
           items: [
             {
-              name: "Subscription",
+              name: req.body.name + " Subscription",
               sku: "Subscription",
-              price: "100.00",
-              currency: "INR",
+              price: req.body.price,
+              currency: "USD",
               quantity: 1
             }
           ]
         },
         amount: {
-          currency: "INR",
-          total: "100.00"
+          currency: "USD",
+          total: req.body.price
         },
         description: "You buy a subscription for Institute System."
       }
@@ -47,7 +47,6 @@ router.post("/buy", (req, res) => {
     } else {
       for (let i = 0; i < payment.links.length; i++) {
         if (payment.links[i].rel === "approval_url") {
-          //res.redirect(payment.links[i].href);
           return res
             .status(200)
             .json({ success: true, redirect_url: payment.links[i].href });
@@ -58,7 +57,7 @@ router.post("/buy", (req, res) => {
 });
 
 router.get("/success", (req, res) => {
-  res.status(200).json({ success: true, message: "Buy successful" });
+  res.status(200).json({ success: true, message: "Purchase Successful" });
 });
 
 router.get("/cancel", (req, res) => {

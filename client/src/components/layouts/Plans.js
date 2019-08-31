@@ -52,6 +52,14 @@ function Plans(props) {
   }, []);
   const classes = useStyles();
 
+  const buySubscription = (name, price) => {
+    axios.post("/api/payment/buy", { name: name, price: price }).then(res => {
+      if (res.data.success) {
+        window.open(res.data.redirect_url, "", "height=600,width=400");
+      }
+    });
+  };
+
   return (
     <Container maxWidth="lg" component="main" style={{ marginTop: "5rem" }}>
       <Grid container spacing={5} alignItems="flex-end">
@@ -93,6 +101,11 @@ function Plans(props) {
                   variant="outlined"
                   color="primary"
                   href={props.landing ? "/signup" : null}
+                  onClick={
+                    props.landing
+                      ? null
+                      : () => buySubscription(tier.title, tier.price)
+                  }
                 >
                   Get Started
                 </Button>
