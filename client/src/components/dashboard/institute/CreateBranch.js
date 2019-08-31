@@ -1,4 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { addBranch, clearProp } from "../../../actions/branchActions";
+import isEmpty from "is-empty";
+import Swal from "sweetalert2";
 
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
@@ -11,10 +16,12 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Button from "@material-ui/core/Button";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
-function CreateBranch() {
+function CreateBranch(props) {
   const [values, setValues] = React.useState({
-    standard: ""
+    standard: "",
+    institution: ""
   });
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
@@ -30,9 +37,30 @@ function CreateBranch() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault();
-  }
+    const post_data = {
+      institute_name: props.auth.user.name,
+      branch_name: document.getElementById("create_branch_name").value,
+      email: document.getElementById("create_branch_email").value,
+      password: document.getElementById("create_branch_password").value,
+      address: document.getElementById("create_branch_address").value,
+      phone_number: document.getElementById("create_branch_phone_number").value,
+      standard: values.standard,
+      institution: values.institution
+    };
+    props.addBranch(post_data);
+  };
+
+  React.useEffect(() => {
+    if (!isEmpty(props.branches.add)) {
+      Swal.fire({
+        type: props.branches.add.success ? "success" : "error",
+        text: props.branches.add.message
+      });
+      props.clearProp();
+    }
+  }, [props]);
 
   return (
     <div>
@@ -50,15 +78,13 @@ function CreateBranch() {
                 required
                 fullWidth
               />
-              <TextField
-                label="Address"
-                variant="outlined"
-                margin="dense"
-                id="create_branch_address"
-                name="create_branch_address"
-                required
-                fullWidth
-              />
+              {props.branches.add ? (
+                <FormHelperText error>
+                  {props.branches.add.create_branch_name}
+                </FormHelperText>
+              ) : (
+                ""
+              )}
               <TextField
                 label="Email"
                 variant="outlined"
@@ -68,15 +94,62 @@ function CreateBranch() {
                 required
                 fullWidth
               />
+              {props.branches.add ? (
+                <FormHelperText error>
+                  {props.branches.add.create_branch_email}
+                </FormHelperText>
+              ) : (
+                ""
+              )}
+              <TextField
+                label="Password"
+                variant="outlined"
+                margin="dense"
+                id="create_branch_password"
+                name="create_branch_password"
+                required
+                fullWidth
+              />
+              {props.branches.add ? (
+                <FormHelperText error>
+                  {props.branches.add.create_branch_password}
+                </FormHelperText>
+              ) : (
+                ""
+              )}
+              <TextField
+                label="Address"
+                variant="outlined"
+                margin="dense"
+                id="create_branch_address"
+                name="create_branch_address"
+                required
+                fullWidth
+              />
+              {props.branches.add ? (
+                <FormHelperText error>
+                  {props.branches.add.create_branch_address}
+                </FormHelperText>
+              ) : (
+                ""
+              )}
               <TextField
                 label="Phone Number"
                 variant="outlined"
                 margin="dense"
                 id="create_branch_phone_number"
                 name="create_branch_phone_number"
+                type="number"
                 required
                 fullWidth
               />
+              {props.branches.add ? (
+                <FormHelperText error>
+                  {props.branches.add.create_branch_phone_number}
+                </FormHelperText>
+              ) : (
+                ""
+              )}
               <FormControl required variant="outlined" fullWidth margin="dense">
                 <InputLabel ref={inputLabel} htmlFor="standard">
                   Select Standard
@@ -96,6 +169,13 @@ function CreateBranch() {
                   <MenuItem value="secondary_school">Secondary School</MenuItem>
                 </Select>
               </FormControl>
+              {props.branches.add ? (
+                <FormHelperText error>
+                  {props.branches.add.create_branch_standard}
+                </FormHelperText>
+              ) : (
+                ""
+              )}
               <FormControl required variant="outlined" fullWidth margin="dense">
                 <InputLabel ref={inputLabel} htmlFor="institution">
                   Select Institution
@@ -116,6 +196,13 @@ function CreateBranch() {
                   <MenuItem value="girls">Girls School</MenuItem>
                 </Select>
               </FormControl>
+              {props.branches.add ? (
+                <FormHelperText error>
+                  {props.branches.add.create_branch_institution}
+                </FormHelperText>
+              ) : (
+                ""
+              )}
               <Button
                 type="submit"
                 variant="contained"
@@ -132,4 +219,21 @@ function CreateBranch() {
   );
 }
 
-export default CreateBranch;
+CreateBranch.propTypes = {
+  addBranch: PropTypes.func.isRequired,
+  clearProp: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  branches: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  branches: state.branches,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { addBranch, clearProp }
+)(CreateBranch);

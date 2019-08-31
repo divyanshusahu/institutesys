@@ -9,6 +9,7 @@ import standardReducer from "./standardReducer";
 import categoryReducer from "./categoryReducer";
 import grievanceCategoryReducer from "./grievanceCategoryReducer";
 import listReducer from "./listReducer";
+import branchReducer from "./branchReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   standards: standardReducer,
   categories: categoryReducer,
   grievance_categories: grievanceCategoryReducer,
-  datalist: listReducer
+  datalist: listReducer,
+  branches: branchReducer
 });
 
 export default rootReducer;

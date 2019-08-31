@@ -124,18 +124,20 @@ function InstituteDashboard(props) {
     setOpen(false);
   };
 
+  const [show, setShow] = React.useState("");
+
   const handleShow = type => {
     if (type === "create_branch") {
-      ReactDom.render(
-        <CreateBranch />,
-        document.getElementById("institute_dashboard_container")
-      );
+      setShow(<CreateBranch />);
     }
     if (type === "buy_plans") {
       ReactDom.render(
         <Plans />,
         document.getElementById("institute_dashboard_container")
       );
+    }
+    else {
+      return "";
     }
   };
 
@@ -286,7 +288,7 @@ function InstituteDashboard(props) {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <div id="institute_dashboard_container"></div>
+          <div id="institute_dashboard_container">{show}</div>
         </Container>
       </main>
     </div>
@@ -294,10 +296,13 @@ function InstituteDashboard(props) {
 }
 
 InstituteDashboard.propTypes = {
-  logoutUser: PropTypes.func.isRequired
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
 export default connect(
   mapStateToProps,
