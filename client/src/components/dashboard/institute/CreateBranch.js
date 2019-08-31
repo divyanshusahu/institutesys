@@ -222,9 +222,9 @@ function CreateBranch(props) {
                     />
                   }
                 >
-                  <MenuItem value="all">UTC</MenuItem>
-                  <MenuItem value="boys">UTC +5:30</MenuItem>
-                  <MenuItem value="girls">UTC -5:30</MenuItem>
+                  <MenuItem value="UTC">UTC</MenuItem>
+                  <MenuItem value="UTC +5:30">UTC +5:30</MenuItem>
+                  <MenuItem value="UTC -5:30">UTC -5:30</MenuItem>
                 </Select>
               </FormControl>
               {props.branches.add ? (
