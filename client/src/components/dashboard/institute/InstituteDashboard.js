@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDom from "react-dom";
 import clsx from "clsx";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
@@ -22,7 +21,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Collapse from "@material-ui/core/Collapse";
 
+import DefaultDashboard from "./DefaultDashboard";
 import CreateBranch from "./CreateBranch";
+import MyPlan from "./MyPlan";
 import Plans from "../../layouts/Plans";
 
 const drawerWidth = 300;
@@ -124,20 +125,19 @@ function InstituteDashboard(props) {
     setOpen(false);
   };
 
-  const [show, setShow] = React.useState("");
+  const [show, setShow] = React.useState(
+    <DefaultDashboard institute={props.auth.user} />
+  );
 
   const handleShow = type => {
-    if (type === "create_branch") {
+    if (type === "dashboard") {
+      setShow(<DefaultDashboard institute={props.auth.user} />);
+    } else if (type === "create_branch") {
       setShow(<CreateBranch />);
-    }
-    if (type === "buy_plans") {
-      ReactDom.render(
-        <Plans />,
-        document.getElementById("institute_dashboard_container")
-      );
-    }
-    else {
-      return "";
+    } else if (type === "my_plan") {
+      setShow(<MyPlan />);
+    } else if (type === "buy_plans") {
+      setShow(<Plans />);
     }
   };
 
@@ -155,7 +155,7 @@ function InstituteDashboard(props) {
 
   const sideBar = (
     <div>
-      <ListItem button>
+      <ListItem button onClick={() => handleShow("dashboard")}>
         <ListItemIcon>
           <Icon>dashboard</Icon>
         </ListItemIcon>
@@ -204,7 +204,7 @@ function InstituteDashboard(props) {
         <ListItemText primary="SMTP" />
       </ListItem>
 
-      <ListItem button>
+      <ListItem button onClick={() => handleShow("my_plan")}>
         <ListItemIcon>
           <Icon>subscriptions</Icon>
         </ListItemIcon>
