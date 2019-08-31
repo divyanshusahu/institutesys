@@ -23,6 +23,7 @@ import Collapse from "@material-ui/core/Collapse";
 
 import DefaultDashboard from "./DefaultDashboard";
 import CreateBranch from "./CreateBranch";
+import ListBranches from "./ListBranches";
 import MyPlan from "./MyPlan";
 import Plans from "../../layouts/Plans";
 
@@ -134,6 +135,8 @@ function InstituteDashboard(props) {
       setShow(<DefaultDashboard institute={props.auth.user} />);
     } else if (type === "create_branch") {
       setShow(<CreateBranch />);
+    } else if (type === "list_branches") {
+      setShow(<ListBranches institute={props.auth.user} />);
     } else if (type === "my_plan") {
       setShow(<MyPlan />);
     } else if (type === "buy_plans") {
@@ -181,7 +184,11 @@ function InstituteDashboard(props) {
             </ListItemIcon>
             <ListItemText primary="Create" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => handleShow("list_branches")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>

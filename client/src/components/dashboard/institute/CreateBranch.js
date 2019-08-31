@@ -21,7 +21,8 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 function CreateBranch(props) {
   const [values, setValues] = React.useState({
     standard: "",
-    institution: ""
+    institution: "",
+    timezone: ""
   });
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
@@ -47,18 +48,21 @@ function CreateBranch(props) {
       address: document.getElementById("create_branch_address").value,
       phone_number: document.getElementById("create_branch_phone_number").value,
       standard: values.standard,
-      institution: values.institution
+      institution: values.institution,
+      timezone: values.timezone
     };
     props.addBranch(post_data);
   };
 
   React.useEffect(() => {
     if (!isEmpty(props.branches.add)) {
-      Swal.fire({
-        type: props.branches.add.success ? "success" : "error",
-        text: props.branches.add.message
-      });
-      props.clearProp();
+      if(props.branches.add.success) {
+        Swal.fire({
+          type: props.branches.add.success ? "success" : "error",
+          text: props.branches.add.message
+        });
+        props.clearProp();
+      }
     }
   }, [props]);
 
@@ -199,6 +203,33 @@ function CreateBranch(props) {
               {props.branches.add ? (
                 <FormHelperText error>
                   {props.branches.add.create_branch_institution}
+                </FormHelperText>
+              ) : (
+                ""
+              )}
+              <FormControl required variant="outlined" fullWidth margin="dense">
+                <InputLabel ref={inputLabel} htmlFor="timezone">
+                  Select Timezone
+                </InputLabel>
+                <Select
+                  value={values.timezone}
+                  onChange={handleChange}
+                  input={
+                    <OutlinedInput
+                      labelWidth={labelWidth}
+                      name="timezone"
+                      id="timezone"
+                    />
+                  }
+                >
+                  <MenuItem value="all">UTC</MenuItem>
+                  <MenuItem value="boys">UTC +5:30</MenuItem>
+                  <MenuItem value="girls">UTC -5:30</MenuItem>
+                </Select>
+              </FormControl>
+              {props.branches.add ? (
+                <FormHelperText error>
+                  {props.branches.add.create_branch_timezone}
                 </FormHelperText>
               ) : (
                 ""
