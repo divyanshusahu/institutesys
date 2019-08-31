@@ -98,8 +98,7 @@ router.get("/list", (req, res) => {
           branch_name: user.branch_name,
           email: user.email,
           address: user.address,
-          phone_number: user.phone_number,
-          timezone: user.timezone
+          phone_number: user.phone_number
         };
       });
       return res
@@ -111,17 +110,23 @@ router.get("/list", (req, res) => {
 });
 
 router.post("/delete", (req, res) => {
-  Branch.deleteOne({ branch_name: req.body.name }, function(err) {
+  User.deleteOne({ email: req.body.email }, function(err) {
     if (err) {
-      return res.status(400).json({ success: false });
+      return res.status(500).json({ success: false });
     }
-    return res.status(200).json({ success: true });
+  });
+
+  Branch.deleteOne({ email: req.body.email }, function(err) {
+    if (err) {
+      return res.status(500).json({ success: false });
+    }
+    return res.status(200).json({ success: true, message: "Deleted Successfully" });
   });
 });
 
 router.post("/update", (req, res) => {
   Branch.findOneAndUpdate(
-    { branch_name: req.body.name },
+    { email: req.body.email },
     req.body,
     { new: true },
     function(err, doc) {
