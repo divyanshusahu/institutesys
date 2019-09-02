@@ -107,6 +107,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AdminDashboard(props) {
+  if (props.auth.user.role !== "admin") {
+    props.history.push(props.auth.user.role);
+    //return null;
+  }
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(true);
@@ -367,11 +371,13 @@ function AdminDashboard(props) {
 
 AdminDashboard.propTypes = {
   listData: PropTypes.func.isRequired,
-  datalist: PropTypes.object.isRequired
+  datalist: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStatetoProps = state => ({
-  datalist: state.datalist
+  datalist: state.datalist,
+  auth: state.auth
 });
 
 export default connect(

@@ -58,7 +58,11 @@ function Header(props) {
   }
 
   const pathname = window.location.pathname;
-  if (pathname.indexOf("dashboard") >= 0) {
+  if (
+    pathname.indexOf("admin") >= 0 ||
+    pathname.indexOf("institute") >= 0 ||
+    pathname.indexOf("school") >= 0
+  ) {
     return null;
   }
 

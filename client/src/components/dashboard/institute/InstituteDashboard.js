@@ -112,6 +112,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function InstituteDashboard(props) {
+  if (props.auth.user.role !== "institute") {
+    props.history.push(props.auth.user.role);
+  }
   const classes = useStyles();
 
   const [nestedopen0, setOpen0] = React.useState(false);
