@@ -1,5 +1,7 @@
 import React from "react";
 import clsx from "clsx";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -15,8 +17,11 @@ import Icon from "@material-ui/core/Icon";
 import Hidden from "@material-ui/core/Hidden";
 
 import SidebarItems from "./SidebarItems";
+import DefaultDashboard from "./DefaultDashboard";
+import CreateAcademicYear from "./CreateAcademicYear";
+import AddWeeklyHoliday from "./AddWeeklyHodiday";
 
-const drawerWidth = 300;
+const drawerWidth = 350;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -97,6 +102,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function SchoolDashboard(props) {
+  if (props.auth.user.role !== "school") {
+    props.history.push(props.auth.user.role);
+  }
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(true);
@@ -113,11 +121,19 @@ function SchoolDashboard(props) {
     }
   }, []);
 
-  /*const buySubscription = () => {
-    axios.post("/api/payment/buy").then((res) => {
-      window.open(res.data.redirect_url, "_parent");
-    });
-  }*/
+  const [show, selectShow] = React.useState(
+    <DefaultDashboard school={props.auth.user} />
+  );
+
+  React.useEffect(() => {
+    if (props.schoolSidebar.type === "default_dashboard") {
+      selectShow(<DefaultDashboard school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "create_academic_year") {
+      selectShow(<CreateAcademicYear />);
+    } else if (props.schoolSidebar.type === "add_weekly_holiday") {
+      selectShow(<AddWeeklyHoliday />);
+    }
+  }, [props.schoolSidebar.type, props.auth.user]);
 
   return (
     <div className={classes.root}>
@@ -168,10 +184,22 @@ function SchoolDashboard(props) {
 
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>dufghudg</Container>
+        <Container maxWidth="lg" className={classes.container}>
+          {show}
+        </Container>
       </main>
     </div>
   );
 }
 
-export default SchoolDashboard;
+SchoolDashboard.propTypes = {
+  auth: PropTypes.object.isRequired,
+  schoolSidebar: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  schoolSidebar: state.schoolSidebar
+});
+
+export default connect(mapStateToProps)(SchoolDashboard);
