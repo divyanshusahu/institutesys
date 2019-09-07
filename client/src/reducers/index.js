@@ -10,6 +10,7 @@ import categoryReducer from "./categoryReducer";
 import grievanceCategoryReducer from "./grievanceCategoryReducer";
 import listReducer from "./listReducer";
 import branchReducer from "./branchReducer";
+import schoolSidebarReducer from "./schoolSidebarReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   categories: categoryReducer,
   grievance_categories: grievanceCategoryReducer,
   datalist: listReducer,
-  branches: branchReducer
+  branches: branchReducer,
+  schoolSidebar: schoolSidebarReducer
 });
 
 export default rootReducer;
