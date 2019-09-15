@@ -34,6 +34,30 @@ const BranchSchema = new Schema({
   timezone: {
     type: String,
     required: true
+  },
+  academic_year: {
+    type: Array
+  },
+  weekly_holidays: {
+    type: Array
+  },
+  grades: {
+    type: Array
+  },
+  subjects: {
+    type: Array
+  },
+  divisions: {
+    type: Array
+  },
+  slots: {
+    type: Array
+  },
+  awards: {
+    type: Array
+  },
+  holidays: {
+    type: Array
   }
 });
 
