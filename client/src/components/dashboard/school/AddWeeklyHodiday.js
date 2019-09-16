@@ -1,4 +1,6 @@
 import React from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -8,7 +10,7 @@ import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from "@material-ui/core/FormGroup";
 
-function AddWeeklyHoliday() {
+function AddWeeklyHoliday(props) {
   const [days, selectDays] = React.useState({
     Monday: false,
     Tuesday: false,
@@ -27,7 +29,23 @@ function AddWeeklyHoliday() {
 
   const handleFormSubmit = event => {
     event.preventDefault();
+    axios
+      .post("/api/school/add_weekly_holidays?email=" + props.school.email, days)
+      .then(res => {
+        Swal.fire({
+          type: res.data.success ? "success" : "error",
+          text: res.data.message
+        });
+      });
   };
+
+  React.useEffect(() => {
+    axios
+      .get("/api/school/add_weekly_holidays?email=" + props.school.email)
+      .then(res => {
+        selectDays(res.data.holidays);
+      });
+  }, [props.school]);
 
   return (
     <div>
@@ -51,7 +69,7 @@ function AddWeeklyHoliday() {
                 control={
                   <Checkbox
                     checked={days.Tuesday}
-                    value={days.Monday}
+                    value={days.Tuesday}
                     name="Tuesday"
                     onChange={handleHoliday}
                   />
@@ -74,7 +92,7 @@ function AddWeeklyHoliday() {
                   <Checkbox
                     checked={days.Thursday}
                     value={days.Thursday}
-                    name="Thrusday"
+                    name="Thursday"
                     onChange={handleHoliday}
                   />
                 }

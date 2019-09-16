@@ -135,7 +135,7 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "create_academic_year") {
       selectShow(<CreateAcademicYear school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "add_weekly_holiday") {
-      selectShow(<AddWeeklyHoliday />);
+      selectShow(<AddWeeklyHoliday school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "list_academic_year") {
     } else if (props.schoolSidebar.type === "create_grade") {
       selectShow(<CreateGrade />);

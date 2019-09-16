@@ -39,7 +39,7 @@ const BranchSchema = new Schema({
     type: Array
   },
   weekly_holidays: {
-    type: Array
+    type: Object
   },
   grades: {
     type: Array

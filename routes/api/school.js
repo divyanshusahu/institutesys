@@ -49,4 +49,40 @@ router.post("/create_academic_year", (req, res) => {
   });
 });
 
+router.post("/add_weekly_holidays", (req, res) => {
+  Branch.findOne({ email: req.query.email }).then(branch => {
+    if (branch) {
+      Branch.findOneAndUpdate(
+        { email: req.query.email },
+        { $set: { weekly_holidays: req.body } },
+        { upsert: false, useFindAndModify: false }
+      )
+        .then(() => {
+          return res
+            .status(200)
+            .json({ success: true, message: "Updated Successfully" });
+        })
+        .catch(err => {
+          return res
+            .status(500)
+            .json({ success: false, message: "Internal Server Error" });
+        });
+    } else {
+      res.status(400).json({ success: false, message: "An Error Occurred" });
+    }
+  });
+});
+
+router.get("/add_weekly_holidays", (req, res) => {
+  Branch.findOne({ email: req.query.email }).then(branch => {
+    if (branch) {
+      return res
+        .status(200)
+        .json({ success: true, holidays: branch.weekly_holidays });
+    } else {
+      return res.status(400).json({ success: false });
+    }
+  });
+});
+
 module.exports = router;
