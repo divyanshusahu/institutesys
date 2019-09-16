@@ -5,6 +5,8 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
 } from "@material-ui/pickers";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -14,7 +16,7 @@ import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
 
-function CreateAcademicYear() {
+function CreateAcademicYear(props) {
   const [date, handleDate] = React.useState(new Date());
   const handleDateChange = date => {
     handleDate(date);
@@ -25,9 +27,21 @@ function CreateAcademicYear() {
     setCurrentYear(event.target.checked);
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = event => {
     event.preventDefault();
-  }
+    var post_data = {
+      email: props.school.email,
+      year_name: document.getElementById("create_academic_year_name").value,
+      start_date: date,
+      is_current_year: isCurrentYear
+    };
+    axios.post("/api/school/create_academic_year", post_data).then(res => {
+      Swal.fire({
+        type: res.data.success ? "success" : "error",
+        text: res.data.message
+      });
+    });
+  };
 
   return (
     <div>

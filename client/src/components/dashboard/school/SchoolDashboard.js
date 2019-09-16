@@ -2,6 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -20,6 +21,9 @@ import SidebarItems from "./SidebarItems";
 import DefaultDashboard from "./DefaultDashboard";
 import CreateAcademicYear from "./CreateAcademicYear";
 import AddWeeklyHoliday from "./AddWeeklyHodiday";
+import CreateGrade from "./CreateGrade";
+import CreateSubject from "./CreateSubject";
+import CreateStudent from "./CreateStudent";
 
 const drawerWidth = 350;
 
@@ -129,11 +133,34 @@ function SchoolDashboard(props) {
     if (props.schoolSidebar.type === "default_dashboard") {
       selectShow(<DefaultDashboard school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_academic_year") {
-      selectShow(<CreateAcademicYear />);
+      selectShow(<CreateAcademicYear school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "add_weekly_holiday") {
       selectShow(<AddWeeklyHoliday />);
+    } else if (props.schoolSidebar.type === "list_academic_year") {
+    } else if (props.schoolSidebar.type === "create_grade") {
+      selectShow(<CreateGrade />);
+    } else if (props.schoolSidebar.type === "list_grade") {
+    } else if (props.schoolSidebar.type === "create_subject") {
+      selectShow(<CreateSubject />);
+    } else if (props.schoolSidebar.type === "list_subject") {
+    } else if (props.schoolSidebar.type === "create_student") {
+      selectShow(<CreateStudent />);
+    } else if (props.schoolSidebar.type === "list_student") {
     }
   }, [props.schoolSidebar.type, props.auth.user]);
+
+  const [instituteData, getInstituteData] = React.useState({});
+  React.useEffect(() => {
+    axios
+      .get("/api/school/current_school?branch_email=" + props.auth.user.email)
+      .then(res => {
+        getInstituteData({
+          institute_name: res.data.branch.institute_name,
+          standard: res.data.branch.standard,
+          address: res.data.branch.address
+        });
+      });
+  }, [props.auth.user]);
 
   return (
     <div className={classes.root}>
