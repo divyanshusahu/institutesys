@@ -21,6 +21,7 @@ import SidebarItems from "./SidebarItems";
 import DefaultDashboard from "./DefaultDashboard";
 import CreateAcademicYear from "./CreateAcademicYear";
 import AddWeeklyHoliday from "./AddWeeklyHodiday";
+import ListAcademicYears from "./ListAcademicYears";
 import CreateGrade from "./CreateGrade";
 import CreateSubject from "./CreateSubject";
 import CreateStudent from "./CreateStudent";
@@ -137,6 +138,7 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "add_weekly_holiday") {
       selectShow(<AddWeeklyHoliday school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "list_academic_year") {
+      selectShow(<ListAcademicYears school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_grade") {
       selectShow(<CreateGrade />);
     } else if (props.schoolSidebar.type === "list_grade") {

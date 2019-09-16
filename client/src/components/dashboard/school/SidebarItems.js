@@ -123,7 +123,11 @@ function SidebarItems(props) {
             </ListItemIcon>
             <ListItemText primary="Add Weekly Holiday" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("list_academic_year")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>

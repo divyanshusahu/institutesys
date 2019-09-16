@@ -49,6 +49,18 @@ router.post("/create_academic_year", (req, res) => {
   });
 });
 
+router.get("/list_academic_years", (req, res) => {
+  Branch.findOne({ email: req.query.email }).then(branch => {
+    if (branch) {
+      return res
+        .status(200)
+        .json({ success: true, years: branch.academic_year });
+    } else {
+      return res.status(400).json({ success: false });
+    }
+  });
+});
+
 router.post("/add_weekly_holidays", (req, res) => {
   Branch.findOne({ email: req.query.email }).then(branch => {
     if (branch) {
