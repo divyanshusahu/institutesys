@@ -25,6 +25,7 @@ import ListAcademicYears from "./ListAcademicYears";
 import CreateGrade from "./CreateGrade";
 import ListGrades from "./ListGrades";
 import CreateSubject from "./CreateSubject";
+import ListSubjects from "./ListSubjects";
 import CreateStudent from "./CreateStudent";
 
 const drawerWidth = 350;
@@ -163,8 +164,9 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "list_grades") {
       selectShow(<ListGrades school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_subject") {
-      selectShow(<CreateSubject />);
-    } else if (props.schoolSidebar.type === "list_subject") {
+      selectShow(<CreateSubject school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "list_subjects") {
+      selectShow(<ListSubjects school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_student") {
       selectShow(<CreateStudent />);
     } else if (props.schoolSidebar.type === "list_student") {

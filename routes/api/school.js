@@ -139,4 +139,43 @@ router.get("/list_grades", (req, res) => {
   });
 });
 
+router.post("/create_subject", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    if (branch) {
+      var save_obj = {
+        subject_name: req.body.subject_name,
+        subject_description: req.body.subject_description,
+        grade: req.body.grade
+      };
+      var original_data = branch.subjects;
+      original_data.push(save_obj);
+      Branch.findOneAndUpdate(
+        { email: req.body.email },
+        { $set: { subjects: original_data } },
+        { upsert: false, useFindAndModify: false }
+      )
+        .then(() =>
+          res
+            .status(200)
+            .json({ success: true, message: "Subject Successfully added" })
+        )
+        .catch(err => res.status(500).json({ success: false, message: err }));
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "An error occurred" });
+    }
+  });
+});
+
+router.get("/list_subjects", (req, res) => {
+  Branch.findOne({ email: req.query.email }).then(branch => {
+    if (branch) {
+      return res.status(200).json({ success: true, subjects: branch.subjects });
+    } else {
+      return res.status(400).json({ success: false });
+    }
+  });
+});
+
 module.exports = router;
