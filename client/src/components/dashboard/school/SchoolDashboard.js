@@ -168,7 +168,7 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "list_subjects") {
       selectShow(<ListSubjects school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_student") {
-      selectShow(<CreateStudent />);
+      selectShow(<CreateStudent school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "list_student") {
     }
   }, [props.schoolSidebar.type, props.auth.user, instituteData.standard]);
