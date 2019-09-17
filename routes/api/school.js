@@ -405,4 +405,14 @@ router.post("/create_teacher", (req, res) => {
   });
 });
 
+router.get("/list_teachers", (req, res) => {
+  Teacher.find({ branch_ref: req.query.email }).then(teacher => {
+    var send_data = teacher.map(s => ({
+      name: s.name,
+      email: s.email
+    }));
+    res.status(200).json({ success: true, teachers: send_data });
+  });
+});
+
 module.exports = router;
