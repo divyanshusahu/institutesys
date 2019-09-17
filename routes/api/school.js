@@ -280,4 +280,42 @@ router.get("/list_students", (req, res) => {
   });
 });
 
+router.post("/create_slot", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    if (branch) {
+      var save_obj = {
+        period: req.body.period,
+        type: req.body.type,
+        start_time: req.body.start_time,
+        end_time: req.body.end_time
+      };
+      var original_data = branch.slots;
+      original_data.push(save_obj);
+      Branch.findOneAndUpdate(
+        { email: req.body.email },
+        { $set: { slots: original_data } },
+        { upsert: false, useFindAndModify: false }
+      )
+        .then(() =>
+          res
+            .status(200)
+            .json({ success: true, message: "Slot successfully added" })
+        )
+        .catch(err => res.status(500).json({ success: false, message: err }));
+    } else {
+      res.status(400).json({ success: false, message: "An error occurred" });
+    }
+  });
+});
+
+router.get("/list_slots", (req, res) => {
+  Branch.findOne({ email: req.query.email }).then(branch => {
+    if (branch) {
+      return res.status(200).json({ success: true, slots: branch.slots });
+    } else {
+      return res.status(400).json({ success: false });
+    }
+  });
+});
+
 module.exports = router;

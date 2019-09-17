@@ -277,7 +277,11 @@ function SidebarItems(props) {
       </ListItem>
       <Collapse in={nestedopen5} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("create_slot")}
+          >
             <ListItemIcon>
               <Icon>edit</Icon>
             </ListItemIcon>
