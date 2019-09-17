@@ -7,6 +7,7 @@ dotenv.config();
 
 const Branch = require("../../models/Branch");
 const Student = require("../../models/Student");
+const Teacher = require("../../models/Teacher");
 const User = require("../../models/User");
 
 router.get("/current_school", (req, res) => {
@@ -315,6 +316,92 @@ router.get("/list_slots", (req, res) => {
     } else {
       return res.status(400).json({ success: false });
     }
+  });
+});
+
+router.post("/create_teacher", (req, res) => {
+  Teacher.findOne({ email: req.body.email }).then(teacher => {
+    if (teacher) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Teacher already added" });
+    }
+
+    const newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      username: req.body.email,
+      password: req.body.password,
+      role: "teacher",
+      isVerified: true
+    });
+
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) {
+          throw err;
+        }
+        newUser.password = hash;
+        newUser
+          .save()
+          .catch(err => res.status(500).json({ success: false, message: err }));
+      });
+    });
+
+    const newTeacher = new Teacher({
+      branch_ref: req.body.branch_email,
+      name: req.body.name,
+      email: req.body.email,
+      phone_number: req.body.phone_number,
+      pan: req.body.pan,
+      qualification: req.body.qualification,
+      designation: req.body.designation,
+      staff_type: req.body.staff_type,
+      joining_date: req.body.joining_date,
+      date_of_birth: req.body.date_of_birth
+    });
+    newTeacher
+      .save()
+      .then(() =>
+        res
+          .status(200)
+          .json({ success: true, message: "Teacher successfully added" })
+      )
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "An error occurred", error: err })
+      );
+
+    let transporter = nodemailer.createTransport({
+      service: "SendGrid",
+      auth: {
+        user: process.env.SENDGRID_USER,
+        pass: process.env.SENDGRID_PASSWORD
+      }
+    });
+
+    let mailinfo = {
+      from: "'Institute System Admin' admin@institutesys.com",
+      to: newUser.email,
+      subject: "Invitation to Institute System",
+      html:
+        "Hey, " +
+        newUser.name +
+        ". Your school added you to Institute System.<br /><br />" +
+        "Please join by below credentials:<br />" +
+        "email: " +
+        req.body.email +
+        "<br />password: " +
+        req.body.password +
+        "<br />"
+    };
+
+    transporter.sendMail(mailinfo, err => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+    });
   });
 });
 

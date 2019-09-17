@@ -29,6 +29,7 @@ import ListSubjects from "./ListSubjects";
 import CreateStudent from "./CreateStudent";
 import ListStudents from "./ListStudents";
 import CreateSlot from "./CreateSlot";
+import CreateTeacher from "./CreateTeacher";
 
 const drawerWidth = 350;
 
@@ -179,6 +180,10 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "list_divisions") {
     } else if (props.schoolSidebar.type === "create_slot") {
       selectShow(<CreateSlot school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "add_time_table") {
+    } else if (props.schoolSidebar.type === "add_division_time_table") {
+    } else if (props.schoolSidebar.type === "create_teacher") {
+      selectShow(<CreateTeacher school={props.auth.user} />);
     }
   }, [props.schoolSidebar.type, props.auth.user, instituteData.standard]);
 
