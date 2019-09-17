@@ -155,7 +155,11 @@ function SidebarItems(props) {
             </ListItemIcon>
             <ListItemText primary="Create Grade" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("list_grades")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>

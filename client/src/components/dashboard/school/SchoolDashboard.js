@@ -23,6 +23,7 @@ import CreateAcademicYear from "./CreateAcademicYear";
 import AddWeeklyHoliday from "./AddWeeklyHodiday";
 import ListAcademicYears from "./ListAcademicYears";
 import CreateGrade from "./CreateGrade";
+import ListGrades from "./ListGrades";
 import CreateSubject from "./CreateSubject";
 import CreateStudent from "./CreateStudent";
 
@@ -159,7 +160,8 @@ function SchoolDashboard(props) {
           standard={instituteData.standard}
         />
       );
-    } else if (props.schoolSidebar.type === "list_grade") {
+    } else if (props.schoolSidebar.type === "list_grades") {
+      selectShow(<ListGrades school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_subject") {
       selectShow(<CreateSubject />);
     } else if (props.schoolSidebar.type === "list_subject") {

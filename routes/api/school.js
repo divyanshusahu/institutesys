@@ -129,4 +129,14 @@ router.post("/create_grade", (req, res) => {
   });
 });
 
+router.get("/list_grades", (req, res) => {
+  Branch.findOne({ email: req.query.email }).then(branch => {
+    if (branch) {
+      return res.status(200).json({ success: true, grades: branch.grades });
+    } else {
+      return res.status(400).json({ success: false });
+    }
+  });
+});
+
 module.exports = router;
