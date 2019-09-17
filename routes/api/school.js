@@ -97,4 +97,36 @@ router.get("/add_weekly_holidays", (req, res) => {
   });
 });
 
+router.post("/create_grade", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    if (branch) {
+      var save_obj = {
+        grade: req.body.create_grade,
+        description: req.body.description,
+        max_student: req.body.max_student,
+        age: req.body.age,
+        start_time: req.body.start_time,
+        end_time: req.body.end_time
+      };
+      var original_data = branch.grades;
+      original_data.push(save_obj);
+      Branch.findOneAndUpdate(
+        { email: req.body.email },
+        { $set: { grades: original_data } },
+        { upsert: false, useFindAndModify: false }
+      )
+        .then(() =>
+          res
+            .status(200)
+            .json({ success: true, message: "Grade added Successfully" })
+        )
+        .catch(err => res.status(500).json({ success: false, message: err }));
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "An Error Occurred" });
+    }
+  });
+});
+
 module.exports = router;

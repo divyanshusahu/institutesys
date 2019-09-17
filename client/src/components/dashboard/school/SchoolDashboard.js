@@ -130,27 +130,6 @@ function SchoolDashboard(props) {
     <DefaultDashboard school={props.auth.user} />
   );
 
-  React.useEffect(() => {
-    if (props.schoolSidebar.type === "default_dashboard") {
-      selectShow(<DefaultDashboard school={props.auth.user} />);
-    } else if (props.schoolSidebar.type === "create_academic_year") {
-      selectShow(<CreateAcademicYear school={props.auth.user} />);
-    } else if (props.schoolSidebar.type === "add_weekly_holiday") {
-      selectShow(<AddWeeklyHoliday school={props.auth.user} />);
-    } else if (props.schoolSidebar.type === "list_academic_year") {
-      selectShow(<ListAcademicYears school={props.auth.user} />);
-    } else if (props.schoolSidebar.type === "create_grade") {
-      selectShow(<CreateGrade />);
-    } else if (props.schoolSidebar.type === "list_grade") {
-    } else if (props.schoolSidebar.type === "create_subject") {
-      selectShow(<CreateSubject />);
-    } else if (props.schoolSidebar.type === "list_subject") {
-    } else if (props.schoolSidebar.type === "create_student") {
-      selectShow(<CreateStudent />);
-    } else if (props.schoolSidebar.type === "list_student") {
-    }
-  }, [props.schoolSidebar.type, props.auth.user]);
-
   const [instituteData, getInstituteData] = React.useState({});
   React.useEffect(() => {
     axios
@@ -163,6 +142,32 @@ function SchoolDashboard(props) {
         });
       });
   }, [props.auth.user]);
+
+  React.useEffect(() => {
+    if (props.schoolSidebar.type === "default_dashboard") {
+      selectShow(<DefaultDashboard school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "create_academic_year") {
+      selectShow(<CreateAcademicYear school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "add_weekly_holiday") {
+      selectShow(<AddWeeklyHoliday school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "list_academic_year") {
+      selectShow(<ListAcademicYears school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "create_grade") {
+      selectShow(
+        <CreateGrade
+          school={props.auth.user}
+          standard={instituteData.standard}
+        />
+      );
+    } else if (props.schoolSidebar.type === "list_grade") {
+    } else if (props.schoolSidebar.type === "create_subject") {
+      selectShow(<CreateSubject />);
+    } else if (props.schoolSidebar.type === "list_subject") {
+    } else if (props.schoolSidebar.type === "create_student") {
+      selectShow(<CreateStudent />);
+    } else if (props.schoolSidebar.type === "list_student") {
+    }
+  }, [props.schoolSidebar.type, props.auth.user, instituteData.standard]);
 
   return (
     <div className={classes.root}>
