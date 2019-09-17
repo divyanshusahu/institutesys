@@ -27,6 +27,7 @@ import ListGrades from "./ListGrades";
 import CreateSubject from "./CreateSubject";
 import ListSubjects from "./ListSubjects";
 import CreateStudent from "./CreateStudent";
+import ListStudents from "./ListStudents";
 
 const drawerWidth = 350;
 
@@ -169,7 +170,8 @@ function SchoolDashboard(props) {
       selectShow(<ListSubjects school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_student") {
       selectShow(<CreateStudent school={props.auth.user} />);
-    } else if (props.schoolSidebar.type === "list_student") {
+    } else if (props.schoolSidebar.type === "list_students") {
+      selectShow(<ListStudents school={props.auth.user} />);
     }
   }, [props.schoolSidebar.type, props.auth.user, instituteData.standard]);
 

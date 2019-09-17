@@ -269,4 +269,15 @@ router.post("/create_student", (req, res) => {
   });
 });
 
+router.get("/list_students", (req, res) => {
+  Student.find({ branch_ref: req.query.email }).then(student => {
+    var send_data = student.map(s => ({
+      name: s.name,
+      email: s.email,
+      grade: s.grade
+    }));
+    res.status(200).json({ success: true, students: send_data });
+  });
+});
+
 module.exports = router;
