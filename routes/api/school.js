@@ -415,4 +415,43 @@ router.get("/list_teachers", (req, res) => {
   });
 });
 
+router.post("/create_holiday", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    if (branch) {
+      var save_obj = {
+        year: req.body.year,
+        date: req.body.date,
+        description: req.body.description
+      };
+      var original_data = branch.holidays;
+      original_data.push(save_obj);
+      Branch.findOneAndUpdate(
+        { email: req.body.email },
+        { $set: { holidays: original_data } },
+        { upsert: false, useFindAndModify: false }
+      )
+        .then(() =>
+          res
+            .status(200)
+            .json({ success: true, message: "Holiday successfully added" })
+        )
+        .catch(err => res.status(500).json({ success: false, message: err }));
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "An error occurred" });
+    }
+  });
+});
+
+router.get("/list_holidays", (req, res) => {
+  Branch.findOne({ email: req.query.email }).then(branch => {
+    if (branch) {
+      return res.status(200).json({ success: true, holidays: branch.holidays });
+    } else {
+      return res.status(400).json({ success: false });
+    }
+  });
+});
+
 module.exports = router;

@@ -31,6 +31,8 @@ import ListStudents from "./ListStudents";
 import CreateSlot from "./CreateSlot";
 import CreateTeacher from "./CreateTeacher";
 import ListTeachers from "./ListTeachers";
+import CreateHoliday from "./CreateHoliday";
+import ListHolidays from "./ListHolidays";
 
 const drawerWidth = 350;
 
@@ -189,6 +191,14 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "add_time_slots") {
     } else if (props.schoolSidebar.type === "list_teachers") {
       selectShow(<ListTeachers school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "add_award") {
+    } else if (props.schoolSidebar.type === "calculate_award") {
+    } else if (props.schoolSidebar.type === "list_awards") {
+    } else if (props.schoolSidebar.type === "list_toppers") {
+    } else if (props.schoolSidebar.type === "create_holiday") {
+      selectShow(<CreateHoliday school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "list_holidays") {
+      selectShow(<ListHolidays school={props.auth.user} />)
     }
   }, [props.schoolSidebar.type, props.auth.user, instituteData.standard]);
 

@@ -391,13 +391,21 @@ function SidebarItems(props) {
       </ListItem>
       <Collapse in={nestedopen8} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("create_holiday")}
+          >
             <ListItemIcon>
               <Icon>edit</Icon>
             </ListItemIcon>
             <ListItemText primary="Create" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("list_holidays")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>
