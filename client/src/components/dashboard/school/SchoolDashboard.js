@@ -28,6 +28,8 @@ import CreateSubject from "./CreateSubject";
 import ListSubjects from "./ListSubjects";
 import CreateStudent from "./CreateStudent";
 import ListStudents from "./ListStudents";
+import AddDivision from "./AddDivision";
+import ListDivisions from "./ListDivisions";
 import CreateSlot from "./CreateSlot";
 import CreateTeacher from "./CreateTeacher";
 import ListTeachers from "./ListTeachers";
@@ -178,9 +180,11 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "list_students") {
       selectShow(<ListStudents school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "add_division") {
+      selectShow(<AddDivision school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "allot_student") {
     } else if (props.schoolSidebar.type === "division_time_table") {
     } else if (props.schoolSidebar.type === "list_divisions") {
+      selectShow(<ListDivisions school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_slot") {
       selectShow(<CreateSlot school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "add_time_table") {
@@ -198,7 +202,7 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "create_holiday") {
       selectShow(<CreateHoliday school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "list_holidays") {
-      selectShow(<ListHolidays school={props.auth.user} />)
+      selectShow(<ListHolidays school={props.auth.user} />);
     }
   }, [props.schoolSidebar.type, props.auth.user, instituteData.standard]);
 

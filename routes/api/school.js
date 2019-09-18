@@ -281,6 +281,44 @@ router.get("/list_students", (req, res) => {
   });
 });
 
+router.post("/create_division", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    if (branch) {
+      var save_obj = {
+        name: req.body.name,
+        grade: req.body.grade
+      };
+      var original_data = branch.divisions;
+      original_data.push(save_obj);
+      Branch.findOneAndUpdate(
+        { email: req.body.email },
+        { $set: { divisions: original_data } },
+        { upsert: false, useFindAndModify: false }
+      )
+        .then(() =>
+          res
+            .status(200)
+            .json({ success: true, message: "Division Successfully Added" })
+        )
+        .catch(err => res.status(500).json({ success: false, message: err }));
+    } else {
+      res.status(400).json({ success: false, message: "An error occurred" });
+    }
+  });
+});
+
+router.get("/list_divisions", (req, res) => {
+  Branch.findOne({ email: req.query.email }).then(branch => {
+    if (branch) {
+      return res
+        .status(200)
+        .json({ success: true, divisions: branch.divisions });
+    } else {
+      return res.status(400).json({ success: false });
+    }
+  });
+});
+
 router.post("/create_slot", (req, res) => {
   Branch.findOne({ email: req.body.email }).then(branch => {
     if (branch) {

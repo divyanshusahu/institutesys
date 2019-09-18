@@ -241,7 +241,11 @@ function SidebarItems(props) {
       </ListItem>
       <Collapse in={nestedopen4} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("add_division")}
+          >
             <ListItemIcon>
               <Icon>add_circle</Icon>
             </ListItemIcon>
@@ -259,7 +263,11 @@ function SidebarItems(props) {
             </ListItemIcon>
             <ListItemText primary="Division Time Table" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("list_divisions")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>
