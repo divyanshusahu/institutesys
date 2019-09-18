@@ -59,7 +59,7 @@ function CreateLevelOne(props) {
   return (
     <div>
       <Card>
-        <CardHeader title="Create Slots" />
+        <CardHeader title="Level 1" />
         <CardContent>
           <form noValidate onSubmit={handleFormSubmit}>
             <TextField
@@ -92,7 +92,7 @@ function CreateLevelOne(props) {
         </CardContent>
       </Card>
       <MaterialTable
-        title="Slots"
+        title="Level 1"
         columns={table.columns}
         data={table.data}
         style={{ marginTop: "2rem" }}
