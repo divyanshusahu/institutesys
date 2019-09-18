@@ -61,6 +61,15 @@ const BranchSchema = new Schema({
   },
   exams: {
     type: Array
+  },
+  level_1: {
+    type: Array
+  },
+  level_2: {
+    type: Array
+  },
+  level_3: {
+    type: Array
   }
 });
 

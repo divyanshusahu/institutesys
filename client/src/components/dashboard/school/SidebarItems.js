@@ -452,7 +452,11 @@ function SidebarItems(props) {
       </ListItem>
       <Collapse in={nestedopen9} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("level_1")}
+          >
             <ListItemIcon>
               <Icon>star</Icon>
             </ListItemIcon>

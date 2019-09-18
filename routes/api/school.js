@@ -492,6 +492,44 @@ router.get("/list_holidays", (req, res) => {
   });
 });
 
+router.post("/create_level_one", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    if (branch) {
+      var save_obj = {
+        name: req.body.name,
+        description: req.body.description
+      };
+      var original_data = branch.level_1;
+      original_data.push(save_obj);
+      Branch.findOneAndUpdate(
+        { email: req.body.email },
+        { $set: { level_1: original_data } },
+        { upsert: false, useFindAndModify: false }
+      )
+        .then(() =>
+          res
+            .status(200)
+            .json({ success: true, message: "Level Successfully Added" })
+        )
+        .catch(err => res.status(500).json({ success: false, message: err }));
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "An error occurred" });
+    }
+  });
+});
+
+router.get("/list_level_one", (req, res) => {
+  Branch.findOne({ email: req.query.email }).then(branch => {
+    if (branch) {
+      return res.status(200).json({ success: true, level_one: branch.level_1 });
+    } else {
+      return res.status(400).json({ success: false });
+    }
+  });
+});
+
 router.post("/create_exam", (req, res) => {
   Branch.findOne({ email: req.body.email }).then(branch => {
     if (branch) {

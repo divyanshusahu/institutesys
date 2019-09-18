@@ -35,6 +35,7 @@ import CreateTeacher from "./CreateTeacher";
 import ListTeachers from "./ListTeachers";
 import CreateHoliday from "./CreateHoliday";
 import ListHolidays from "./ListHolidays";
+import CreateLevelOne from "./CreateLevelOne";
 import CreateExam from "./CreateExam";
 import ListExams from "./ListExams";
 
@@ -209,6 +210,7 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "notice_board") {
     } else if (props.schoolSidebar.type === "smtp") {
     } else if (props.schoolSidebar.type === "level_1") {
+      selectShow(<CreateLevelOne school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "level_2") {
     } else if (props.schoolSidebar.type === "level_3") {
     } else if (props.schoolSidebar.type === "create_appointment") {
