@@ -500,13 +500,21 @@ function SidebarItems(props) {
       </ListItem>
       <Collapse in={nestedopen11} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("create_exam")}
+          >
             <ListItemIcon>
               <Icon>edit</Icon>
             </ListItemIcon>
             <ListItemText primary="Create Exam" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("view_exams")}
+          >
             <ListItemIcon>
               <Icon>list</Icon>
             </ListItemIcon>

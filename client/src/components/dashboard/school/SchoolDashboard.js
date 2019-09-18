@@ -35,6 +35,8 @@ import CreateTeacher from "./CreateTeacher";
 import ListTeachers from "./ListTeachers";
 import CreateHoliday from "./CreateHoliday";
 import ListHolidays from "./ListHolidays";
+import CreateExam from "./CreateExam";
+import ListExams from "./ListExams";
 
 const drawerWidth = 350;
 
@@ -203,6 +205,17 @@ function SchoolDashboard(props) {
       selectShow(<CreateHoliday school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "list_holidays") {
       selectShow(<ListHolidays school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "school_calender") {
+    } else if (props.schoolSidebar.type === "notice_board") {
+    } else if (props.schoolSidebar.type === "smtp") {
+    } else if (props.schoolSidebar.type === "level_1") {
+    } else if (props.schoolSidebar.type === "level_2") {
+    } else if (props.schoolSidebar.type === "level_3") {
+    } else if (props.schoolSidebar.type === "create_appointment") {
+    } else if (props.schoolSidebar.type === "create_exam") {
+      selectShow(<CreateExam school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "view_exams") {
+      selectShow(<ListExams school={props.auth.user} />);
     }
   }, [props.schoolSidebar.type, props.auth.user, instituteData.standard]);
 

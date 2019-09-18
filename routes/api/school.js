@@ -492,4 +492,52 @@ router.get("/list_holidays", (req, res) => {
   });
 });
 
+router.post("/create_exam", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    if (branch) {
+      var save_obj = {
+        year: req.body.year,
+        name: req.body.name,
+        grade: req.body.grade,
+        description: req.body.description,
+        marks_entry_date: req.body.marks_entry_date,
+        parents_approval_date: req.body.parents_approval_date,
+        exam_prepare_date: req.body.exam_prepare_date
+      };
+      var original_data = branch.exams;
+      original_data.push(save_obj);
+      Branch.findOneAndUpdate(
+        { email: req.body.email },
+        { $set: { exams: original_data } },
+        { upsert: false, useFindAndModify: false }
+      )
+        .then(() =>
+          res
+            .status(200)
+            .json({ success: true, message: "Exam Successfully Created" })
+        )
+        .catch(err => res.status(500).json({ success: false, message: err }));
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "An error occurred" });
+    }
+  });
+});
+
+router.get("/list_exams", (req, res) => {
+  Branch.findOne({ email: req.query.email }).then(branch => {
+    if (branch) {
+      var send_data = branch.exams.map(e => ({
+        grade: e.grade,
+        name: e.name,
+        description: e.description
+      }));
+      res.status(200).json({ success: true, exams: send_data });
+    } else {
+      res.status(400).json({ success: false });
+    }
+  });
+});
+
 module.exports = router;

@@ -58,6 +58,9 @@ const BranchSchema = new Schema({
   },
   holidays: {
     type: Array
+  },
+  exams: {
+    type: Array
   }
 });
 
