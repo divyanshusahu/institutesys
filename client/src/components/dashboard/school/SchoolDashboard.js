@@ -32,6 +32,7 @@ import AddDivision from "./AddDivision";
 import ListDivisions from "./ListDivisions";
 import CreateSlot from "./CreateSlot";
 import CreateTeacher from "./CreateTeacher";
+import AddTeacherSkill from "./AddTeacherSkill";
 import ListTeachers from "./ListTeachers";
 import CreateHoliday from "./CreateHoliday";
 import ListHolidays from "./ListHolidays";
@@ -197,6 +198,7 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "create_teacher") {
       selectShow(<CreateTeacher school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "add_skills") {
+      selectShow(<AddTeacherSkill school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "add_time_slots") {
     } else if (props.schoolSidebar.type === "list_teachers") {
       selectShow(<ListTeachers school={props.auth.user} />);
