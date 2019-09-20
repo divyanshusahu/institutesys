@@ -339,7 +339,11 @@ function SidebarItems(props) {
             </ListItemIcon>
             <ListItemText primary="Add Skills" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("add_time_slots")}
+          >
             <ListItemIcon>
               <Icon>add_circle</Icon>
             </ListItemIcon>
