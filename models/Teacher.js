@@ -44,6 +44,9 @@ const TeacherSchema = new Schema({
   },
   skills: {
     type: Array
+  },
+  available_time_slots: {
+    type: Array
   }
 });
 

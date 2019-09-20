@@ -478,6 +478,52 @@ router.post("/add_skills", (req, res) => {
   });
 });
 
+router.post("/add_time_slot", (req, res) => {
+  Teacher.findOne({ email: req.body.teacher_email }).then(teacher => {
+    if (teacher) {
+      var newData = {
+        period: req.body.period,
+        slot: req.body.slot,
+        Monday: req.body.Monday,
+        Tuesday: req.body.Tuesday,
+        Wednesday: req.body.Wednesday,
+        Thursday: req.body.Thursday,
+        Friday: req.body.Friday,
+        Saturday: req.body.Saturday,
+        Sunday: req.body.Sunday
+      };
+      var original_data = teacher.available_time_slots;
+      for (let i = 0; i < original_data.length; i++) {
+        if (original_data[i].period === req.body.period) {
+          original_data.splice(i, 1);
+        }
+      }
+      original_data.push(newData);
+      Teacher.findOneAndUpdate(
+        { email: req.body.teacher_email },
+        { $set: { available_time_slots: original_data } },
+        { upsert: false, useFindAndModify: false }
+      ).then(() => res.status(200).json({ success: true, message: "Updated" }));
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "An error occurred" });
+    }
+  });
+});
+
+router.get("/list_teacher_available_slots", (req, res) => {
+  Teacher.findOne({ email: req.query.email }).then(teacher => {
+    if (teacher) {
+      return res
+        .status(200)
+        .json({ success: true, data: teacher.available_time_slots });
+    } else {
+      return res.status(400).json({ success: false });
+    }
+  });
+});
+
 router.get("/list_teachers", (req, res) => {
   Teacher.find({ branch_ref: req.query.email }).then(teacher => {
     var send_data = teacher.map(s => ({

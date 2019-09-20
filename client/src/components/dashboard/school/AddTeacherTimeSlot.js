@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
+import Swal from "sweetalert2";
 
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -17,21 +18,6 @@ function AddTeacherTimeSlot(props) {
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
-
-  const [teachers, setTeachers] = React.useState([]);
-  React.useEffect(() => {
-    axios
-      .get("/api/school/list_teachers?email=" + props.school.email)
-      .then(res => {
-        var temp = res.data.teachers.map(t => t.name);
-        setTeachers(temp);
-      });
-  }, [props.school.email, setTeachers]);
-
-  const [selectedTeacher, setSelectedTeacher] = React.useState("");
-  const handleTeacherChange = event => {
-    setSelectedTeacher(event.target.value);
-  };
 
   const [table, setTable] = React.useState({
     columns: [],
@@ -65,50 +51,98 @@ function AddTeacherTimeSlot(props) {
             });
           }
         }
-        setTable(oldValues => ({
-          ...oldValues,
-          columns: columns
-        }));
+        setTable({
+          columns: columns,
+          data: []
+        });
       });
   }, [props.school.email]);
 
+  const [slots, setSlots] = React.useState();
   React.useEffect(() => {
     axios
       .get("/api/school/list_slots?email=" + props.school.email)
       .then(res => {
-        var temp = res.data.slots.map(s => {
-          var start_time = new Date(s.start_time);
-          var start_time_display =
-            ("0" + start_time.getHours()).slice(-2) +
-            ":" +
-            ("0" + start_time.getMinutes()).slice(-2);
-          var end_time = new Date(s.end_time);
-          var end_time_display =
-            ("0" + end_time.getHours()).slice(-2) +
-            ":" +
-            ("0" + end_time.getMinutes()).slice(-2);
-          return {
-            slot: start_time_display + " to " + end_time_display,
-            period: s.period,
-            Monday: false,
-            Tuesday: false,
-            Wednesday: false,
-            Thursday: false,
-            Friday: false,
-            Saturday: false,
-            Sunday: false
-          };
-        });
-        setTable(oldValues => ({
-          ...oldValues,
-          data: temp
+        var temp = res.data.slots.map(s => ({
+          period: s.period,
+          start_time: s.start_time,
+          end_time: s.end_time
         }));
+        setSlots(temp);
       });
   }, [props.school.email]);
 
-  const handleTeacherSlotUpdate = (data) => {
-    console.log(data);
-  }
+  const resetTeacherSlot = () => {
+    var data = slots.map(s => {
+      var start_time = new Date(s.start_time);
+      var start_time_display =
+        ("0" + start_time.getHours()).slice(-2) +
+        ":" +
+        ("0" + start_time.getMinutes()).slice(-2);
+      var end_time = new Date(s.end_time);
+      var end_time_display =
+        ("0" + end_time.getHours()).slice(-2) +
+        ":" +
+        ("0" + end_time.getMinutes()).slice(-2);
+      return {
+        slot: start_time_display + " to " + end_time_display,
+        period: s.period,
+        Monday: false,
+        Tuesday: false,
+        Wednesday: false,
+        Thursday: false,
+        Friday: false,
+        Saturday: false,
+        Sunday: false
+      };
+    });
+    var newTable = table;
+    newTable.data = data;
+    setTable(newTable);
+  };
+
+  const [teachers, setTeachers] = React.useState([]);
+  React.useEffect(() => {
+    axios
+      .get("/api/school/list_teachers?email=" + props.school.email)
+      .then(res => {
+        setTeachers(res.data.teachers);
+      });
+  }, [props.school.email, setTeachers]);
+
+  const getTeacherTimeSlots = email => {
+    axios
+      .get("/api/school/list_teacher_available_slots?email=" + email)
+      .then(res => {
+        var oldData = table.data;
+        for (let i = 0; i < res.data.data.length; i++) {
+          let index = res.data.data[i].period - 1;
+          oldData[index] = res.data.data[i];
+        }
+        setTable(oldValues => ({
+          ...oldValues,
+          data: oldData
+        }));
+      });
+  };
+
+  const [selectedTeacher, setSelectedTeacher] = React.useState("");
+  const handleTeacherChange = event => {
+    setSelectedTeacher(event.target.value);
+    resetTeacherSlot();
+    getTeacherTimeSlots(event.target.value);
+  };
+
+  const handleTeacherSlotUpdate = data => {
+    data.teacher_email = selectedTeacher;
+    axios.post("/api/school/add_time_slot", data).then(res => {
+      Swal.fire({
+        type: res.data.success ? "success" : "error",
+        text: res.data.message
+      });
+      getTeacherTimeSlots(selectedTeacher);
+    });
+  };
 
   return (
     <div>
@@ -131,8 +165,8 @@ function AddTeacherTimeSlot(props) {
               }
             >
               {teachers.map(c => (
-                <MenuItem value={c} key={c}>
-                  {c}
+                <MenuItem value={c.email} key={c.email}>
+                  {c.name}
                 </MenuItem>
               ))}
             </Select>
@@ -157,6 +191,16 @@ function AddTeacherTimeSlot(props) {
               });
             }
           }}
+          actions={[
+            {
+              icon: "refresh",
+              tooltip: "Refresh",
+              isFreeAction: true,
+              onClick: () => {
+                getTeacherTimeSlots(selectedTeacher);
+              }
+            }
+          ]}
         />
       </div>
     </div>
