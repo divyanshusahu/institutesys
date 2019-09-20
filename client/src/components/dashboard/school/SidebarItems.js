@@ -462,13 +462,21 @@ function SidebarItems(props) {
             </ListItemIcon>
             <ListItemText primary="Level 1" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("level_2")}
+          >
             <ListItemIcon>
               <Icon>star</Icon>
             </ListItemIcon>
             <ListItemText primary="Level 2" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("level_3")}
+          >
             <ListItemIcon>
               <Icon>star</Icon>
             </ListItemIcon>

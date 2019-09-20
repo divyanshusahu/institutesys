@@ -36,6 +36,8 @@ import ListTeachers from "./ListTeachers";
 import CreateHoliday from "./CreateHoliday";
 import ListHolidays from "./ListHolidays";
 import CreateLevelOne from "./CreateLevelOne";
+import CreateLevelTwo from "./CreateLevelTwo";
+import CreateLevelThree from "./CreateLevelThree";
 import CreateExam from "./CreateExam";
 import ListExams from "./ListExams";
 
@@ -212,7 +214,9 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "level_1") {
       selectShow(<CreateLevelOne school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "level_2") {
+      selectShow(<CreateLevelTwo school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "level_3") {
+      selectShow(<CreateLevelThree school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_appointment") {
     } else if (props.schoolSidebar.type === "create_exam") {
       selectShow(<CreateExam school={props.auth.user} />);
