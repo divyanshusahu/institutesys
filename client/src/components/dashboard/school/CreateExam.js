@@ -51,7 +51,7 @@ function CreateExam(props) {
         var temp = res.data.grades.map(c => c.grade);
         setClasses(temp);
       });
-  }, [setClasses, props.standard]);
+  }, [setClasses, props.school.email]);
 
   const [selectedGrade, setSelectedGrade] = React.useState("");
   const handleGradeChange = event => {
@@ -66,7 +66,7 @@ function CreateExam(props) {
         var temp = res.data.years.map(y => y.year_name);
         setYears(temp);
       });
-  }, [setYears, props.standard]);
+  }, [setYears, props.school.email]);
 
   const [selectedYear, setSelectedYear] = React.useState("");
   const handleYearChange = event => {
