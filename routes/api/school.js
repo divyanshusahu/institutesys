@@ -443,6 +443,41 @@ router.post("/create_teacher", (req, res) => {
   });
 });
 
+router.post("/add_skills", (req, res) => {
+  Teacher.findOne({ email: req.body.teacher_email }).then(teacher => {
+    if (teacher) {
+      var save_obj = {
+        grade: req.body.grade,
+        division: req.body.division,
+        subject_name: req.body.subject_name
+      };
+      var original_data = teacher.skills;
+      if (original_data.indexOf(save_obj) >= 0) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Skill already added" });
+      } else {
+        original_data.push(save_obj);
+        Teacher.findOneAndUpdate(
+          { email: req.body.teacher_email },
+          { $set: { skills: original_data } },
+          { upsert: false, useFindAndModify: false }
+        )
+          .then(() =>
+            res
+              .status(200)
+              .json({ success: true, message: "Skill successfully added" })
+          )
+          .catch(err => res.status(500).json({ success: false, message: err }));
+      }
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "An error occurred" });
+    }
+  });
+});
+
 router.get("/list_teachers", (req, res) => {
   Teacher.find({ branch_ref: req.query.email }).then(teacher => {
     var send_data = teacher.map(s => ({
@@ -599,7 +634,9 @@ router.post("/create_level_three", (req, res) => {
 router.get("/list_level_three", (req, res) => {
   Branch.findOne({ email: req.query.email }).then(branch => {
     if (branch) {
-      return res.status(200).json({ success: true, level_three: branch.level_3 });
+      return res
+        .status(200)
+        .json({ success: true, level_three: branch.level_3 });
     } else {
       return res.status(400).json({ success: false });
     }

@@ -24,8 +24,7 @@ function AddTeacherSkill(props) {
     axios
       .get("/api/school/list_teachers?email=" + props.school.email)
       .then(res => {
-        var temp = res.data.teachers.map(t => t.name);
-        setTeachers(temp);
+        setTeachers(res.data.teachers);
       });
   }, [props.school.email, setTeachers]);
 
@@ -94,6 +93,19 @@ function AddTeacherSkill(props) {
 
   const handleFormSubmit = event => {
     event.preventDefault();
+
+    var post_data = {
+      teacher_email: selectedTeacher,
+      grade: selectedGrade,
+      division: selectedDivision,
+      subject_name: selectedSubject
+    };
+    axios.post("/api/school/add_skills", post_data).then(res => {
+      Swal.fire({
+        type: res.data.success ? "success" : "error",
+        text: res.data.message
+      });
+    });
   };
 
   return (
@@ -118,8 +130,8 @@ function AddTeacherSkill(props) {
                 }
               >
                 {teachers.map(c => (
-                  <MenuItem value={c} key={c}>
-                    {c}
+                  <MenuItem value={c.email} key={c.email}>
+                    {c.name}
                   </MenuItem>
                 ))}
               </Select>

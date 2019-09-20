@@ -41,6 +41,9 @@ const TeacherSchema = new Schema({
   date_of_birth: {
     type: Date,
     required: true
+  },
+  skills: {
+    type: Array
   }
 });
 
