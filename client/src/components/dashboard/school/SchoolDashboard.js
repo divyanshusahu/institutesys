@@ -31,6 +31,7 @@ import ListStudents from "./ListStudents";
 import AddDivision from "./AddDivision";
 import ListDivisions from "./ListDivisions";
 import CreateSlot from "./CreateSlot";
+import AddTimeTable from "./AddTimeTable";
 import CreateTeacher from "./CreateTeacher";
 import AddTeacherSkill from "./AddTeacherSkill";
 import AddTeacherTimeSlot from "./AddTeacherTimeSlot";
@@ -194,8 +195,8 @@ function SchoolDashboard(props) {
       selectShow(<ListDivisions school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_slot") {
       selectShow(<CreateSlot school={props.auth.user} />);
-    } else if (props.schoolSidebar.type === "add_time_table") {
-    } else if (props.schoolSidebar.type === "add_division_time_table") {
+    } else if (props.schoolSidebar.type === "add_timetable") {
+      selectShow(<AddTimeTable school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "create_teacher") {
       selectShow(<CreateTeacher school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "add_skills") {

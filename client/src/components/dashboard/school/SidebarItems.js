@@ -295,17 +295,15 @@ function SidebarItems(props) {
             </ListItemIcon>
             <ListItemText primary="Create Slot" />
           </ListItem>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("add_timetable")}
+          >
             <ListItemIcon>
               <Icon>add_circle</Icon>
             </ListItemIcon>
-            <ListItemText primary="Add Time Table" />
-          </ListItem>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <Icon>add_circle</Icon>
-            </ListItemIcon>
-            <ListItemText primary="Add Division Time Slots" />
+            <ListItemText primary="Add Division Time Table" />
           </ListItem>
         </List>
       </Collapse>
