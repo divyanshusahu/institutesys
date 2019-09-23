@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import clsx from "clsx";
+import isEmpty from "is-empty";
+import Swal from "sweetalert2";
 
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -41,7 +43,8 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     textAlign: "center",
     padding: theme.spacing(2),
-    border: "1px solid rgba(0,0,0,0.5)"
+    border: "1px solid rgba(0,0,0,0.5)",
+    overflowX: "hidden"
   },
   timetable_slots_disabled: {
     backgroundColor: "rgba(240, 240, 240, 1)",
@@ -135,6 +138,73 @@ function AddTimeTable(props) {
     listTeachers(selectedGrade, event.target.value);
   };
 
+  const [slots, setSlots] = React.useState([]);
+  React.useEffect(() => {
+    axios
+      .get("/api/school/list_slots?email=" + props.school.email)
+      .then(res => {
+        setSlots(res.data.slots);
+      });
+  }, [props.school.email]);
+
+  const resetSlots = () => {
+    for (let i = 1; i < timetableColumns.length; i++) {
+      var element = document.getElementsByName(timetableColumns[i]);
+      for (let j = 0; j < element.length; j++) {
+        var cur_classes = element[j].classList.value.split(" ");
+        if (cur_classes.indexOf(classes.timetable_slots_disabled) < 0) {
+          element[j].classList.add(classes.timetable_slots_disabled);
+        }
+        if (cur_classes.indexOf(classes.timetable_slots_enabled) >= 0) {
+          element[j].classList.remove(classes.timetable_slots_enabled);
+        }
+      }
+    }
+  };
+
+  const [selectedTeacher, setSelectedTeacher] = React.useState({
+    email: "",
+    name: "",
+    subject_name: ""
+  });
+  const handleTeacherSelect = (email, name, subject_name) => {
+    setSelectedTeacher({
+      email: email,
+      name: name,
+      subject_name: subject_name
+    });
+    resetSlots();
+    var available_time_slots = [];
+    for (let i = 0; i < teachers.length; i++) {
+      if (teachers[i].email === email) {
+        available_time_slots = teachers[i].available_time_slots;
+        break;
+      }
+    }
+    for (let i = 0; i < available_time_slots.length; i++) {
+      var index = available_time_slots[i].period - 1;
+      for (let j = 1; j < timetableColumns.length; j++) {
+        if (
+          available_time_slots[i][timetableColumns[j]] &&
+          available_time_slots[i].assigned.indexOf(timetableColumns[j]) < 0
+        ) {
+          let element = document.getElementsByName(timetableColumns[j])[index];
+          element.classList.remove(classes.timetable_slots_disabled);
+          element.classList.add(classes.timetable_slots_enabled);
+        }
+      }
+    }
+  };
+
+  const assignTeacher = React.useCallback(
+    event => {
+      var element = event.target;
+      element.innerHTML = selectedTeacher.name;
+      element.id = selectedTeacher.email;
+    },
+    [selectedTeacher]
+  );
+
   const [emptyCells, setEmptyCells] = React.useState([]);
   const [timetableColumns, setColumns] = React.useState([]);
   React.useEffect(() => {
@@ -159,6 +229,7 @@ function AddTimeTable(props) {
               )}
               key={columns[i]}
               name={columns[i]}
+              onClick={assignTeacher}
             ></div>
           );
         }
@@ -167,61 +238,34 @@ function AddTimeTable(props) {
   }, [
     props.school.email,
     classes.timetable_children,
-    classes.timetable_slots_disabled
+    classes.timetable_slots_disabled,
+    assignTeacher
   ]);
 
-  const [slots, setSlots] = React.useState([]);
-  React.useEffect(() => {
-    axios
-      .get("/api/school/list_slots?email=" + props.school.email)
-      .then(res => {
-        setSlots(res.data.slots);
+  const handleFormSubmit = () => {
+    var timetable_data = [];
+    for (let i = 0; i < slots.length; i++) {
+      var temp = {};
+      var period = i + 1;
+      temp.period = period;
+      for (let j = 1; j < timetableColumns.length; j++) {
+        var element = document.getElementsByName(timetableColumns[j])[i];
+        temp[timetableColumns[j]] = isEmpty(element.id) ? null : element.id;
+      }
+      timetable_data.push(temp);
+    }
+    var post_data = {
+      data: timetable_data,
+      email: props.school.email,
+      grade: selectedGrade,
+      division: selectedDivision
+    };
+    axios.post("/add_division_timetable", post_data).then(res => {
+      Swal.fire({
+        type: res.data.status ? "success" : "error",
+        text: res.data.message
       });
-  }, [props.school.email]);
-
-  const initialTimeTable = slots.map(s => (
-    <div className={classes.timetable_root} key={s.period}>
-      <span className={classes.timetable_children}>{s.period}</span>
-      {emptyCells.map(c => c)}
-    </div>
-  ));
-
-  const [initTimeTable, setInitialTimeTable] = React.useState(initialTimeTable);
-  React.useEffect(() => {
-    setInitialTimeTable(
-      slots.map(s => (
-        <div className={classes.timetable_root} key={s.period}>
-          <span className={classes.timetable_children}>{s.period}</span>
-          {emptyCells.map(c => c)}
-        </div>
-      ))
-    );
-  }, [classes.timetable_root, classes.timetable_children, emptyCells, slots]);
-
-  const [selectedTeacher, setSelectedTeacher] = React.useState("");
-  const handleTeacherSelect = email => {
-    setSelectedTeacher(email);
-    setTimeout(() => {
-      var available_time_slots = [];
-      for (let i = 0; i < teachers.length; i++) {
-        if (teachers[i].email === email) {
-          available_time_slots = teachers[i].available_time_slots;
-          break;
-        }
-      }
-      for (let i = 0; i < available_time_slots.length; i++) {
-        var index = available_time_slots[i].period - 1;
-        for (let j = 1; j < timetableColumns.length; j++) {
-          if (available_time_slots[i][timetableColumns[j]]) {
-            let element = document.getElementsByName(timetableColumns[j])[
-              index
-            ];
-            element.classList.remove(classes.timetable_slots_disabled);
-            element.classList.add(classes.timetable_slots_enabled);
-          }
-        }
-      }
-    }, 5000);
+    });
   };
 
   return (
@@ -284,9 +328,17 @@ function AddTimeTable(props) {
                   <Paper
                     className={clsx(
                       classes.paper,
-                      selectedTeacher === teacher.email ? classes.active : null
+                      selectedTeacher.email === teacher.email
+                        ? classes.active
+                        : null
                     )}
-                    onClick={() => handleTeacherSelect(teacher.email)}
+                    onClick={() =>
+                      handleTeacherSelect(
+                        teacher.email,
+                        teacher.name,
+                        teacher.subject_name
+                      )
+                    }
                   >
                     <div>
                       <Typography variant="body1" component="p">
@@ -309,12 +361,18 @@ function AddTimeTable(props) {
                 </span>
               ))}
             </div>
-            {initTimeTable}
+            {slots.map(s => (
+              <div className={classes.timetable_root} key={s.period}>
+                <span className={classes.timetable_children}>{s.period}</span>
+                {emptyCells.map(c => c)}
+              </div>
+            ))}
           </div>
           <Button
             variant="contained"
             color="primary"
             className={classes.update_button}
+            onClick={handleFormSubmit}
           >
             Update
           </Button>

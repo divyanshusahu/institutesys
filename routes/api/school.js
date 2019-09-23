@@ -329,7 +329,14 @@ router.post("/create_slot", (req, res) => {
         end_time: req.body.end_time
       };
       var original_data = branch.slots;
-      original_data.push(save_obj);
+      for (let i = 0; i < original_data.length; i++) {
+        if (original_data[i].period === req.body.period) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Period alrealy exists" });
+        }
+      }
+      original_data.splice(req.body.period - 1, 0, save_obj);
       Branch.findOneAndUpdate(
         { email: req.body.email },
         { $set: { slots: original_data } },
@@ -355,6 +362,34 @@ router.get("/list_slots", (req, res) => {
       return res.status(400).json({ success: false });
     }
   });
+});
+
+router.post("/add_division_timetable", (req, res) => {
+  Branch.findOne({ email: req.body.email }),
+    then(branch => {
+      var divisions = branch.divisions;
+
+      for (let i = 0; i < divisions.length; i++) {
+        if (
+          divisions[i].grade === req.body.grade &&
+          divisions[i].name === req.body.name
+        ) {
+          divisions[i] = {
+            grade: req.body.grade,
+            name: req.body.division,
+            students: [],
+            timetable: req.body.data
+          };
+          break;
+        }
+      }
+      Branch.findOneAndUpdate(
+        { email: req.body.email },
+        { $set: { divisions: divisions } },
+        { upsert: false, useFindAndModify: false }
+      );
+      return res.status(200).json({ success: true, message: "Updated" });
+    });
 });
 
 router.post("/create_teacher", (req, res) => {
@@ -490,7 +525,8 @@ router.post("/add_time_slot", (req, res) => {
         Thursday: req.body.Thursday,
         Friday: req.body.Friday,
         Saturday: req.body.Saturday,
-        Sunday: req.body.Sunday
+        Sunday: req.body.Sunday,
+        assigned: []
       };
       var original_data = teacher.available_time_slots;
       for (let i = 0; i < original_data.length; i++) {
