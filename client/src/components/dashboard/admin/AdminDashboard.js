@@ -229,7 +229,7 @@ function AdminDashboard(props) {
           });
           props.listData("subscription");
         }
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire("Deleted!", "Your entry has been deleted.", "success");
       }
     });
   }
