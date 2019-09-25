@@ -206,9 +206,9 @@ function ListAcademicYears(props) {
         <Dialog
           open={open}
           onClose={handleClose}
-          aria-labelledby="Edit Academic Year"
+          aria-labelledby="edit_academic_year"
         >
-          <DialogTitle id="Edit Academic Year">Edit Academic Year</DialogTitle>
+          <DialogTitle id="edit_academic_year">Edit Academic Year</DialogTitle>
           <DialogContent>
             <TextField
               required
