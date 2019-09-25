@@ -179,7 +179,12 @@ function SchoolDashboard(props) {
         />
       );
     } else if (props.schoolSidebar.type === "list_grades") {
-      selectShow(<ListGrades school={props.auth.user} />);
+      selectShow(
+        <ListGrades
+          school={props.auth.user}
+          standard={instituteData.standard}
+        />
+      );
     } else if (props.schoolSidebar.type === "create_subject") {
       selectShow(<CreateSubject school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "list_subjects") {

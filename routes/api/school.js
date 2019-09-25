@@ -189,6 +189,41 @@ router.get("/list_grades", (req, res) => {
   });
 });
 
+router.post("/delete_grade", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    var original_data = branch.grades;
+    original_data.splice(req.body.index, 1);
+    Branch.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { grades: original_data } },
+      { upsert: false, useFindAndModify: false }
+    )
+      .then(() => res.status(200).json({ success: true, message: "Deleted" }))
+      .catch(() => res.status(500).json({ success: false, message: "Error" }));
+  });
+});
+
+router.post("/update_grade", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    var original_data = branch.grades;
+    original_data[req.body.index] = {
+      grade: req.body.grade,
+      description: req.body.description,
+      max_student: req.body.max_student,
+      age: req.body.age,
+      start_time: req.body.start_time,
+      end_time: req.body.end_time
+    };
+    Branch.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { grades: original_data } },
+      { upsert: false, useFindAndModify: false }
+    )
+      .then(() => res.status(200).json({ success: true, message: "Updated" }))
+      .catch(() => res.status(500).json({ success: false, message: "Error" }));
+  });
+});
+
 router.post("/create_subject", (req, res) => {
   Branch.findOne({ email: req.body.email }).then(branch => {
     if (branch) {
