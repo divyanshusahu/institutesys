@@ -271,6 +271,23 @@ router.post("/create_student", (req, res) => {
 });
 
 router.post("/allot_student", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    var divisions = branch.divisions;
+    for (let i = 0; i < divisions.length; i++) {
+      if (
+        divisions[i].name === req.body.division &&
+        divisions[i].grade === req.body.grade
+      ) {
+        divisions[i].student.push(req.body.student);
+        break;
+      }
+    }
+    Branch.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { divisions: divisions } },
+      { upsert: false, useFindAndModify: false }
+    );
+  });
   Student.findOneAndUpdate(
     { email: req.body.student },
     { $set: { division: req.body.division } },

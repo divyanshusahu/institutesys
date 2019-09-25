@@ -118,6 +118,8 @@ function AllotStudent(props) {
       });
     } else {
       var post_data = {
+        email: props.school.email,
+        grade: selectedGrade,
         student: selectedStudent,
         division: selectedDivision
       };
