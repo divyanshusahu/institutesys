@@ -34,6 +34,9 @@ const StudentSchema = new Schema({
     type: String,
     required: true
   },
+  division: {
+    type: String
+  },
   previous_class_performance: {
     type: String,
     required: true

@@ -270,12 +270,27 @@ router.post("/create_student", (req, res) => {
   });
 });
 
+router.post("/allot_student", (req, res) => {
+  Student.findOneAndUpdate(
+    { email: req.body.student },
+    { $set: { division: req.body.division } },
+    { upsert: false, useFindAndModify: false }
+  )
+    .then(() =>
+      res.status(200).json({ success: true, message: "Student allotted" })
+    )
+    .catch(() =>
+      res.status(500).json({ success: false, message: "Error occurred" })
+    );
+});
+
 router.get("/list_students", (req, res) => {
   Student.find({ branch_ref: req.query.email }).then(student => {
     var send_data = student.map(s => ({
       name: s.name,
       email: s.email,
-      grade: s.grade
+      grade: s.grade,
+      division: s.division
     }));
     res.status(200).json({ success: true, students: send_data });
   });

@@ -29,6 +29,7 @@ import ListSubjects from "./ListSubjects";
 import CreateStudent from "./CreateStudent";
 import ListStudents from "./ListStudents";
 import AddDivision from "./AddDivision";
+import AllotStudent from "./AllotStudent";
 import ListDivisions from "./ListDivisions";
 import CreateSlot from "./CreateSlot";
 import AddTimeTable from "./AddTimeTable";
@@ -190,6 +191,7 @@ function SchoolDashboard(props) {
     } else if (props.schoolSidebar.type === "add_division") {
       selectShow(<AddDivision school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "allot_student") {
+      selectShow(<AllotStudent school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "division_time_table") {
     } else if (props.schoolSidebar.type === "list_divisions") {
       selectShow(<ListDivisions school={props.auth.user} />);

@@ -199,8 +199,13 @@ function AddTimeTable(props) {
   const assignTeacher = React.useCallback(
     event => {
       var element = event.target;
-      element.innerHTML = selectedTeacher.name;
-      element.id = selectedTeacher.email;
+      if (element.id !== selectedTeacher.email) {
+        element.innerHTML = selectedTeacher.name;
+        element.id = selectedTeacher.email;
+      } else {
+        element.innerHTML = "";
+        element.id = "";
+      }
     },
     [selectedTeacher]
   );
