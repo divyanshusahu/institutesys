@@ -68,6 +68,49 @@ router.get("/list_academic_years", (req, res) => {
   });
 });
 
+router.post("/delete_academic_year", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    var original_data = branch.academic_year;
+    for (let i = 0; i < original_data.length; i++) {
+      if (original_data[i].start_date === req.body.start_date) {
+        original_data.splice(i, 1);
+        break;
+      }
+    }
+    Branch.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { academic_year: original_data } },
+      { upsert: false, useFindAndModify: false }
+    )
+      .then(() =>
+        res.status(200).json({ success: true, message: "Entry deleted" })
+      )
+      .catch(() =>
+        res.status(500).json({ success: false, message: "Error occurred" })
+      );
+  });
+});
+
+router.post("/update_academic_year", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    var original_data = branch.academic_year;
+    original_data[req.body.index] = {
+      year_name: req.body.year_name,
+      start_date: req.body.start_date,
+      is_current_year: req.body.current_year
+    };
+    Branch.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { academic_year: original_data } },
+      { upsert: false, useFindAndModify: false }
+    )
+      .then(() => res.status(200).json({ success: true, message: "Updated" }))
+      .catch(() =>
+        res.status(500).json({ success: false, message: "Error occured" })
+      );
+  });
+});
+
 router.post("/add_weekly_holidays", (req, res) => {
   Branch.findOne({ email: req.query.email }).then(branch => {
     if (branch) {
