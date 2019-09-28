@@ -15,12 +15,14 @@ const grievance_categories = require("./routes/api/grievance_categories");
 const payment = require("./routes/api/payment");
 const branches = require("./routes/api/branches");
 const school = require("./routes/api/school");
+const handbooks = require("./routes/api/handbooks");
 
 const app = express();
 
 app.use(
   bodyParser.urlencoded({
-    extended: true
+    extended: true,
+    useNewUrlParser: true
   })
 );
 app.use(bodyParser.json());
@@ -46,6 +48,7 @@ app.use("/api/grievance_categories", grievance_categories);
 app.use("/api/payment", payment);
 app.use("/api/branches", branches);
 app.use("/api/school", school);
+app.use("/api/handbooks", handbooks);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));

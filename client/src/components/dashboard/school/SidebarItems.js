@@ -552,7 +552,7 @@ function SidebarItems(props) {
         <ListItemText primary="Leave Approvals" />
       </ListItem>
 
-      <ListItem button>
+      <ListItem button onClick={() => props.schoolSidebarSelect("handbook")}>
         <ListItemIcon>
           <Icon>book</Icon>
         </ListItemIcon>

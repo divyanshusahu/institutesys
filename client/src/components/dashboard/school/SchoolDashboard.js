@@ -44,6 +44,7 @@ import CreateLevelTwo from "./CreateLevelTwo";
 import CreateLevelThree from "./CreateLevelThree";
 import CreateExam from "./CreateExam";
 import ListExams from "./ListExams";
+import Handbook from "./Handbook";
 
 const drawerWidth = 350;
 
@@ -234,6 +235,9 @@ function SchoolDashboard(props) {
       selectShow(<CreateExam school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "view_exams") {
       selectShow(<ListExams school={props.auth.user} />);
+    } else if (props.schoolSidebar.type === "leave_approvals") {
+    } else if (props.schoolSidebar.type === "handbook") {
+      selectShow(<Handbook school={props.auth.user} />);
     }
   }, [props.schoolSidebar.type, props.auth.user, instituteData.standard]);
 
