@@ -21,8 +21,7 @@ const app = express();
 
 app.use(
   bodyParser.urlencoded({
-    extended: true,
-    useNewUrlParser: true
+    extended: true
   })
 );
 app.use(bodyParser.json());
@@ -30,7 +29,7 @@ app.use(bodyParser.json());
 const db = require("./config/keys").mongoURI;
 
 mongoose
-  .connect(db, { useNewUrlParser: true })
+  .connect(db, { useNewUrlParser: true, useCreateIndex: true })
   .then(() => console.log("Connected to Mongo Database"))
   .catch(err => console.log(err));
 

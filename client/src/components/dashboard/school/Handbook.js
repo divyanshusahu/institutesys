@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -9,6 +10,18 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
 function Handbook(props) {
+  const [handbooks, setHandbooks] = React.useState([]);
+
+  const getHandbooks = React.useCallback(email => {
+    axios.get("/api/handbooks/get_handbooks?email=" + email).then(res => {
+      setHandbooks(res.data.handbooks);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    getHandbooks(props.school.email);
+  }, [props.school.email, getHandbooks]);
+
   const handleFormSubmit = event => {
     event.preventDefault();
 
@@ -70,11 +83,24 @@ function Handbook(props) {
               name="add_handbook_file"
               id="add_handbook_file"
               margin="normal"
+              inputProps={{ accept: "application/pdf" }}
             />
             <Button type="submit" variant="contained" color="primary">
               Add
             </Button>
           </form>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader title="List" />
+        <CardContent>
+          {handbooks.map(h => (
+            <p key={h._id}>
+              <Link to={`/api/handbooks/download/${h.file}`} target="_blank">
+                {h.name}
+              </Link>
+            </p>
+          ))}
         </CardContent>
       </Card>
     </div>
