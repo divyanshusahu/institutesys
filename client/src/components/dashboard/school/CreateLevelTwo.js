@@ -28,7 +28,7 @@ function CreateLevelTwo(props) {
       .then(res => {
         setLevel1(res.data.level_one);
       });
-  }, []);
+  }, [props.school.email]);
 
   const [selectedLevel, setSelectedLevel] = React.useState("");
   const handleLevelChange = event => {

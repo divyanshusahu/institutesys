@@ -802,6 +802,7 @@ router.post("/create_level_three", (req, res) => {
   Branch.findOne({ email: req.body.email }).then(branch => {
     if (branch) {
       var save_obj = {
+        level_two: req.body.level2,
         name: req.body.name,
         description: req.body.description
       };
