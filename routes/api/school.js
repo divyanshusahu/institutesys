@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
+const isEmpty = require("is-empty");
 dotenv.config();
 
 const Branch = require("../../models/Branch");
@@ -348,35 +349,72 @@ router.post("/create_student", (req, res) => {
   });
 });
 
-router.post("/allot_student", (req, res) => {
+router.post("/allot_students", (req, res) => {
+  let division_A = req.body.division_students["A"];
+  if (!isEmpty(division_A)) {
+    for (let i = 0; i < division_A.length; i++) {
+      Student.findOneAndUpdate(
+        { email: division_A[i].email },
+        { $set: { division: "A" } },
+        { upsert: false, useFindAndModify: false }
+      );
+    }
+  }
+  let division_B = req.body.division_students["B"];
+  if (!isEmpty(division_B)) {
+    for (let i = 0; i < division_B.length; i++) {
+      Student.findOneAndUpdate(
+        { email: division_B[i].email },
+        { $set: { division: "B" } },
+        { upsert: false, useFindAndModify: false }
+      );
+    }
+  }
+  let division_C = req.body.division_students["C"];
+  if (!isEmpty(division_C)) {
+    for (let i = 0; i < division_C.length; i++) {
+      Student.findOneAndUpdate(
+        { email: division_C[i].email },
+        { $set: { division: "C" } },
+        { upsert: false, useFindAndModify: false }
+      );
+    }
+  }
+  let division_D = req.body.division_students["D"];
+  if (!isEmpty(division_D)) {
+    for (let i = 0; i < division_D.length; i++) {
+      Student.findOneAndUpdate(
+        { email: division_D[i].email },
+        { $set: { division: "D" } },
+        { upsert: false, useFindAndModify: false }
+      );
+    }
+  }
   Branch.findOne({ email: req.body.email }).then(branch => {
-    var divisions = branch.divisions;
-    for (let i = 0; i < divisions.length; i++) {
-      if (
-        divisions[i].name === req.body.division &&
-        divisions[i].grade === req.body.grade
-      ) {
-        divisions[i].student.push(req.body.student);
-        break;
+    var newDivisions = branch.divisions;
+    for (let i = 0; i < newDivisions.length; i++) {
+      if (newDivisions[i].grade === req.body.grade) {
+        if (newDivisions[i].id === "A" && !isEmpty(division_A)) {
+          var students = newDivisions[i]["students"];
+          var newStudents = division_A.map(s => s.email);
+          newDivisions[i]["students"] = students.concat(newStudents);
+        } else if (newDivisions[i].id === "B" && !isEmpty(division_B)) {
+          var students = newDivisions[i]["students"];
+          var newStudents = division_B.map(s => s.email);
+          newDivisions[i]["students"] = students.concat(newStudents);
+        } else if (newDivisions[i].id === "C" && !isEmpty(division_C)) {
+          var students = newDivisions[i]["students"];
+          var newStudents = division_C.map(s => s.email);
+          newDivisions[i]["students"] = students.concat(newStudents);
+        } else if (newDivisions[i].id === "D" && !isEmpty(division_D)) {
+          var students = newDivisions[i]["students"];
+          var newStudents = division_D.map(s => s.email);
+          newDivisions[i]["students"] = students.concat(newStudents);
+        }
       }
     }
-    Branch.findOneAndUpdate(
-      { email: req.body.email },
-      { $set: { divisions: divisions } },
-      { upsert: false, useFindAndModify: false }
-    );
+    res.status(200).json({ success: true, message: "Updated" });
   });
-  Student.findOneAndUpdate(
-    { email: req.body.student },
-    { $set: { division: req.body.division } },
-    { upsert: false, useFindAndModify: false }
-  )
-    .then(() =>
-      res.status(200).json({ success: true, message: "Student allotted" })
-    )
-    .catch(() =>
-      res.status(500).json({ success: false, message: "Error occurred" })
-    );
 });
 
 router.get("/list_students", (req, res) => {

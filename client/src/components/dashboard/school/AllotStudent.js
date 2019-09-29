@@ -184,34 +184,6 @@ function AllotStudent(props) {
   };
 
   const handleFormSubmit = () => {
-    /*if (isEmpty(selectedStudent) || isEmpty(selectedDivision)) {
-      Swal.fire({
-        type: "error",
-        text: "Please select both student and division"
-      });
-    } else {
-      var post_data = {
-        email: props.school.email,
-        grade: selectedGrade,
-        student: selectedStudent,
-        division: selectedDivision
-      };
-      axios
-        .post("/api/school/allot_student", post_data)
-        .then(res => {
-          Swal.fire({
-            type: "success",
-            text: res.data.message
-          });
-        })
-        .catch(res => {
-          Swal.fire({
-            type: "error",
-            text: res.data.message
-          });
-        });
-    }*/
-
     if (
       (isEmpty(divisionStudents["A"]) &&
         isEmpty(divisionStudents["B"]) &&
@@ -227,6 +199,7 @@ function AllotStudent(props) {
     } else {
       var post_data = {
         email: props.school.email,
+        grade: selectedGrade,
         division_students: divisionStudents
       };
       axios
@@ -237,10 +210,10 @@ function AllotStudent(props) {
             text: res.data.message
           });
         })
-        .catch(res => {
+        .catch(() => {
           Swal.fire({
             type: "error",
-            text: res.data.message
+            text: "Error occurred"
           });
         });
     }
