@@ -439,7 +439,10 @@ function SidebarItems(props) {
         <ListItemText primary="School Calender" />
       </ListItem>
 
-      <ListItem button onClick={() => props.schoolSidebarSelect("notice_board")}>
+      <ListItem
+        button
+        onClick={() => props.schoolSidebarSelect("notice_board")}
+      >
         <ListItemIcon>
           <Icon>notifications</Icon>
         </ListItemIcon>
@@ -470,7 +473,7 @@ function SidebarItems(props) {
             <ListItemIcon>
               <Icon>star</Icon>
             </ListItemIcon>
-            <ListItemText primary="Level 1" />
+            <ListItemText primary="Category 1" />
           </ListItem>
           <ListItem
             button
@@ -480,7 +483,7 @@ function SidebarItems(props) {
             <ListItemIcon>
               <Icon>star</Icon>
             </ListItemIcon>
-            <ListItemText primary="Level 2" />
+            <ListItemText primary="Category 2" />
           </ListItem>
           <ListItem
             button
@@ -490,7 +493,17 @@ function SidebarItems(props) {
             <ListItemIcon>
               <Icon>star</Icon>
             </ListItemIcon>
-            <ListItemText primary="Level 3" />
+            <ListItemText primary="Category 3" />
+          </ListItem>
+          <ListItem
+            button
+            className={classes.nested}
+            onClick={() => props.schoolSidebarSelect("product_description")}
+          >
+            <ListItemIcon>
+              <Icon>star</Icon>
+            </ListItemIcon>
+            <ListItemText primary="Product Description" />
           </ListItem>
         </List>
       </Collapse>

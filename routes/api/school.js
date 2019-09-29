@@ -763,6 +763,7 @@ router.post("/create_level_two", (req, res) => {
   Branch.findOne({ email: req.body.email }).then(branch => {
     if (branch) {
       var save_obj = {
+        level_one: req.body.level1,
         name: req.body.name,
         description: req.body.description
       };
