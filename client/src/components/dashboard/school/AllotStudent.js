@@ -3,6 +3,7 @@ import axios from "axios";
 import isEmpty from "is-empty";
 import clsx from "clsx";
 import Swal from "sweetalert2";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -18,19 +19,48 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
+    minHeight: 500,
+    backgroundColor: "rgba(240,240,240,0.5)"
+  },
+  display_root: {
+    display: "flex",
+    flexDirection: "row",
+    minHeight: 550
+  },
+  display_child: {
+    flexBasis: 0,
+    flexGrow: 1,
+    margin: theme.spacing(1),
+    overflow: "auto"
   },
   student_root: {
-    padding: theme.spacing(2),
-    fontSize: 18
+    padding: theme.spacing(1),
+    fontSize: 18,
+    width: "100%",
+    textAlign: "center"
   },
   student_children: {
-    cursor: "pointer"
+    margin: 0,
+    border: "1px solid rgba(0,0,0,0.1)",
+    borderRadius: "4px",
+    backgroundColor: "#ffffff",
+    padding: theme.spacing(1),
+    width: "80%"
   },
   student_selected: {
     color: "#ffffff",
     backgroundColor: "#3f51b5",
     padding: theme.spacing(1)
+  },
+  division_root: {
+    padding: theme.spacing(1)
+  },
+  division_child: {
+    minHeight: 100,
+    border: "1px solid rgba(0,0,0,0.1)",
+    margin: "0 0",
+    backgroundColor: "rgba(0,0,0,0)"
   },
   button: {
     marginTop: theme.spacing(2)
@@ -82,11 +112,6 @@ function AllotStudent(props) {
     listDivision(event.target.value);
   };
 
-  const [selectedDivision, setSelectedDivision] = React.useState("");
-  const handleDivisionChange = event => {
-    setSelectedDivision(event.target.value);
-  };
-
   const [students, setStudents] = React.useState([]);
   React.useEffect(() => {
     axios
@@ -105,13 +130,61 @@ function AllotStudent(props) {
       });
   }, [props.school.email, selectedGrade, setStudents]);
 
-  const [selectedStudent, setSelectedStudent] = React.useState("");
-  const handleStudentSelect = email => {
-    setSelectedStudent(email);
+  const [divisionStudents, setDivisionStudents] = React.useState({
+    A: [],
+    B: [],
+    C: [],
+    D: []
+  });
+
+  const onDragEnd = result => {
+    const { destination, source } = result;
+
+    if (isEmpty(destination)) {
+      return;
+    }
+
+    if (destination.droppableId === source.droppableId) {
+      return;
+    }
+
+    if (
+      source.droppableId === "students" &&
+      destination.droppableId !== "students"
+    ) {
+      let newStudents = students;
+      let draggedStudent = newStudents[source.index];
+      newStudents.splice(source.index, 1);
+      setStudents(newStudents);
+
+      let newDivision = divisionStudents[destination.droppableId];
+      newDivision.splice(destination.index, 0, draggedStudent);
+      setDivisionStudents(oldValues => ({
+        ...oldValues,
+        [destination.droppableId]: newDivision
+      }));
+    }
+
+    if (
+      destination.droppableId === "students" &&
+      source.droppableId !== "students"
+    ) {
+      let newDivision = divisionStudents[source.droppableId];
+      let draggedStudent = newDivision[source.index];
+      newDivision.splice(source.index, 1);
+      setDivisionStudents(oldValues => ({
+        ...oldValues,
+        [source.droppableId]: newDivision
+      }));
+
+      let newStudents = students;
+      newStudents.splice(destination.index, 0, draggedStudent);
+      setStudents(newStudents);
+    }
   };
 
   const handleFormSubmit = () => {
-    if (isEmpty(selectedStudent) || isEmpty(selectedDivision)) {
+    /*if (isEmpty(selectedStudent) || isEmpty(selectedDivision)) {
       Swal.fire({
         type: "error",
         text: "Please select both student and division"
@@ -125,6 +198,39 @@ function AllotStudent(props) {
       };
       axios
         .post("/api/school/allot_student", post_data)
+        .then(res => {
+          Swal.fire({
+            type: "success",
+            text: res.data.message
+          });
+        })
+        .catch(res => {
+          Swal.fire({
+            type: "error",
+            text: res.data.message
+          });
+        });
+    }*/
+
+    if (
+      (isEmpty(divisionStudents["A"]) &&
+        isEmpty(divisionStudents["B"]) &&
+        isEmpty(divisionStudents["C"]) &&
+        isEmpty(divisionStudents["D"])) ||
+      isEmpty(selectedGrade)
+    ) {
+      Swal.fire({
+        type: "error",
+        text: "Allot atleast one student"
+      });
+      return;
+    } else {
+      var post_data = {
+        email: props.school.email,
+        division_students: divisionStudents
+      };
+      axios
+        .post("/api/school/allot_students", post_data)
         .then(res => {
           Swal.fire({
             type: "success",
@@ -167,52 +273,95 @@ function AllotStudent(props) {
               ))}
             </Select>
           </FormControl>
-          <FormControl required variant="outlined" fullWidth margin="normal">
-            <InputLabel ref={inputLabel} htmlFor="select_division">
-              Select Division
-            </InputLabel>
-            <Select
-              value={selectedDivision}
-              onChange={handleDivisionChange}
-              input={
-                <OutlinedInput
-                  labelWidth={labelWidth}
-                  name="select_division"
-                  id="select_division"
-                  disabled={selectedGrade ? false : true}
-                />
-              }
-            >
-              {showDivision.map(c => (
-                <MenuItem value={c} key={c}>
-                  {c}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
           <CardHeader subheader="List Students" />
-          <Paper className={classes.paper}>
-            {students.map(s => (
-              <div key={s.email} className={classes.student_root}>
-                <span
-                  className={clsx(
-                    classes.student_children,
-                    selectedStudent === s.email ? classes.student_selected : ""
+          <DragDropContext onDragEnd={onDragEnd}>
+            <div className={classes.display_root}>
+              <div className={classes.display_child}>
+                <Droppable droppableId="students">
+                  {provided => (
+                    <Paper
+                      ref={provided.innerRef}
+                      className={classes.paper}
+                      {...provided.droppableProps}
+                    >
+                      {students.map((s, index) => (
+                        <Draggable
+                          draggableId={s.email}
+                          index={index}
+                          key={index}
+                        >
+                          {provided => (
+                            <div
+                              className={classes.student_root}
+                              {...provided.draggableProps}
+                              ref={provided.innerRef}
+                            >
+                              <p
+                                className={clsx(classes.student_children)}
+                                {...provided.dragHandleProps}
+                              >
+                                {s.name}
+                              </p>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </Paper>
                   )}
-                  onClick={() => handleStudentSelect(s.email)}
-                >
-                  {s.name}
-                </span>
+                </Droppable>
               </div>
-            ))}
-          </Paper>
+              <div className={classes.display_child}>
+                <Paper className={classes.paper}>
+                  {showDivision.map((d, index) => (
+                    <Droppable droppableId={d} key={index}>
+                      {provided => (
+                        <div className={classes.division_root}>
+                          <div
+                            className={classes.division_child}
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                          >
+                            <p>{d}</p>
+                            {divisionStudents[d].map((s, index) => (
+                              <Draggable
+                                draggableId={s.email}
+                                index={index}
+                                key={index}
+                              >
+                                {provided => (
+                                  <div
+                                    className={classes.student_root}
+                                    {...provided.draggableProps}
+                                    ref={provided.innerRef}
+                                  >
+                                    <p
+                                      className={clsx(classes.student_children)}
+                                      {...provided.dragHandleProps}
+                                    >
+                                      {s.name}
+                                    </p>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        </div>
+                      )}
+                    </Droppable>
+                  ))}
+                </Paper>
+              </div>
+            </div>
+          </DragDropContext>
           <Button
             variant="contained"
             color="secondary"
             className={classes.button}
             onClick={handleFormSubmit}
           >
-            Add
+            Update
           </Button>
         </CardContent>
       </Card>
