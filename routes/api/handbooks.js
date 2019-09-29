@@ -33,9 +33,6 @@ const storage = new GridFsStorage({
         const filename = buf.toString("hex") + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
-          display_name: req.query.name,
-          description: req.query.description,
-          school: req.query.school,
           bucketName: "handbooks"
         };
         resolve(fileInfo);
