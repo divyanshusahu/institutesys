@@ -439,7 +439,7 @@ function SidebarItems(props) {
         <ListItemText primary="School Calender" />
       </ListItem>
 
-      <ListItem button>
+      <ListItem button onClick={() => props.schoolSidebarSelect("notice_board")}>
         <ListItemIcon>
           <Icon>notifications</Icon>
         </ListItemIcon>

@@ -15,6 +15,7 @@ const grievance_categories = require("./routes/api/grievance_categories");
 const payment = require("./routes/api/payment");
 const branches = require("./routes/api/branches");
 const school = require("./routes/api/school");
+const notices = require("./routes/api/notices");
 const handbooks = require("./routes/api/handbooks");
 
 const app = express();
@@ -47,6 +48,7 @@ app.use("/api/grievance_categories", grievance_categories);
 app.use("/api/payment", payment);
 app.use("/api/branches", branches);
 app.use("/api/school", school);
+app.use("/api/notices", notices);
 app.use("/api/handbooks", handbooks);
 
 if (process.env.NODE_ENV === "production") {

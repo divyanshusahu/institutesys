@@ -39,6 +39,7 @@ import AddTeacherTimeSlot from "./AddTeacherTimeSlot";
 import ListTeachers from "./ListTeachers";
 import CreateHoliday from "./CreateHoliday";
 import ListHolidays from "./ListHolidays";
+import Notices from "./Notices";
 import CreateLevelOne from "./CreateLevelOne";
 import CreateLevelTwo from "./CreateLevelTwo";
 import CreateLevelThree from "./CreateLevelThree";
@@ -223,6 +224,7 @@ function SchoolDashboard(props) {
       selectShow(<ListHolidays school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "school_calender") {
     } else if (props.schoolSidebar.type === "notice_board") {
+      selectShow(<Notices school={props.auth.user} />);
     } else if (props.schoolSidebar.type === "smtp") {
     } else if (props.schoolSidebar.type === "level_1") {
       selectShow(<CreateLevelOne school={props.auth.user} />);
