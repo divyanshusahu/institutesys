@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import isEmpty from "is-empty";
 
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -43,7 +44,9 @@ function AddWeeklyHoliday(props) {
     axios
       .get("/api/school/add_weekly_holidays?email=" + props.school.email)
       .then(res => {
-        selectDays(res.data.holidays);
+        if (!isEmpty(res.data.holidays)) {
+          selectDays(res.data.holidays);
+        }
       });
   }, [props.school]);
 
