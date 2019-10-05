@@ -82,9 +82,9 @@ function SidebarItems(props) {
     setOpen7(false);
   }
 
-  function handleFMOpen() {
+  /*function handleFMOpen() {
     setOpen8(true);
-  }
+  }*/
 
   function handleFMClose() {
     setOpen8(false);
@@ -189,7 +189,7 @@ function SidebarItems(props) {
             <ListItemIcon>
               <Icon>edit</Icon>
             </ListItemIcon>
-            <ListItemText primary="Create" onClick={handleFMOpen} />
+            <ListItemText primary="Create" /> {/* onClick={handleFMOpen} */}
           </ListItem>
           <Dialog
             open={openFM}

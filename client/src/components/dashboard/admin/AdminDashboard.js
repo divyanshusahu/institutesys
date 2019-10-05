@@ -142,13 +142,12 @@ function AdminDashboard(props) {
               editable: "never"
             };
           }
-          if (c === "active") {
+          if (c === "isActive") {
             return {
-              title: c.toUpperCase(),
+              title: "Active",
               field: c,
-              type: "boolean",
-              editable: "never"
-            }
+              type: "boolean"
+            };
           }
           if (c === "features") {
             return {
@@ -183,6 +182,9 @@ function AdminDashboard(props) {
   }, [props.datalist]);
 
   function handleDeleteData(type, item) {
+    if (type === "Feature List") {
+      return;
+    }
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -208,12 +210,14 @@ function AdminDashboard(props) {
             name: item
           });
           props.listData("standard");
-        } else if (type === "Feature List") {
+        } /*else if (type === "Feature List") {
           axios.post("/api/features/delete", {
             name: item
           });
           props.listData("feature");
-        } else if (type === "Institute List") {
+        } */ else if (
+          type === "Institute List"
+        ) {
           axios.post("/api/institutes/delete", {
             name: item
           });

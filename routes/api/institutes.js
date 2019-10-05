@@ -149,7 +149,7 @@ router.get("/list", (req, res) => {
     if (user) {
       var send_data = user.map(user => {
         return {
-          active: user.isActive,
+          isActive: user.isActive,
           name: user.name,
           phone_number: user.phone_number,
           registration_number: user.registration_number,
@@ -189,9 +189,9 @@ router.post("/delete", (req, res) => {
 
 router.post("/update", (req, res) => {
   Institute.findOneAndUpdate(
-    { name: req.body.name },
+    { owner_email: req.body.owner_email },
     req.body,
-    { new: true },
+    { useFindAndModify: false },
     function(err, doc) {
       if (err) {
         return res
