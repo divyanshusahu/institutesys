@@ -264,6 +264,20 @@ router.get("/list_subjects", (req, res) => {
   });
 });
 
+router.post("/delete_subject", (req, res) => {
+  Branch.findOne({ email: req.body.email }).then(branch => {
+    var original_data = branch.subjects;
+    original_data.splice(req.body.index, 1);
+    Branch.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { subjects: original_data } },
+      { upsert: false, useFindAndModify: false }
+    )
+      .then(() => res.status(200).json({ success: true, message: "Deleted" }))
+      .catch(() => res.status(500).json({ success: false, message: "Error" }));
+  });
+});
+
 router.post("/create_student", (req, res) => {
   Student.findOne({ email: req.body.email }).then(student => {
     if (student) {
@@ -419,13 +433,19 @@ router.post("/allot_students", (req, res) => {
 
 router.get("/list_students", (req, res) => {
   Student.find({ branch_ref: req.query.email }).then(student => {
-    var send_data = student.map(s => ({
+    /*var send_data = student.map(s => ({
       name: s.name,
       email: s.email,
       grade: s.grade,
       division: s.division
-    }));
-    res.status(200).json({ success: true, students: send_data });
+    }));*/
+    res.status(200).json({ success: true, students: student });
+  });
+});
+
+router.post("/delete_student", (req, res) => {
+  Student.findOneAndDelete({ email: req.body.email }).then(() => {
+    res.status(200).json({ success: true, message: "Deleted" });
   });
 });
 
