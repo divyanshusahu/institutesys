@@ -193,7 +193,7 @@ function Notices(props) {
       name: data.name,
       text: data.text,
       start_date: data.start_date,
-      end_data: data.end_data,
+      end_date: data.end_date,
       _id: data._id
     };
     axios.post("/api/notices/update", post_data).then(res => {
