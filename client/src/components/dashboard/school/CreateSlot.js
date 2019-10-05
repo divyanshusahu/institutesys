@@ -103,9 +103,14 @@ function CreateSlot(props) {
             type: "time"
           }
         ];
+        let temp_data = res.data.slots.map(s => {
+          s.start_time = new Date(s.start_time);
+          s.end_time = new Date(s.end_time);
+          return s;
+        });
         setData({
           columns: columns,
-          data: res.data.slots
+          data: temp_data
         });
       });
   }, [props.school.email]);

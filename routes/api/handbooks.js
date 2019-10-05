@@ -79,6 +79,25 @@ router.get("/get_handbooks", (req, res) => {
   });
 });
 
+router.post("/delete", (req, res) => {
+  var ObjectId = mongoose.Types.ObjectId;
+  var search_id = new ObjectId(req.body.handbook_id);
+  Handbook.findOneAndDelete({ _id: search_id }).then(() =>
+    res.status(200).json({ success: true, message: "Deleted" })
+  );
+});
+
+router.post("/update", (req, res) => {
+  var ObjectId = mongoose.Types.ObjectId;
+  var _id = new ObjectId(req.body._id);
+
+  Handbook.findOneAndUpdate(
+    { _id: _id },
+    { $set: { name: req.body.name, description: req.body.description } },
+    { upsert: false, useFindAndModify: false }
+  ).then(() => res.status(200).json({ success: true, message: "Updated" }));
+});
+
 router.get("/download/:id", (req, res) => {
   var ObjectId = mongoose.Types.ObjectId;
   var search_id = new ObjectId(req.params.id);
