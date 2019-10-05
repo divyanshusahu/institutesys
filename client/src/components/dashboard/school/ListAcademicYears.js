@@ -39,14 +39,27 @@ function ListAcademicYears(props) {
             type: "date"
           },
           {
+            title: "End Date",
+            field: "end_date",
+            type: "date"
+          },
+          {
             title: "Current Year",
             field: "is_current_year",
             type: "boolean"
           }
         ];
+        let temp_data = res.data.years.map(y => {
+          var result = new Date(y["start_date"]);
+          result.setDate(result.getDate() + 365);
+          y["end_date"] = result;
+
+          y["start_date"] = new Date(y["start_date"]);
+          return y;
+        });
         setData({
           columns: columns,
-          data: res.data.years
+          data: temp_data
         });
       });
   }, [props.school, setData]);
