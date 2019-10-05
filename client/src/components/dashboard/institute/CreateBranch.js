@@ -44,7 +44,7 @@ function CreateBranch(props) {
       institute_name: props.auth.user.name,
       branch_name: document.getElementById("create_branch_name").value,
       email: document.getElementById("create_branch_email").value,
-      password: document.getElementById("create_branch_password").value,
+      //password: document.getElementById("create_branch_password").value,
       address: document.getElementById("create_branch_address").value,
       phone_number: document.getElementById("create_branch_phone_number").value,
       standard: values.standard,
@@ -105,7 +105,7 @@ function CreateBranch(props) {
               ) : (
                 ""
               )}
-              <TextField
+              {/*<TextField
                 label="Password"
                 variant="outlined"
                 margin="dense"
@@ -120,7 +120,7 @@ function CreateBranch(props) {
                 </FormHelperText>
               ) : (
                 ""
-              )}
+              )}*/}
               <TextField
                 label="Address"
                 variant="outlined"

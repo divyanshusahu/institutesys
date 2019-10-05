@@ -13,6 +13,7 @@ import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
 import EmailVerification from "./components/auth/EmailVerification";
 import InvitationRegister from "./components/auth/InvitationRegister";
+import NewUserRegister from "./components/auth/NewUserRegister";
 import AdminDashboard from "./components/dashboard/admin/AdminDashboard";
 import InstituteDashboard from "./components/dashboard/institute/InstituteDashboard";
 import SchoolDashboard from "./components/dashboard/school/SchoolDashboard";
@@ -63,21 +64,17 @@ function App() {
                 path="/invitation_register"
                 component={InvitationRegister}
               />
-              <PrivateRoute
-                exact
-                path="/admin"
-                component={AdminDashboard}
+              <Route
+                path="/newuser/create_password"
+                component={NewUserRegister}
               />
+              <PrivateRoute exact path="/admin" component={AdminDashboard} />
               <PrivateRoute
                 exact
                 path="/institute"
                 component={InstituteDashboard}
               />
-              <PrivateRoute
-                exact
-                path="/school"
-                component={SchoolDashboard}
-              />
+              <PrivateRoute exact path="/school" component={SchoolDashboard} />
             </Switch>
             <Footer />
           </div>

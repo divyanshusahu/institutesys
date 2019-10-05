@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
+const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -9,6 +11,7 @@ const validateBranchInputs = require("../../validation/branch");
 
 const Branch = require("../../models/Branch");
 const User = require("../../models/User");
+const Token = require("../../models/Token");
 
 router.post("/create", (req, res) => {
   const { errors, isValid } = validateBranchInputs(req.body);
@@ -17,7 +20,7 @@ router.post("/create", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  const newUser = new User({
+  /*const newUser = new User({
     name: req.body.branch_name,
     email: req.body.email,
     username: req.body.email,
@@ -36,7 +39,7 @@ router.post("/create", (req, res) => {
         .save()
         .catch(err => res.status(500).json({ success: false, error: err }));
     });
-  });
+  });*/
 
   const newBranch = new Branch({
     institute_name: req.body.institute_name,
@@ -58,34 +61,77 @@ router.post("/create", (req, res) => {
     )
     .catch(err => res.status(500).json({ status: false, error: err }));
 
-  let transporter = nodemailer.createTransport({
-    service: "SendGrid",
-    auth: {
-      user: process.env.SENDGRID_USER,
-      pass: process.env.SENDGRID_PASSWORD
-    }
+  crypto.randomBytes(48, (err, buffer) => {
+    const newToken = new Token({
+      _userid: newBranch._id,
+      token: buffer.toString("hex")
+    });
+
+    newToken.save();
+
+    let transporter = nodemailer.createTransport({
+      service: "SendGrid",
+      auth: {
+        user: process.env.SENDGRID_USER,
+        pass: process.env.SENDGRID_PASSWORD
+      }
+    });
+
+    let mailinfo = {
+      from: "'Institute System Admin' admin@institutesys.com",
+      to: newUser.email,
+      subject: "Invitation to Institute System",
+      html:
+        "Hey, " +
+        newUser.name +
+        ". Your institute added your school to Institute System.<br /><br />" +
+        "Please join by visiting the below link:<br />" +
+        "http://" +
+        req.headers.host +
+        "/newuser/create_password?token=" +
+        newToekn.token
+    };
+
+    transporter.sendMail(mailinfo, err => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+    });
   });
+});
 
-  let mailinfo = {
-    from: "'Institute System Admin' admin@institutesys.com",
-    to: newUser.email,
-    subject: "Invitation to Institute System",
-    html:
-      "Hey, " +
-      newUser.name +
-      ". Your institute added your school to Institute System.<br /><br />" +
-      "Please join by below credentials:<br />" +
-      "email: " +
-      req.body.email +
-      "<br />password: " +
-      req.body.password +
-      "<br />"
-  };
+router.get("/newuser/create_password", (req, res) => {
+  Token.findOne({ token: req.query.token }).then(branch => {
+    var ObjectId = mongoose.Types.ObjectId;
+    var branch_id = new ObjectId(branch._userid);
+    Branch.findOne({ _id: branch_id }).then(b => {
+      res
+        .status(200)
+        .json({ success: true, email: b.email, name: b.branch_name });
+    });
+  });
+});
 
-  transporter.sendMail(mailinfo, err => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
+router.post("/newuser/create_password", (req, res) => {
+  const newUser = new User({
+    name: req.body.branch_name,
+    email: req.body.email,
+    username: req.body.username,
+    password: req.body.password,
+    role: "school",
+    isVerified: true
+  });
+  
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newUser.password, salt, (err, hash) => {
+      if (err) {
+        throw err;
+      }
+      newUser.password = hash;
+      newUser
+        .save()
+        .catch(err => res.status(500).json({ success: false, error: err }));
+    });
   });
 });
 
@@ -120,7 +166,9 @@ router.post("/delete", (req, res) => {
     if (err) {
       return res.status(500).json({ success: false });
     }
-    return res.status(200).json({ success: true, message: "Deleted Successfully" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Deleted Successfully" });
   });
 });
 

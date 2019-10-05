@@ -5,7 +5,7 @@ function validateBranchInputs(data) {
   let errors = {};
   data.branch_name = !isEmpty(data.branch_name) ? data.branch_name : "";
   data.email = !isEmpty(data.email) ? data.email : "";
-  data.password = !isEmpty(data.password) ? data.password : "";
+  //data.password = !isEmpty(data.password) ? data.password : "";
   data.address = !isEmpty(data.address) ? data.address : "";
   data.phone_number = !isEmpty(data.phone_number) ? data.phone_number : "";
   data.standard = !isEmpty(data.standard) ? data.standard : "";
@@ -22,9 +22,9 @@ function validateBranchInputs(data) {
     errors.create_branch_email = "Invalid Email";
   }
 
-  if (Validator.isEmpty(data.password)) {
+  /*if (Validator.isEmpty(data.password)) {
     errors.create_branch_password = "Password field is required";
-  }
+  }*/
 
   if (Validator.isEmpty(data.address)) {
     errors.create_branch_address = "Address field is required";
