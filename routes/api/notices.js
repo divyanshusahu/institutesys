@@ -81,6 +81,31 @@ router.get("/get_notices", (req, res) => {
   });
 });
 
+router.post("/delete", (req, res) => {
+  var ObjectId = mongoose.Types.ObjectId;
+  var search_id = new ObjectId(req.body.notice_id);
+  Notice.findOneAndRemove({ _id: search_id }).then(() =>
+    res.status(200).json({ success: true, message: "Deleted" })
+  );
+});
+
+router.post("/update", (req, res) => {
+  var ObjectId = mongoose.Types.ObjectId;
+  var search_id = new ObjectId(req.body._id);
+  Notice.findOneAndUpdate(
+    { _id: search_id },
+    {
+      $set: {
+        name: req.body.name,
+        text: req.body.text,
+        start_date: req.body.start_date,
+        end_date: req.body.end_date
+      }
+    },
+    { upsert: false, useFindAndModify: false }
+  ).then(() => res.status(200).json({ success: true, message: "Updated" }));
+});
+
 router.get("/download/:id", (req, res) => {
   var ObjectId = mongoose.Types.ObjectId;
   var search_id = new ObjectId(req.params.id);
