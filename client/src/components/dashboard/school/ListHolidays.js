@@ -27,9 +27,13 @@ function ListHolidays(props) {
             field: "year"
           }
         ];
+        var temp_data = res.data.holidays.map(h => {
+          h.date = new Date(h.date);
+          return h;
+        });
         setData({
           columns: columns,
-          data: res.data.holidays
+          data: temp_data
         });
       });
   }, [props.school, setData]);
